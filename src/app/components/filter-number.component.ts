@@ -5,8 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { FilterNumber } from '../types/PaymentFilter';
 import { StoreService } from '../store.service';
+import { FilterNumber } from '../app.types';
 
 @Component({
   selector: 'app-filter-number',

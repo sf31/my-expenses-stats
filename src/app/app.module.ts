@@ -18,6 +18,7 @@ import { FilterDateComponent } from './components/filter-date.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { FilterIconComponent } from './components/filter-icon.component';
+import { StatsComponent } from './components/stats.component';
 
 const routes: Routes = [];
 
@@ -37,6 +38,7 @@ const routes: Routes = [];
     FilterNumberComponent,
     FilterDateComponent,
     FilterIconComponent,
+    StatsComponent,
   ],
   imports: [
     BrowserModule,

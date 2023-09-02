@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
-import { State } from './types/State';
-import { Payment } from './types/Payment';
-import { PaymentFilter } from './types/PaymentFilter';
+import { Payment, PaymentFilter, State } from './app.types';
 
 @Injectable({
   providedIn: 'root',
@@ -59,6 +57,35 @@ export class StoreService {
 
   resetFilter(): void {
     this.patchState({ filterList: {} });
+  }
+
+  getFilteredPaymentList1(): Observable<Payment[]> {
+    return this.state$.pipe(
+      map(({ paymentList, filterList }) => {
+        return paymentList.filter((p) => {
+          if (filterList.date)
+            return filterDate(p.date, filterList.date.from, filterList.date.to);
+          if (filterList.payee)
+            return filterString(p.payee, filterList.payee.value);
+          if (filterList.expense) {
+            const { min, max } = filterList.expense;
+            return filterNumber(p.expense, min, max);
+          }
+          if (filterList.income) {
+            const { min, max } = filterList.income;
+            return filterNumber(p.income, min, max);
+          }
+          if (filterList.category)
+            return filterListString(p.category, filterList.category.values);
+          if (filterList.subcategory)
+            return filterListString(
+              p.subcategory,
+              filterList.subcategory.values,
+            );
+          return true;
+        });
+      }),
+    );
   }
 
   getFilteredPaymentList(): Observable<Payment[]> {

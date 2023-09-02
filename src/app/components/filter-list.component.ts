@@ -5,8 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { FilterList } from '../types/PaymentFilter';
 import { StoreService } from '../store.service';
+import { FilterList } from '../app.types';
 
 @Component({
   selector: 'app-filter-list',

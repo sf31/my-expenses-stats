@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { StoreService } from '../store.service';
 import { BehaviorSubject, Observable, tap } from 'rxjs';
-import { State } from '../types/State';
 import { DateTime } from 'luxon';
+import { State } from '../app.types';
 
 @Component({
   selector: 'app-filter',

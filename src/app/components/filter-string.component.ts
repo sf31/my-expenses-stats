@@ -5,8 +5,8 @@ import {
   OnInit,
 } from '@angular/core';
 import { StoreService } from '../store.service';
-import { FilterString } from '../types/PaymentFilter';
 import { map, Observable } from 'rxjs';
+import { FilterString } from '../app.types';
 
 @Component({
   selector: 'app-filter-string',

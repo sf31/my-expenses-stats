@@ -1,11 +1,11 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import * as papa from 'papaparse';
 import { ParseResult } from 'papaparse';
-import { Payment } from '../types/Payment';
 import * as uuid from 'uuid';
 import { DateTime } from 'luxon';
 import { notNullOrUndefined } from '../utils/utils';
 import { StoreService } from '../store.service';
+import { Payment } from '../app.types';
 
 @Component({
   selector: 'app-load-csv',
