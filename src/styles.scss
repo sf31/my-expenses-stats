@@ -1,1 +1,27 @@
 /* You can add global styles to this file, and also import other style files */
+
+html,
+body {
+  padding: 0;
+  margin: 0;
+}
+
+:root {
+  --primary-color: #007bff;
+  --secondary-color: #6c757d;
+  --success-color: #28a745;
+  --warning-color: #ffc107;
+  --danger-color: #dc3545;
+  --bg-color: #f8f9fa;
+  --border-color: #dee2e6;
+  --hover-color: #e2e6ea;
+
+  --radius-1: 5px;
+  --radius-2: 10px;
+
+  --spacing-1: 0.5rem;
+  --spacing-2: 0.75rem;
+  --spacing-3: 1rem;
+  --spacing-4: 1.5rem;
+  --spacing-5: 3rem;
+}
