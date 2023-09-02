@@ -6,39 +6,93 @@ import { Payment } from '../types/Payment';
 @Component({
   selector: 'app-payment-list',
   template: `
-    <div class="payment-card" *ngFor="let p of paymentList$ | async">
-      <div class="payee">{{ p.payee }}</div>
-      <div class="amount">{{ p.expense }}</div>
-      <div class="date">{{ p.date | date: 'dd/MM/yyyy' }}</div>
-    </div>
+    <app-filter />
+    <ng-container *ngIf="paymentList$ | async as list">
+      <ng-container *ngIf="paymentListFiltered$ | async as filtered">
+        <div>Showing {{ filtered.length }} (of {{ list.length }})</div>
+
+        <div class="list-header">
+          <div class="payee">
+            <span>Payee</span>
+            <app-filter-string field="payee" />
+          </div>
+          <div class="amount">
+            <span>Amount</span>
+            <app-filter-number field="expense" />
+          </div>
+          <div class="date">
+            <span>Date</span>
+            <app-filter-date />
+          </div>
+          <div class="category">
+            <span>Category</span>
+            <app-filter-list field="category" />
+          </div>
+          <div class="subcategory">
+            <span>Subcategory</span>
+            <app-filter-list field="subcategory" />
+          </div>
+        </div>
+        <div class="payment-card" *ngFor="let p of filtered">
+          <div class="payee">{{ p.payee }}</div>
+          <div class="amount">{{ p.expense | currency: 'EUR' }}</div>
+          <div class="date">{{ p.date | date: 'dd/MM/yyyy' }}</div>
+          <div class="category">{{ p.category }}</div>
+          <div class="subcategory">{{ p.subcategory }}</div>
+        </div>
+      </ng-container>
+    </ng-container>
   `,
   styles: [
     `
+      .list-header,
       .payment-card {
         display: flex;
         align-items: center;
-        border-radius: var(--radius-1);
-        border: 1px solid var(--border-color);
-        padding: var(--spacing-2);
-        margin: var(--spacing-1);
+        padding: var(--spacing-1);
+        &:nth-child(odd) {
+          background-color: var(--bg-color);
+        }
+      }
+
+      .list-header {
+        font-weight: bold;
+        position: sticky;
+        top: 0;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .list-header > div,
+      .payment-card > div {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 var(--spacing-1);
       }
 
       .payee {
-        min-width: 300px;
+        min-width: 250px;
       }
 
-      .amount {
-        min-width: 100px;
-      }
-
+      .amount,
       .date {
         min-width: 100px;
+      }
+
+      .category,
+      .subcategory {
+        min-width: 120px;
       }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PaymentListComponent {
-  paymentList$: Observable<Payment[]> = this.store.select('paymentList');
-  constructor(private store: StoreService) {}
+  paymentList$: Observable<Payment[]>;
+  paymentListFiltered$: Observable<Payment[]>;
+
+  constructor(private store: StoreService) {
+    this.paymentList$ = this.store.select('paymentList');
+    this.paymentListFiltered$ = this.store.getFilteredPaymentList();
+  }
 }

@@ -1,4 +1,5 @@
 /* You can add global styles to this file, and also import other style files */
+@import '@angular/cdk/overlay-prebuilt.css';
 
 html,
 body {
@@ -12,7 +13,7 @@ body {
   --success-color: #28a745;
   --warning-color: #ffc107;
   --danger-color: #dc3545;
-  --bg-color: #f8f9fa;
+  --bg-color: #eeeeee;
   --border-color: #dee2e6;
   --hover-color: #e2e6ea;
 
@@ -24,4 +25,13 @@ body {
   --spacing-3: 1rem;
   --spacing-4: 1.5rem;
   --spacing-5: 3rem;
+}
+
+input {
+    border-radius: var(--radius-1);
+    border: 1px solid var(--border-color);
+    padding: var(--spacing-1);
+    font-size: 1rem;
+    width: 100%;
+    box-sizing: border-box;
 }

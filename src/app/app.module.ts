@@ -9,6 +9,15 @@ import { HomeComponent } from './components/home.component';
 import { ChartListComponent } from './components/chart-list.component';
 import { HeaderComponent } from './components/header.component';
 import { BtnComponent } from './components/btn.component';
+import { FilterComponent } from './components/filter.component';
+import { InputSelectComponent } from './components/input-select.component';
+import { FilterStringComponent } from './components/filter-string.component';
+import { FilterListComponent } from './components/filter-list.component';
+import { FilterNumberComponent } from './components/filter-number.component';
+import { FilterDateComponent } from './components/filter-date.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
+import { FilterIconComponent } from './components/filter-icon.component';
 
 const routes: Routes = [];
 
@@ -21,8 +30,23 @@ const routes: Routes = [];
     ChartListComponent,
     HeaderComponent,
     BtnComponent,
+    FilterComponent,
+    InputSelectComponent,
+    FilterStringComponent,
+    FilterListComponent,
+    FilterNumberComponent,
+    FilterDateComponent,
+    FilterIconComponent,
   ],
-  imports: [BrowserModule, RouterModule.forRoot(routes), NgChartsModule],
+  imports: [
+    BrowserModule,
+    RouterModule.forRoot(routes),
+    NgChartsModule,
+    FontAwesomeModule,
+    CdkMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
+  ],
   providers: [],
   bootstrap: [AppComponent],
 })
