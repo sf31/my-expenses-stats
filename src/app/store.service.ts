@@ -92,6 +92,16 @@ export class StoreService {
     return this.state$.pipe(
       map(({ paymentList, filterList }) => {
         return paymentList.filter((p) => {
+          const fieldToFilter = Object.keys(filterList);
+          const filter = fieldToFilter.map((field) => {
+            const value = p[field as keyof Payment];
+            const filter = filterList[field as keyof State['filterList']];
+            switch (filter.type) {
+              case 'date':
+                return filterDate(value, filter.from, filter.to);
+            }
+          });
+
           if (filterList.date)
             return filterDate(p.date, filterList.date.from, filterList.date.to);
           if (filterList.payee)
