@@ -13,7 +13,7 @@ import {
     <div class="select-multiple-wrapper">
       <div class="item" *ngFor="let item of view" (click)="onItemClick(item)">
         <div class="label">{{ item.label }}</div>
-        <div class="checkbox" [class.checked]="item.selected"></div>
+        <app-checkbox [checked]="item.selected" />
       </div>
     </div>
   `,
@@ -33,15 +33,6 @@ import {
         cursor: pointer;
         &:hover {
           background-color: var(--hover-color);
-        }
-      }
-
-      .checkbox {
-        width: 20px;
-        height: 20px;
-        border: 1px solid var(--border-color);
-        &.checked {
-          background-color: var(--primary-color);
         }
       }
     `,
