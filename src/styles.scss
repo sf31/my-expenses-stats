@@ -13,6 +13,7 @@ body {
   --success-color: #28a745;
   --warning-color: #ffc107;
   --danger-color: #dc3545;
+  --disabled-color: #bbbbbb;
   --bg-color: #eeeeee;
   --border-color: #dee2e6;
   --hover-color: #e2e6ea;
@@ -36,7 +37,6 @@ input {
     box-sizing: border-box;
 }
 
-
 .dropdown-menu {
   background-color: var(--bg-color);
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
@@ -44,4 +44,14 @@ input {
   width: 250px;
   border-radius: var(--radius-1);
   padding: var(--spacing-1);
+}
+
+.show-on-hover-toggle:hover .show-on-hover {
+  //opacity: 1;
+  display: inline;
+}
+
+.show-on-hover {
+  //opacity: 0;
+  display: none;
 }

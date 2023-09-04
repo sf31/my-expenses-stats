@@ -8,10 +8,19 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
     `
       fa-icon {
         cursor: pointer;
+        color: var(--disabled-color);
       }
 
       .enabled {
         color: var(--primary-color);
+      }
+
+      .show {
+        display: none;
+      }
+
+      .show-toggle:hover + .show {
+        display: block;
       }
     `,
   ],

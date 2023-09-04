@@ -67,6 +67,10 @@ import { Payment } from '../app.types';
         padding: 0 var(--spacing-1);
       }
 
+      .list-header > div {
+        border-right: 1px solid var(--disabled-color);
+      }
+
       .payee {
         min-width: 250px;
       }
