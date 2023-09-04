@@ -6,14 +6,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
     <div class="home-wrapper">
       <app-header />
       <app-payment-list />
-      <app-chart-list />
+      <!--      <app-chart-list />-->
     </div>
   `,
   styles: [
     `
       .home-wrapper {
         display: grid;
-        grid-template-columns: 1fr 1fr;
+        //grid-template-columns: 1fr 1fr;
         grid-template-rows: 50px 1fr;
         height: 100vh;
       }

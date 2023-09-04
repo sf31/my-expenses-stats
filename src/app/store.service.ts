@@ -1,12 +1,21 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
-import { Payment, PaymentFilter, State } from './app.types';
+import {
+  Filter,
+  FilterDate,
+  FilterList,
+  FilterNumber,
+  FilterString,
+  Payment,
+  State,
+} from './app.types';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StoreService {
   private readonly LSK_STATE = 'my-expenses-stats-state';
+
   constructor() {
     const state = localStorage.getItem(this.LSK_STATE);
     if (state) this._state$.next(JSON.parse(state));
@@ -22,18 +31,23 @@ export class StoreService {
     localStorage.setItem(this.LSK_STATE, JSON.stringify(this._state$.value));
   }
 
-  get state$() {
-    return this._state$.asObservable();
-  }
-
   select<T extends keyof State>(
     field: T,
     distinctFn?: (a: State[T], b: State[T]) => boolean,
   ): Observable<State[typeof field]> {
     const defaultFn = (a: State[T], b: State[T]) => a === b;
-    return this.state$.pipe(
+    return this._state$.pipe(
       map((state) => state[field]),
       distinctUntilChanged(distinctFn ?? defaultFn),
+    );
+  }
+
+  selectFilter<T extends keyof State['filterList']>(
+    field: T,
+  ): Observable<State['filterList'][typeof field]> {
+    return this.select('filterList').pipe(
+      map((filterList) => filterList[field]),
+      distinctUntilChanged(),
     );
   }
 
@@ -41,94 +55,30 @@ export class StoreService {
     this.patchState({ paymentList: paymentList });
   }
 
-  addFilter(field: keyof State['filterList'], filter: PaymentFilter): void {
-    const filterList = {
-      ...this._state$.getValue().filterList,
-      [field]: filter,
-    };
-    this.patchState({ filterList: filterList });
+  setFilter(field: keyof Payment, filter: Filter | null): void {
+    const filterList = this._state$.getValue().filterList;
+    if (filter === null) {
+      const { [field]: _, ...rest } = filterList;
+      this.patchState({ filterList: rest });
+    } else {
+      this.patchState({ filterList: { ...filterList, [field]: filter } });
+    }
   }
 
-  removeFilter(field: keyof State['filterList']): void {
-    const filterList = { ...this._state$.getValue().filterList };
-    delete filterList[field];
-    this.patchState({ filterList: filterList });
-  }
-
-  resetFilter(): void {
+  resetFilters(): void {
     this.patchState({ filterList: {} });
   }
 
-  getFilteredPaymentList1(): Observable<Payment[]> {
-    return this.state$.pipe(
-      map(({ paymentList, filterList }) => {
-        return paymentList.filter((p) => {
-          if (filterList.date)
-            return filterDate(p.date, filterList.date.from, filterList.date.to);
-          if (filterList.payee)
-            return filterString(p.payee, filterList.payee.value);
-          if (filterList.expense) {
-            const { min, max } = filterList.expense;
-            return filterNumber(p.expense, min, max);
-          }
-          if (filterList.income) {
-            const { min, max } = filterList.income;
-            return filterNumber(p.income, min, max);
-          }
-          if (filterList.category)
-            return filterListString(p.category, filterList.category.values);
-          if (filterList.subcategory)
-            return filterListString(
-              p.subcategory,
-              filterList.subcategory.values,
-            );
-          return true;
-        });
-      }),
-    );
-  }
-
   getFilteredPaymentList(): Observable<Payment[]> {
-    return this.state$.pipe(
-      map(({ paymentList, filterList }) => {
-        return paymentList.filter((p) => {
-          const fieldToFilter = Object.keys(filterList);
-          const filter = fieldToFilter.map((field) => {
-            const value = p[field as keyof Payment];
-            const filter = filterList[field as keyof State['filterList']];
-            switch (filter.type) {
-              case 'date':
-                return filterDate(value, filter.from, filter.to);
-            }
-          });
-
-          if (filterList.date)
-            return filterDate(p.date, filterList.date.from, filterList.date.to);
-          if (filterList.payee)
-            return filterString(p.payee, filterList.payee.value);
-          if (filterList.expense) {
-            const { min, max } = filterList.expense;
-            return filterNumber(p.expense, min, max);
-          }
-          if (filterList.income) {
-            const { min, max } = filterList.income;
-            return filterNumber(p.income, min, max);
-          }
-          if (filterList.category)
-            return filterListString(p.category, filterList.category.values);
-          if (filterList.subcategory)
-            return filterListString(
-              p.subcategory,
-              filterList.subcategory.values,
-            );
-          return true;
-        });
-      }),
+    return this._state$.pipe(
+      map(({ paymentList }) =>
+        paymentList.filter((payment) => this.applyFilter(payment)),
+      ),
     );
   }
 
   getCategoryList(): Observable<string[]> {
-    return this.state$.pipe(
+    return this._state$.pipe(
       map(({ paymentList }) => {
         const categories = paymentList.map((p) => p.category);
         return [...new Set(categories)];
@@ -137,27 +87,100 @@ export class StoreService {
   }
 
   getSubcategoryList(): Observable<string[]> {
-    return this.state$.pipe(
+    return this._state$.pipe(
       map(({ paymentList }) => {
         const subcategories = paymentList.map((p) => p.subcategory);
         return [...new Set(subcategories)];
       }),
     );
   }
+
+  private applyFilter(payment: Payment): boolean {
+    const filterList = this._state$.getValue().filterList;
+    // const fieldsToFilter = Object.keys(filterList) as (keyof Payment)[];
+
+    const idPassed = filterList.id
+      ? filterString(payment.id, filterList.id)
+      : true;
+    const datePassed = filterList.date
+      ? filterDate(payment.date, filterList.date)
+      : true;
+    const payeePassed = filterList.payee
+      ? filterString(payment.payee, filterList.payee)
+      : true;
+    const expensePassed = filterList.expense
+      ? filterNumber(payment.expense, filterList.expense)
+      : true;
+    const incomePassed = filterList.income
+      ? filterNumber(payment.income, filterList.income)
+      : true;
+    const categoryPassed = filterList.category
+      ? filterListString(payment.category, filterList.category)
+      : true;
+    const subcategoryPassed = filterList.subcategory
+      ? filterListString(payment.subcategory, filterList.subcategory)
+      : true;
+    const notesPassed = filterList.notes
+      ? filterString(payment.notes, filterList.notes)
+      : true;
+    const paymentMethodPassed = filterList.paymentMethod
+      ? filterString(payment.paymentMethod, filterList.paymentMethod)
+      : true;
+
+    return (
+      idPassed &&
+      datePassed &&
+      payeePassed &&
+      expensePassed &&
+      incomePassed &&
+      categoryPassed &&
+      subcategoryPassed &&
+      notesPassed &&
+      paymentMethodPassed
+    );
+
+    // return fieldsToFilter.every((field) => {
+    //   switch (field) {
+    //     case 'id':
+    //     case 'payee':
+    //     case 'notes':
+    //     case 'paymentMethod': {
+    //       const filter = filterList[field];
+    //       return filter ? filterString(payment[field], filter) : true;
+    //     }
+    //     case 'date': {
+    //       const filter = filterList[field];
+    //       return filter ? filterDate(payment[field], filter) : true;
+    //     }
+    //     case 'expense':
+    //     case 'income': {
+    //       const filter = filterList[field];
+    //       return filter ? filterNumber(payment[field], filter) : true;
+    //     }
+    //     case 'category':
+    //     case 'subcategory': {
+    //       const filter = filterList[field];
+    //       return filter ? filterListString(payment[field], filter) : true;
+    //     }
+    //     default:
+    //       return true;
+    //   }
+    // });
+  }
 }
 
-function filterDate(date: Date, from: Date, to: Date): boolean {
-  return date >= from && date <= to;
+function filterDate(value: Date, filter: FilterDate): boolean {
+  return value >= filter.from && value <= filter.to;
 }
 
-function filterListString(str: string, list: string[]): boolean {
-  return list.includes(str.toLowerCase());
+function filterListString(value: string, filter: FilterList): boolean {
+  return filter.values.includes(value);
 }
 
-function filterString(str: string, filter: string): boolean {
-  return str.toLowerCase().includes(filter.toLowerCase());
+function filterString(value: string, filter: FilterString): boolean {
+  return value.toLowerCase().includes(filter.value.toLowerCase());
 }
 
-function filterNumber(num: number, from: number, to: number): boolean {
-  return num >= from && num <= to;
+function filterNumber(value: number, filter: FilterNumber): boolean {
+  return value >= filter.min && value <= filter.max;
 }

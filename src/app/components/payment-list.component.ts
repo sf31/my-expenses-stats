@@ -92,6 +92,6 @@ export class PaymentListComponent {
   }
 
   reset() {
-    this.store.resetFilter();
+    this.store.resetFilters();
   }
 }

@@ -1,41 +1,40 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { map, Observable } from 'rxjs';
-import { StoreService } from '../store.service';
 import { DateTime } from 'luxon';
+import { StoreService } from '../store.service';
 
 @Component({
   selector: 'app-filter-date',
   template: `
-    <app-filter-icon
-      [cdkMenuTriggerFor]="menu"
-      [enabled]="(isFilterEnabled$ | async) ?? false"
-    />
+    <ng-container *ngIf="filter$ | async as filter">
+      <app-filter-icon [cdkMenuTriggerFor]="menu" [enabled]="filter.enabled" />
 
-    <ng-template #menu>
-      <div class="date-filter" cdkMenu *ngIf="dateRange$ | async as dateRange">
-        <div class="filter">
-          <div class="field">From</div>
-          <input
-            #dateFrom
-            type="date"
-            [value]="dateRange.fromStr"
-            (input)="onDateChange(dateFrom, dateTo)"
-          />
+      <ng-template #menu>
+        <div class="date-filter" cdkMenu>
+          <div class="filter">
+            <div class="field">From</div>
+            <input
+              #dateFrom
+              type="date"
+              [value]="filter.fromStr"
+              (input)="onDateChange(dateFrom, dateTo)"
+            />
+          </div>
+
+          <div class="filter">
+            <div class="field">To</div>
+            <input
+              #dateTo
+              type="date"
+              [value]="filter.toStr"
+              (input)="onDateChange(dateFrom, dateTo)"
+            />
+          </div>
+
+          <app-btn (click)="reset()"> Reset </app-btn>
         </div>
-
-        <div class="filter">
-          <div class="field">To</div>
-          <input
-            #dateTo
-            type="date"
-            [value]="dateRange.toStr"
-            (input)="onDateChange(dateFrom, dateTo)"
-          />
-        </div>
-
-        <app-btn (click)="reset()"> Reset </app-btn>
-      </div>
-    </ng-template>
+      </ng-template>
+    </ng-container>
   `,
   styles: [
     `
@@ -60,22 +59,17 @@ import { DateTime } from 'luxon';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDateComponent {
-  dateRange$: Observable<{ fromStr: string; toStr: string }>;
-  isFilterEnabled$: Observable<boolean>;
+  filter$: Observable<{ fromStr: string; toStr: string; enabled: boolean }>;
 
   constructor(private store: StoreService) {
-    this.isFilterEnabled$ = this.store
-      .select('filterList')
-      .pipe(map((filterList) => !!filterList.date));
-
-    this.dateRange$ = this.store.select('filterList').pipe(
+    this.filter$ = this.store.selectFilter('date').pipe(
       map((filterList) => {
-        if (!filterList.date) return { fromStr: '', toStr: '' };
+        if (!filterList) return { fromStr: '', toStr: '', enabled: false };
         const fmt = 'yyyy-MM-dd';
-        const { from, to } = filterList.date;
+        const { from, to } = filterList;
         const fromStr = DateTime.fromJSDate(from).toFormat(fmt);
         const toStr = DateTime.fromJSDate(to).toFormat(fmt);
-        return { fromStr, toStr };
+        return { fromStr, toStr, enabled: true };
       }),
     );
   }
@@ -86,10 +80,10 @@ export class FilterDateComponent {
     const to = DateTime.fromFormat(dateTo.value, 'yyyy-MM-dd');
     if (!from.isValid || !to.isValid) return;
     const filter = { from: from.toJSDate(), to: to.toJSDate() };
-    this.store.addFilter('date', filter);
+    this.store.setFilter('date', filter);
   }
 
   reset(): void {
-    this.store.removeFilter('date');
+    this.store.setFilter('date', null);
   }
 }

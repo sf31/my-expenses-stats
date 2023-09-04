@@ -1,6 +1,7 @@
 export type State = {
   paymentList: Payment[];
   filterList: {
+    id?: FilterString;
     date?: FilterDate;
     payee?: FilterString;
     expense?: FilterNumber;
@@ -24,28 +25,8 @@ export type Payment = {
   paymentMethod: string;
 };
 
-// export type FilterDate = { from: Date; to: Date };
-// export type FilterString = { value: string };
-// export type FilterNumber = { min: number; max: number };
-// export type FilterList = { values: string[] };
-// export type PaymentFilter =
-//   | FilterDate
-//   | FilterString
-//   | FilterNumber
-//   | FilterList;
-
-// export type Filter = { apply: (p: Payment) => boolean }
-export type FilterDate = {
-  type: 'date';
-  from: Date;
-  to: Date;
-  apply: (p: Payment) => boolean;
-};
-export type FilterString = { type: 'string'; value: string };
-export type FilterNumber = { type: 'number'; min: number; max: number };
-export type FilterList = { type: 'list'; values: string[] };
-export type PaymentFilter =
-  | FilterDate
-  | FilterString
-  | FilterNumber
-  | FilterList;
+export type Filter = FilterDate | FilterString | FilterNumber | FilterList;
+export type FilterDate = { from: Date; to: Date };
+export type FilterString = { value: string };
+export type FilterNumber = { min: number; max: number };
+export type FilterList = { values: string[] };

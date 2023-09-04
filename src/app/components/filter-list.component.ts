@@ -4,7 +4,7 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { StoreService } from '../store.service';
 import { FilterList } from '../app.types';
 
@@ -13,7 +13,7 @@ import { FilterList } from '../app.types';
   template: `
     <app-filter-icon
       [cdkMenuTriggerFor]="menu"
-      [enabled]="(filter$ | async) !== null"
+      [enabled]="(filter$ | async) !== undefined"
     />
 
     <ng-template #menu>
@@ -31,7 +31,7 @@ import { FilterList } from '../app.types';
 })
 export class FilterListComponent implements OnInit {
   @Input({ required: true }) field?: 'category' | 'subcategory';
-  filter$?: Observable<FilterList | null>;
+  filter$?: Observable<FilterList | undefined>;
   categories: Observable<string[] | null>;
   subcategories: Observable<string[] | null>;
 
@@ -42,10 +42,7 @@ export class FilterListComponent implements OnInit {
 
   ngOnInit(): void {
     if (!this.field) throw new Error('Field is required');
-    const field = this.field;
-    this.filter$ = this.store
-      .select('filterList')
-      .pipe(map((filterList) => filterList[field] || null));
+    this.filter$ = this.store.selectFilter(this.field);
   }
 
   onInput(event: Event) {
@@ -53,8 +50,8 @@ export class FilterListComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     const value = (target.value ?? '').trim();
     if (!value || value.length === 0)
-      return this.store.removeFilter(this.field);
+      return this.store.setFilter(this.field, null);
     const filter: FilterList = { values: [value] };
-    this.store.addFilter(this.field, filter);
+    this.store.setFilter(this.field, filter);
   }
 }

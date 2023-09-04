@@ -4,22 +4,23 @@ import {
   Input,
   OnInit,
 } from '@angular/core';
-import { StoreService } from '../store.service';
-import { map, Observable } from 'rxjs';
+import { Observable } from 'rxjs';
 import { FilterString } from '../app.types';
+import { StoreService } from '../store.service';
 
 @Component({
   selector: 'app-filter-string',
   template: `
     <app-filter-icon
       [cdkMenuTriggerFor]="menu"
-      [enabled]="(filter$ | async) !== null"
+      [enabled]="(filter$ | async) !== undefined"
     />
 
     <ng-template #menu>
       <div class="dropdown" cdkMenu>
         <input
           [placeholder]="'Filter ' + field"
+          [value]="(filter$ | async)?.value"
           type="text"
           (input)="onInput($event)"
         />
@@ -37,16 +38,13 @@ import { FilterString } from '../app.types';
 })
 export class FilterStringComponent implements OnInit {
   @Input({ required: true }) field?: 'payee' | 'notes' | 'paymentMethod';
-  filter$?: Observable<FilterString | null>;
+  filter$?: Observable<FilterString | undefined>;
 
   constructor(private store: StoreService) {}
 
   ngOnInit(): void {
     if (!this.field) throw new Error('Field is required');
-    const field = this.field;
-    this.filter$ = this.store
-      .select('filterList')
-      .pipe(map((filterList) => filterList[field] || null));
+    this.filter$ = this.store.selectFilter(this.field);
   }
 
   onInput(event: Event) {
@@ -54,8 +52,8 @@ export class FilterStringComponent implements OnInit {
     const target = event.target as HTMLInputElement;
     const value = (target.value ?? '').trim();
     if (!value || value.length === 0)
-      return this.store.removeFilter(this.field);
+      return this.store.setFilter(this.field, null);
     const filter: FilterString = { value };
-    this.store.addFilter(this.field, filter);
+    this.store.setFilter(this.field, filter);
   }
 }

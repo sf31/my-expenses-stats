@@ -9,7 +9,6 @@ import { HomeComponent } from './components/home.component';
 import { ChartListComponent } from './components/chart-list.component';
 import { HeaderComponent } from './components/header.component';
 import { BtnComponent } from './components/btn.component';
-import { FilterComponent } from './components/filter.component';
 import { InputSelectComponent } from './components/input-select.component';
 import { FilterStringComponent } from './components/filter-string.component';
 import { FilterListComponent } from './components/filter-list.component';
@@ -31,7 +30,6 @@ const routes: Routes = [];
     ChartListComponent,
     HeaderComponent,
     BtnComponent,
-    FilterComponent,
     InputSelectComponent,
     FilterStringComponent,
     FilterListComponent,
