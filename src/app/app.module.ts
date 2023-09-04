@@ -18,6 +18,9 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 import { FilterIconComponent } from './components/filter-icon.component';
 import { StatsComponent } from './components/stats.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import { SelectMultipleComponent } from './components/select-multiple.component';
+import { CheckboxComponent } from './components/checkbox.component';
 
 const routes: Routes = [];
 
@@ -37,6 +40,8 @@ const routes: Routes = [];
     FilterDateComponent,
     FilterIconComponent,
     StatsComponent,
+    SelectMultipleComponent,
+    CheckboxComponent,
   ],
   imports: [
     BrowserModule,
@@ -46,6 +51,7 @@ const routes: Routes = [];
     CdkMenuTrigger,
     CdkMenu,
     CdkMenuItem,
+    ReactiveFormsModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

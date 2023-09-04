@@ -10,7 +10,7 @@ import { StoreService } from '../store.service';
       <app-filter-icon [cdkMenuTriggerFor]="menu" [enabled]="filter.enabled" />
 
       <ng-template #menu>
-        <div class="date-filter" cdkMenu>
+        <div class="dropdown-menu" cdkMenu>
           <div class="filter">
             <div class="field">From</div>
             <input
@@ -38,7 +38,7 @@ import { StoreService } from '../store.service';
   `,
   styles: [
     `
-      .date-filter {
+      .dropdown-menu {
         background-color: var(--bg-color);
       }
 

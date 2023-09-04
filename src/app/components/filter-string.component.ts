@@ -17,7 +17,7 @@ import { StoreService } from '../store.service';
     />
 
     <ng-template #menu>
-      <div class="dropdown" cdkMenu>
+      <div class="dropdown-menu" cdkMenu>
         <input
           [placeholder]="'Filter ' + field"
           [value]="(filter$ | async)?.value"

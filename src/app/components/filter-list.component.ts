@@ -17,11 +17,19 @@ import { FilterList } from '../app.types';
     />
 
     <ng-template #menu>
-      <div class="dropdown" cdkMenu>
-        <input
-          [placeholder]="'Filter ' + field"
-          type="text"
-          (input)="onInput($event)"
+      <div class="dropdown-menu" cdkMenu>
+        <app-select-multiple
+          *ngIf="field === 'category'"
+          [itemList]="(categories$ | async) ?? []"
+          [itemListSelected]="(filter$ | async)?.values ?? []"
+          (itemListSelectedChange)="onItemListSelectedChange($event)"
+        />
+
+        <app-select-multiple
+          *ngIf="field === 'subcategory'"
+          [itemList]="(subcategories$ | async) ?? []"
+          [itemListSelected]="(filter$ | async)?.values ?? []"
+          (itemListSelectedChange)="onItemListSelectedChange($event)"
         />
       </div>
     </ng-template>
@@ -32,12 +40,12 @@ import { FilterList } from '../app.types';
 export class FilterListComponent implements OnInit {
   @Input({ required: true }) field?: 'category' | 'subcategory';
   filter$?: Observable<FilterList | undefined>;
-  categories: Observable<string[] | null>;
-  subcategories: Observable<string[] | null>;
+  categories$: Observable<string[]>;
+  subcategories$: Observable<string[]>;
 
   constructor(private store: StoreService) {
-    this.categories = this.store.getCategoryList();
-    this.subcategories = this.store.getSubcategoryList();
+    this.categories$ = this.store.getCategoryList();
+    this.subcategories$ = this.store.getSubcategoryList();
   }
 
   ngOnInit(): void {
@@ -45,13 +53,10 @@ export class FilterListComponent implements OnInit {
     this.filter$ = this.store.selectFilter(this.field);
   }
 
-  onInput(event: Event) {
+  onItemListSelectedChange(values: string[]) {
     if (!this.field) return;
-    const target = event.target as HTMLInputElement;
-    const value = (target.value ?? '').trim();
-    if (!value || value.length === 0)
-      return this.store.setFilter(this.field, null);
-    const filter: FilterList = { values: [value] };
+    if (values.length === 0) return this.store.setFilter(this.field, null);
+    const filter: FilterList = { values };
     this.store.setFilter(this.field, filter);
   }
 }

@@ -17,7 +17,7 @@ import { StoreService } from '../store.service';
     />
 
     <ng-template #menu>
-      <div class="date-filter" cdkMenu>
+      <div class="dropdown-menu" cdkMenu>
         <div class="filter">
           <div class="field">Min</div>
           <input
