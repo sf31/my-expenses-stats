@@ -6,7 +6,9 @@ import { Observable } from 'rxjs';
 @Component({
   selector: 'app-chart-list',
   template: `
-    <div class="filters"></div>
+    <div class="filters">
+      <app-filter-date />
+    </div>
     <app-chart *ngFor="let c of chartList$ | async" [config]="c" />
   `,
   styles: [],

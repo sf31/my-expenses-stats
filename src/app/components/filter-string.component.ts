@@ -11,29 +11,13 @@ import { StoreService } from '../store.service';
 @Component({
   selector: 'app-filter-string',
   template: `
-    <app-filter-icon
-      [cdkMenuTriggerFor]="menu"
-      [enabled]="(filter$ | async) !== undefined"
+    <input
+      [placeholder]="'Filter ' + field"
+      [value]="(filter$ | async)?.value"
+      type="text"
+      (input)="onInput($event)"
     />
-
-    <ng-template #menu>
-      <div class="dropdown-menu" cdkMenu>
-        <input
-          [placeholder]="'Filter ' + field"
-          [value]="(filter$ | async)?.value"
-          type="text"
-          (input)="onInput($event)"
-        />
-      </div>
-    </ng-template>
   `,
-  styles: [
-    `
-      fa-icon {
-        cursor: pointer;
-      }
-    `,
-  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterStringComponent implements OnInit {

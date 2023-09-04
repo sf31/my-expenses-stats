@@ -7,41 +7,31 @@ import { StoreService } from '../store.service';
   selector: 'app-filter-date',
   template: `
     <ng-container *ngIf="filter$ | async as filter">
-      <app-filter-icon [cdkMenuTriggerFor]="menu" [enabled]="filter.enabled" />
+      <div class="filter">
+        <div class="field">From</div>
+        <input
+          #dateFrom
+          type="date"
+          [value]="filter.fromStr"
+          (input)="onDateChange(dateFrom, dateTo)"
+        />
+      </div>
 
-      <ng-template #menu>
-        <div class="dropdown-menu" cdkMenu>
-          <div class="filter">
-            <div class="field">From</div>
-            <input
-              #dateFrom
-              type="date"
-              [value]="filter.fromStr"
-              (input)="onDateChange(dateFrom, dateTo)"
-            />
-          </div>
+      <div class="filter">
+        <div class="field">To</div>
+        <input
+          #dateTo
+          type="date"
+          [value]="filter.toStr"
+          (input)="onDateChange(dateFrom, dateTo)"
+        />
+      </div>
 
-          <div class="filter">
-            <div class="field">To</div>
-            <input
-              #dateTo
-              type="date"
-              [value]="filter.toStr"
-              (input)="onDateChange(dateFrom, dateTo)"
-            />
-          </div>
-
-          <app-btn (click)="reset()"> Reset </app-btn>
-        </div>
-      </ng-template>
+      <app-btn (click)="reset()"> Reset </app-btn>
     </ng-container>
   `,
   styles: [
     `
-      .dropdown-menu {
-        background-color: var(--bg-color);
-      }
-
       .filter {
         display: flex;
         align-items: center;

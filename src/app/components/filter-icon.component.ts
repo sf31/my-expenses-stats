@@ -27,6 +27,6 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterIconComponent {
-  @Input({ required: true }) enabled?: boolean;
+  @Input() enabled?: boolean;
   icon = faFilter;
 }

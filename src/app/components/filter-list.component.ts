@@ -11,30 +11,20 @@ import { FilterList } from '../app.types';
 @Component({
   selector: 'app-filter-list',
   template: `
-    <app-filter-icon
-      [cdkMenuTriggerFor]="menu"
-      [enabled]="(filter$ | async) !== undefined"
+    <app-select-multiple
+      *ngIf="field === 'category'"
+      [itemList]="(categories$ | async) ?? []"
+      [itemListSelected]="(filter$ | async)?.values ?? []"
+      (itemListSelectedChange)="onItemListSelectedChange($event)"
     />
 
-    <ng-template #menu>
-      <div class="dropdown-menu" cdkMenu>
-        <app-select-multiple
-          *ngIf="field === 'category'"
-          [itemList]="(categories$ | async) ?? []"
-          [itemListSelected]="(filter$ | async)?.values ?? []"
-          (itemListSelectedChange)="onItemListSelectedChange($event)"
-        />
-
-        <app-select-multiple
-          *ngIf="field === 'subcategory'"
-          [itemList]="(subcategories$ | async) ?? []"
-          [itemListSelected]="(filter$ | async)?.values ?? []"
-          (itemListSelectedChange)="onItemListSelectedChange($event)"
-        />
-      </div>
-    </ng-template>
+    <app-select-multiple
+      *ngIf="field === 'subcategory'"
+      [itemList]="(subcategories$ | async) ?? []"
+      [itemListSelected]="(filter$ | async)?.values ?? []"
+      (itemListSelectedChange)="onItemListSelectedChange($event)"
+    />
   `,
-  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterListComponent implements OnInit {

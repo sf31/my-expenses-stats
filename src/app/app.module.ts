@@ -21,6 +21,7 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SelectMultipleComponent } from './components/select-multiple.component';
 import { CheckboxComponent } from './components/checkbox.component';
 import { ChartComponent } from './components/chart.component';
+import { FilterDropdown } from './components/filter-dropdown';
 
 const routes: Routes = [
   { path: '', component: PaymentListComponent },
@@ -47,6 +48,7 @@ const routes: Routes = [
     SelectMultipleComponent,
     CheckboxComponent,
     ChartComponent,
+    FilterDropdown,
   ],
   imports: [
     BrowserModule,

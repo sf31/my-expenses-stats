@@ -11,38 +11,28 @@ import { StoreService } from '../store.service';
 @Component({
   selector: 'app-filter-number',
   template: `
-    <app-filter-icon
-      [cdkMenuTriggerFor]="menu"
-      [enabled]="(filter$ | async) !== undefined"
-    />
+    <div class="filter">
+      <div class="field">Min</div>
+      <input
+        #min
+        type="number"
+        [value]="(filter$ | async)?.min"
+        (input)="onValueChange(min, max)"
+      />
+    </div>
 
-    <ng-template #menu>
-      <div class="dropdown-menu" cdkMenu>
-        <div class="filter">
-          <div class="field">Min</div>
-          <input
-            #min
-            type="number"
-            [value]="(filter$ | async)?.min"
-            (input)="onValueChange(min, max)"
-          />
-        </div>
+    <div class="filter">
+      <div class="field">Max</div>
+      <input
+        #max
+        type="number"
+        [value]="(filter$ | async)?.max"
+        (input)="onValueChange(min, max)"
+      />
+    </div>
 
-        <div class="filter">
-          <div class="field">Max</div>
-          <input
-            #max
-            type="number"
-            [value]="(filter$ | async)?.max"
-            (input)="onValueChange(min, max)"
-          />
-        </div>
-
-        <app-btn (click)="reset()"> Reset</app-btn>
-      </div>
-    </ng-template>
+    <app-btn (click)="reset()"> Reset</app-btn>
   `,
-  styles: [],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterNumberComponent implements OnInit {
