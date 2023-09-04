@@ -11,6 +11,7 @@ export type State = {
     notes?: FilterString;
     paymentMethod?: FilterString;
   };
+  chartList: ChartConfig[];
 };
 
 export type Payment = {
@@ -30,3 +31,13 @@ export type FilterDate = { from: Date; to: Date };
 export type FilterString = { value: string };
 export type FilterNumber = { min: number; max: number };
 export type FilterList = { values: string[] };
+
+export type ChartConfig = {
+  type: 'pie' | 'bar' | 'line';
+  field: keyof Payment;
+};
+
+export type ChartData = ChartConfig & {
+  labels: string[];
+  data: number[];
+};

@@ -1,6 +1,13 @@
 import { Injectable } from '@angular/core';
-import { BehaviorSubject, distinctUntilChanged, map, Observable } from 'rxjs';
 import {
+  BehaviorSubject,
+  combineLatest,
+  distinctUntilChanged,
+  map,
+  Observable,
+} from 'rxjs';
+import {
+  ChartData,
   Filter,
   FilterDate,
   FilterList,
@@ -9,22 +16,26 @@ import {
   Payment,
   State,
 } from './app.types';
+import { createChartConfig } from './utils/chart.utils';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StoreService {
   private readonly LSK_STATE = 'my-expenses-stats-state';
+  private readonly INITIAL_STATE: State = {
+    paymentList: [],
+    filterList: {},
+    chartList: [{ type: 'pie', field: 'category' }],
+  };
 
   constructor() {
     const state = localStorage.getItem(this.LSK_STATE);
-    if (state) this._state$.next(JSON.parse(state));
+    if (!state) return;
+    this._state$.next({ ...this.INITIAL_STATE, ...JSON.parse(state) });
   }
 
-  private _state$ = new BehaviorSubject<State>({
-    paymentList: [],
-    filterList: {},
-  });
+  private _state$ = new BehaviorSubject<State>(this.INITIAL_STATE);
 
   private patchState(patch: Partial<State>) {
     this._state$.next({ ...this._state$.value, ...patch });
@@ -92,6 +103,19 @@ export class StoreService {
         const subcategories = paymentList.map((p) => p.subcategory);
         return [...new Set(subcategories)];
       }),
+    );
+  }
+
+  getChartListData(): Observable<ChartData[]> {
+    return combineLatest([
+      this.getFilteredPaymentList(),
+      this.select('chartList'),
+    ]).pipe(
+      map(([paymentList, chartList]) =>
+        chartList.map((chartConfig) =>
+          createChartConfig(paymentList, chartConfig),
+        ),
+      ),
     );
   }
 

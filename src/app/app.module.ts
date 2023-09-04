@@ -5,7 +5,7 @@ import { NgChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
 import { UploadCsvComponent } from './pages/upload-csv.component';
 import { PaymentListComponent } from './pages/payment-list.component';
-import { ChartListComponent } from './components/chart-list.component';
+import { ChartListComponent } from './pages/chart-list.component';
 import { HeaderComponent } from './components/header.component';
 import { BtnComponent } from './components/btn.component';
 import { InputSelectComponent } from './components/input-select.component';
@@ -20,6 +20,7 @@ import { StatsComponent } from './components/stats.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SelectMultipleComponent } from './components/select-multiple.component';
 import { CheckboxComponent } from './components/checkbox.component';
+import { ChartComponent } from './components/chart.component';
 
 const routes: Routes = [
   { path: '', component: PaymentListComponent },
@@ -45,6 +46,7 @@ const routes: Routes = [
     StatsComponent,
     SelectMultipleComponent,
     CheckboxComponent,
+    ChartComponent,
   ],
   imports: [
     BrowserModule,
