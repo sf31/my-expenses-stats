@@ -3,9 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
 import { NgChartsModule } from 'ng2-charts';
 import { RouterModule, Routes } from '@angular/router';
-import { LoadCsvComponent } from './components/load-csv.component';
-import { PaymentListComponent } from './components/payment-list.component';
-import { HomeComponent } from './components/home.component';
+import { UploadCsvComponent } from './pages/upload-csv.component';
+import { PaymentListComponent } from './pages/payment-list.component';
 import { ChartListComponent } from './components/chart-list.component';
 import { HeaderComponent } from './components/header.component';
 import { BtnComponent } from './components/btn.component';
@@ -22,14 +21,18 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { SelectMultipleComponent } from './components/select-multiple.component';
 import { CheckboxComponent } from './components/checkbox.component';
 
-const routes: Routes = [];
+const routes: Routes = [
+  { path: '', component: PaymentListComponent },
+  { path: 'upload', component: UploadCsvComponent },
+  { path: 'charts', component: ChartListComponent },
+  { path: '**', redirectTo: '' },
+];
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoadCsvComponent,
+    UploadCsvComponent,
     PaymentListComponent,
-    HomeComponent,
     ChartListComponent,
     HeaderComponent,
     BtnComponent,

@@ -4,7 +4,11 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   selector: 'app-header',
   template: `
     <div class="logo">AWESOME NAME HERE</div>
-    <app-load-csv />
+    <div class="menu">
+      <div class="menu-item" routerLink="">Payments</div>
+      <div class="menu-item" routerLink="charts">Charts</div>
+      <div class="menu-item" routerLink="upload">Upload</div>
+    </div>
   `,
   styles: [
     `
@@ -12,8 +16,19 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         background-color: var(--primary-color);
         display: flex;
         align-items: center;
-        justify-content: space-between;
         padding: 0 var(--spacing-2);
+        user-select: none;
+      }
+
+      .menu {
+        display: flex;
+      }
+
+      .menu-item {
+        padding: 0 var(--spacing-2);
+        cursor: pointer;
+        color: var(--bg-color);
+        height: 100%;
       }
     `,
   ],

@@ -8,7 +8,7 @@ import { StoreService } from '../store.service';
 import { Payment } from '../app.types';
 
 @Component({
-  selector: 'app-load-csv',
+  selector: 'app-upload-csv',
   template: `
     <app-btn (click)="input.click()"> Load CSV </app-btn>
     <input #input type="file" (change)="onFileSelected($event)" />
@@ -22,7 +22,7 @@ import { Payment } from '../app.types';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class LoadCsvComponent {
+export class UploadCsvComponent {
   constructor(private store: StoreService) {}
 
   onFileSelected(event: Event) {

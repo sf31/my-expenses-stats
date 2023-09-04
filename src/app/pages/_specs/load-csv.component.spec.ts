@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { LoadCsvComponent } from '../load-csv.component';
+import { UploadCsvComponent } from '../upload-csv.component';
 
 describe('LoadCsvComponent', () => {
-  let component: LoadCsvComponent;
-  let fixture: ComponentFixture<LoadCsvComponent>;
+  let component: UploadCsvComponent;
+  let fixture: ComponentFixture<UploadCsvComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [LoadCsvComponent],
+      declarations: [UploadCsvComponent],
     });
-    fixture = TestBed.createComponent(LoadCsvComponent);
+    fixture = TestBed.createComponent(UploadCsvComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
