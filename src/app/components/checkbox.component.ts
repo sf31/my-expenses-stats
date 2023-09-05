@@ -20,9 +20,9 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
         align-items: center;
         justify-content: center;
         font-size: 0.9rem;
+        color: var(--bg-color);
         &.checked {
           background-color: var(--primary-color);
-          color: var(--bg-color);
         }
       }
     `,

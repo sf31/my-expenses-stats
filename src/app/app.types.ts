@@ -12,6 +12,7 @@ export type State = {
     paymentMethod?: FilterString;
   };
   chartList: ChartConfig[];
+  theme: 'light' | 'dark';
 };
 
 export type Payment = {

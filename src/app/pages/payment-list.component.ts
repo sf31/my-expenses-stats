@@ -58,7 +58,7 @@ import { Payment } from '../app.types';
         align-items: center;
         padding: var(--spacing-1);
         &:nth-child(odd) {
-          background-color: var(--bg-color);
+          background-color: var(--border-color);
         }
       }
 

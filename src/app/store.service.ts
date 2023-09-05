@@ -31,6 +31,7 @@ export class StoreService {
       { chartId: uuid.v4(), type: 'pie', field: 'category' },
       { chartId: uuid.v4(), type: 'pie', field: 'subcategory' },
     ],
+    theme: 'dark',
   };
 
   constructor() {
@@ -39,8 +40,8 @@ export class StoreService {
     this._state$.next({
       ...this.INITIAL_STATE,
       ...JSON.parse(state),
-      chartList: this.INITIAL_STATE.chartList,
     });
+    applyTheme(this._state$.value.theme);
   }
 
   private _state$ = new BehaviorSubject<State>(this.INITIAL_STATE);
@@ -126,6 +127,11 @@ export class StoreService {
         return createChartConfig(paymentList, config);
       }),
     );
+  }
+
+  setTheme(theme: 'dark' | 'light'): void {
+    this.patchState({ theme });
+    applyTheme(theme);
   }
 
   private applyFilter(payment: Payment): boolean {
@@ -216,4 +222,14 @@ function filterString(value: string, filter: FilterString): boolean {
 
 function filterNumber(value: number, filter: FilterNumber): boolean {
   return value >= filter.min && value <= filter.max;
+}
+
+function applyTheme(theme: 'dark' | 'light'): void {
+  if (theme === 'dark') {
+    document.body.classList.remove('light');
+    document.body.classList.add('dark');
+  } else {
+    document.body.classList.add('light');
+    document.body.classList.remove('dark');
+  }
 }

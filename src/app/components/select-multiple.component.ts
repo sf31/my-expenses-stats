@@ -31,9 +31,6 @@ import {
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
-        &:hover {
-          background-color: var(--hover-color);
-        }
       }
     `,
   ],

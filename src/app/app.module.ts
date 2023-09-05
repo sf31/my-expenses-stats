@@ -22,6 +22,7 @@ import { SelectMultipleComponent } from './components/select-multiple.component'
 import { CheckboxComponent } from './components/checkbox.component';
 import { ChartComponent } from './components/chart.component';
 import { FilterDropdown } from './components/filter-dropdown';
+import { ThemeToggleComponent } from './components/theme-toggle.component';
 
 const routes: Routes = [
   { path: '', component: PaymentListComponent },
@@ -49,6 +50,7 @@ const routes: Routes = [
     CheckboxComponent,
     ChartComponent,
     FilterDropdown,
+    ThemeToggleComponent,
   ],
   imports: [
     BrowserModule,
