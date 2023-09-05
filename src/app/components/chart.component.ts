@@ -12,6 +12,7 @@ import { map, Subscription } from 'rxjs';
 import { StoreService } from '../store.service';
 import { ChartConfig } from '../app.types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { stringToHexColor } from '../utils/chart.utils';
 
 @Component({
   selector: 'app-chart',
@@ -58,12 +59,6 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
       fa-icon {
         cursor: pointer;
       }
-
-      .canvas-wrapper {
-        //padding: var(--spacing-2);
-        //height: 350px;
-        //position: relative;
-      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -88,19 +83,31 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
       .pipe(
         map((chartData) => {
           if (!chartData) return;
-          const { labels, data, type } = chartData;
           if (!this.chart) {
             this.chart = new Chart(ctx, {
-              type: type,
-              data: { labels, datasets: [{ data }] },
+              type: chartData.type,
+              data: {
+                labels: chartData.labels,
+                datasets: [
+                  {
+                    data: chartData.data,
+                    backgroundColor: chartData.labels.map(stringToHexColor),
+                  },
+                ],
+              },
               options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                plugins: {
+                  legend: {
+                    display: chartData.type === 'pie',
+                  },
+                },
               },
             }) as Chart;
           } else {
-            this.chart.data.labels = labels;
-            this.chart.data.datasets[0].data = data;
+            this.chart.data.labels = chartData.labels;
+            this.chart.data.datasets[0].data = chartData.data;
             this.chart.update();
           }
         }),

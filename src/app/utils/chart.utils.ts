@@ -35,3 +35,24 @@ function getValue(payment: Payment, config: ChartConfig): number {
   if (config.op === 'income') return payment.income;
   return 1;
 }
+
+function stringToHexColorCopilot(value: string): string {
+  const hash = value
+    .split('')
+    .reduce((acc, char) => char.charCodeAt(0) + acc, 0);
+  const hue = hash % 360;
+  return `hsl(${hue}, 50%, 50%)`;
+}
+
+export function stringToHexColor(str: string): string {
+  let hash = 0;
+  str
+    .split('')
+    .forEach((char) => (hash = char.charCodeAt(0) + ((hash << 5) - hash)));
+  let colour = '#';
+  for (let i = 0; i < 3; i++) {
+    const value = (hash >> (i * 8)) & 0xff;
+    colour += value.toString(16).padStart(2, '0');
+  }
+  return colour;
+}
