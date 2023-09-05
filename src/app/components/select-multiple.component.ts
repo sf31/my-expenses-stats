@@ -12,7 +12,7 @@ import {
   template: `
     <div class="select-multiple-wrapper">
       <div class="item" *ngFor="let item of view" (click)="onItemClick(item)">
-        <div class="label">{{ item.label }}</div>
+        <div class="label text-ellipsis">{{ item.label }}</div>
         <app-checkbox [checked]="item.selected" />
       </div>
     </div>
@@ -21,9 +21,7 @@ import {
     `
       .select-multiple-wrapper {
         background-color: var(--bg-color);
-        height: 250px;
         overflow: auto;
-        width: 250px;
       }
 
       .item {
@@ -31,6 +29,10 @@ import {
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
+        margin-bottom: var(--spacing-1);
+        &:last-child {
+          margin-bottom: 0;
+        }
       }
     `,
   ],
