@@ -90,3 +90,10 @@ export function moveElement<T>(array: T[], from: number, to: number): T[] {
   const newArray = addElementArrayAtIndex<T>(array, fromElement, addIndex);
   return removeElementFromArrayByIndex<T>(newArray, removeIndex);
 }
+
+/**
+ * Return a random number (int) between `min` and `max` INCLUDED.
+ */
+export function randomIntFromInterval(min: number, max: number) {
+  return Math.floor(Math.random() * (max - min + 1) + min);
+}

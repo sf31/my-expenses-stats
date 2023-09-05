@@ -1,13 +1,23 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { filter, map, Observable } from 'rxjs';
 import { NavigationEnd, Router } from '@angular/router';
-import { notNullOrUndefined } from '../utils/utils';
+import { notNullOrUndefined, randomIntFromInterval } from '../utils/utils';
+import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import {
+  faChartPie,
+  faCircleDollarToSlot,
+  faCoins,
+  faCommentDollar,
+  faMagnifyingGlassDollar,
+  faSackDollar,
+  faWallet,
+} from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-header',
   template: `
     <ng-container *ngIf="routeStr$ | async as routerStr">
-      <div class="logo">AWESOME NAME HERE</div>
+      <fa-icon [icon]="logo" class="logo" />
       <div class="menu">
         <div
           class="menu-item"
@@ -30,6 +40,11 @@ import { notNullOrUndefined } from '../utils/utils';
         align-items: center;
         user-select: none;
         color: #ffffff;
+      }
+
+      .logo {
+        margin: 0 var(--spacing-2);
+        font-size: 1.7rem;
       }
 
       .menu {
@@ -65,11 +80,23 @@ export class HeaderComponent {
     { route: '/charts', label: 'Charts' },
     { route: '/upload', label: 'Upload' },
   ];
+  logo: IconDefinition;
+
+  icons: IconDefinition[] = [
+    faCoins,
+    faMagnifyingGlassDollar,
+    faCircleDollarToSlot,
+    faCommentDollar,
+    faChartPie,
+    faSackDollar,
+    faWallet,
+  ];
 
   constructor(private router: Router) {
     this.routeStr$ = this.router.events.pipe(
       map((evt) => (evt instanceof NavigationEnd ? evt.url : null)),
       filter(notNullOrUndefined),
     );
+    this.logo = this.icons[randomIntFromInterval(0, this.icons.length - 1)];
   }
 }

@@ -1,34 +1,21 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { StoreService } from '../store.service';
 import { Observable } from 'rxjs';
+import { faCircleHalfStroke } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-theme-toggle',
   template: `
     <ng-container *ngIf="theme$ | async as theme">
-      <div class="theme" (click)="toggleTheme(theme)">
-        <span class="toggle" [class.active]="theme === 'dark'">Dark</span>
-        <span class="toggle" [class.active]="theme === 'light'">Light</span>
-      </div>
+      <fa-icon [icon]="iconToggle" (click)="toggleTheme(theme)" />
     </ng-container>
   `,
   styles: [
     `
-      .theme {
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
+      fa-icon {
         cursor: pointer;
-        color: #ffffff;
-      }
-
-      .toggle {
+        font-size: 1.5rem;
         padding: 0 var(--spacing-2);
-      }
-
-      .toggle.active {
-        font-weight: bold;
-        color: var(--accent-color);
       }
     `,
   ],
@@ -36,6 +23,7 @@ import { Observable } from 'rxjs';
 })
 export class ThemeToggleComponent {
   theme$: Observable<'dark' | 'light'>;
+  iconToggle = faCircleHalfStroke;
 
   constructor(private store: StoreService) {
     this.theme$ = this.store.select('theme');
