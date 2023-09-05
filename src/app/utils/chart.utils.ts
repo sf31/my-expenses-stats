@@ -4,6 +4,7 @@ export function createChartConfig(
   paymentList: Payment[],
   config: ChartConfig,
 ): ChartData {
+  console.log('createChartConfig');
   const labels: string[] = [];
   const data: number[] = [];
 

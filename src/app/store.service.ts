@@ -16,6 +16,7 @@ import {
   Payment,
   State,
 } from './app.types';
+import * as uuid from 'uuid';
 import { createChartConfig } from './utils/chart.utils';
 
 @Injectable({
@@ -26,13 +27,20 @@ export class StoreService {
   private readonly INITIAL_STATE: State = {
     paymentList: [],
     filterList: {},
-    chartList: [{ type: 'pie', field: 'category' }],
+    chartList: [
+      { chartId: uuid.v4(), type: 'pie', field: 'category' },
+      { chartId: uuid.v4(), type: 'pie', field: 'subcategory' },
+    ],
   };
 
   constructor() {
     const state = localStorage.getItem(this.LSK_STATE);
     if (!state) return;
-    this._state$.next({ ...this.INITIAL_STATE, ...JSON.parse(state) });
+    this._state$.next({
+      ...this.INITIAL_STATE,
+      ...JSON.parse(state),
+      chartList: this.INITIAL_STATE.chartList,
+    });
   }
 
   private _state$ = new BehaviorSubject<State>(this.INITIAL_STATE);
@@ -106,16 +114,17 @@ export class StoreService {
     );
   }
 
-  getChartListData(): Observable<ChartData[]> {
+  getChartData(chartId: string): Observable<ChartData | null> {
     return combineLatest([
       this.getFilteredPaymentList(),
       this.select('chartList'),
     ]).pipe(
-      map(([paymentList, chartList]) =>
-        chartList.map((chartConfig) =>
-          createChartConfig(paymentList, chartConfig),
-        ),
-      ),
+      map(([paymentList, chartList]) => {
+        console.log('getChartData');
+        const config = chartList.find((c) => c.chartId === chartId);
+        if (!config) return null;
+        return createChartConfig(paymentList, config);
+      }),
     );
   }
 

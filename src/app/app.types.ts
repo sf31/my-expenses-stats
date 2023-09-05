@@ -33,6 +33,7 @@ export type FilterNumber = { min: number; max: number };
 export type FilterList = { values: string[] };
 
 export type ChartConfig = {
+  chartId: string;
   type: 'pie' | 'bar' | 'line';
   field: keyof Payment;
 };
