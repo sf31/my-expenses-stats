@@ -18,7 +18,8 @@ import {
   State,
 } from './app.types';
 import * as uuid from 'uuid';
-import { createChartConfig } from './utils/chart.utils';
+import { createChartConfig, historicalChart } from './utils/chart.utils';
+import { parseDateToUnix } from './pages/upload-csv.component';
 
 @Injectable({
   providedIn: 'root',
@@ -40,6 +41,8 @@ export class StoreService {
       ...JSON.parse(state),
       // chartList: [],
     });
+    parseDateToUnix('10/10/2020');
+    historicalChart(this._state$.value.paymentList);
     applyTheme(this._state$.value.theme);
   }
 
@@ -223,7 +226,8 @@ export class StoreService {
   }
 }
 
-function filterDate(value: Date, filter: FilterDate): boolean {
+function filterDate(value: number, filter: FilterDate): boolean {
+  console.log(value, filter);
   return value >= filter.from && value <= filter.to;
 }
 

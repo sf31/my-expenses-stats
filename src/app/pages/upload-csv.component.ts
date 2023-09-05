@@ -52,7 +52,8 @@ function parseRow(row: unknown[]): Payment | null {
   try {
     return {
       id: uuid.v4(),
-      date: parseDate(row[1]),
+      // date: parseDate(row[1]),
+      date: parseDateToUnix(row[1]),
       payee: parseString(row[2]),
       income: parseNumber(row[3]),
       expense: parseNumber(row[4]),
@@ -70,6 +71,15 @@ function parseDate(dateStr: unknown, format: string = 'dd/MM/yyyy'): Date {
   if (typeof dateStr !== 'string')
     throw new Error(`Expected string, got ${typeof dateStr}`);
   return DateTime.fromFormat(dateStr, format).toJSDate();
+}
+
+export function parseDateToUnix(
+  dateStr: unknown,
+  format: string = 'dd/MM/yyyy',
+): number {
+  if (typeof dateStr !== 'string')
+    throw new Error(`Expected string, got ${typeof dateStr}`);
+  return DateTime.fromFormat(dateStr, format, { zone: 'UTC' }).toUnixInteger();
 }
 
 function parseNumber(numStr: unknown): number {

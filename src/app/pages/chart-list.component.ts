@@ -9,10 +9,7 @@ import { Observable, take } from 'rxjs';
     <div class="filters">
       <app-filter-date />
       <app-filter-number field="expense" />
-      <app-filter-number field="income" />
       <app-filter-string field="payee" />
-      <app-filter-string field="notes" />
-      <app-filter-string field="paymentMethod" />
       <app-filter-dropdown mode="select" field="category">
         <app-filter-list field="category" />
       </app-filter-dropdown>

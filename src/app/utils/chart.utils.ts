@@ -24,6 +24,15 @@ export function createChartConfig(
   return { labels, data, ...config };
 }
 
+export function historicalChart(paymentList: Payment[]): any {
+  const sorted = [...paymentList].sort((p1, p2) =>
+    p1.date >= p2.date ? 1 : -1,
+  );
+  const first = sorted[0].date;
+  const last = sorted[sorted.length - 1].date;
+  // const daily: { day: DateTime, list: Payment[]} = {}
+}
+
 function valueToString(value: string | Date | number): string {
   if (typeof value === 'string') return value;
   if (value instanceof Date) return value.toISOString();

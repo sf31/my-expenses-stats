@@ -17,7 +17,7 @@ export type State = {
 
 export type Payment = {
   id: string;
-  date: Date;
+  date: number; // unix
   payee: string;
   expense: number;
   income: number;
@@ -28,7 +28,7 @@ export type Payment = {
 };
 
 export type Filter = FilterDate | FilterString | FilterNumber | FilterList;
-export type FilterDate = { from: Date; to: Date };
+export type FilterDate = { from: number; to: number };
 export type FilterString = { value: string };
 export type FilterNumber = { min: number; max: number };
 export type FilterList = { values: string[] };

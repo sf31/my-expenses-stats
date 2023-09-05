@@ -48,7 +48,9 @@ import { Payment } from '../app.types';
         <div class="payment-card" *ngFor="let p of filtered">
           <div class="payee">{{ p.payee }}</div>
           <div class="amount">{{ p.expense | currency: 'EUR' }}</div>
-          <div class="date">{{ p.date | date: 'dd/MM/yyyy' }}</div>
+          <div class="date">
+            {{ p.date * 1000 | date: 'dd/MM/yyyy' : 'UTC' }}
+          </div>
           <div class="category">{{ p.category }}</div>
           <div class="subcategory">{{ p.subcategory }}</div>
         </div>

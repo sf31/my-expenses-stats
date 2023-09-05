@@ -62,8 +62,8 @@ export class FilterDateComponent {
         if (!filterList) return { fromStr: '', toStr: '', enabled: false };
         const fmt = 'yyyy-MM-dd';
         const { from, to } = filterList;
-        const fromStr = DateTime.fromJSDate(from).toFormat(fmt);
-        const toStr = DateTime.fromJSDate(to).toFormat(fmt);
+        const fromStr = DateTime.fromSeconds(from).toFormat(fmt);
+        const toStr = DateTime.fromSeconds(to).toFormat(fmt);
         return { fromStr, toStr, enabled: true };
       }),
     );
@@ -71,10 +71,12 @@ export class FilterDateComponent {
 
   onDateChange(dateFrom: HTMLInputElement, dateTo: HTMLInputElement): void {
     // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date
-    const from = DateTime.fromFormat(dateFrom.value, 'yyyy-MM-dd');
-    const to = DateTime.fromFormat(dateTo.value, 'yyyy-MM-dd');
+    const from = DateTime.fromFormat(dateFrom.value, 'yyyy-MM-dd', {
+      zone: 'UTC',
+    });
+    const to = DateTime.fromFormat(dateTo.value, 'yyyy-MM-dd', { zone: 'UTC' });
     if (!from.isValid || !to.isValid) return;
-    const filter = { from: from.toJSDate(), to: to.toJSDate() };
+    const filter = { from: from.toUnixInteger(), to: to.toUnixInteger() };
     this.store.setFilter('date', filter);
   }
 
