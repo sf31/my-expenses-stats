@@ -12,31 +12,31 @@ import { Payment } from '../app.types';
       <div class="list-header">
         <div class="payee">
           <span>Payee</span>
-          <app-filter-dropdown>
+          <app-filter-dropdown field="payee">
             <app-filter-string field="payee" />
           </app-filter-dropdown>
         </div>
         <div class="amount">
           <span>Amount</span>
-          <app-filter-dropdown>
+          <app-filter-dropdown field="expense">
             <app-filter-number field="expense" />
           </app-filter-dropdown>
         </div>
         <div class="date">
           <span>Date</span>
-          <app-filter-dropdown>
+          <app-filter-dropdown field="date">
             <app-filter-date />
           </app-filter-dropdown>
         </div>
         <div class="category">
           <span>Category</span>
-          <app-filter-dropdown>
+          <app-filter-dropdown field="category">
             <app-filter-list field="category" />
           </app-filter-dropdown>
         </div>
         <div class="subcategory">
           <span>Subcategory</span>
-          <app-filter-dropdown>
+          <app-filter-dropdown field="subcategory">
             <app-filter-list field="subcategory" />
           </app-filter-dropdown>
         </div>
