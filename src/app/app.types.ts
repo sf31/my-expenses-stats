@@ -37,6 +37,7 @@ export type ChartConfig = {
   chartId: string;
   type: 'pie' | 'bar' | 'line';
   field: keyof Payment;
+  op: 'expense' | 'income' | 'count';
 };
 
 export type ChartData = ChartConfig & {

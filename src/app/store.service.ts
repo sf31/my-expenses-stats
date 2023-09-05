@@ -7,6 +7,7 @@ import {
   Observable,
 } from 'rxjs';
 import {
+  ChartConfig,
   ChartData,
   Filter,
   FilterDate,
@@ -27,10 +28,7 @@ export class StoreService {
   private readonly INITIAL_STATE: State = {
     paymentList: [],
     filterList: {},
-    chartList: [
-      { chartId: uuid.v4(), type: 'pie', field: 'category' },
-      { chartId: uuid.v4(), type: 'pie', field: 'subcategory' },
-    ],
+    chartList: [],
     theme: 'dark',
   };
 
@@ -40,6 +38,7 @@ export class StoreService {
     this._state$.next({
       ...this.INITIAL_STATE,
       ...JSON.parse(state),
+      // chartList: [],
     });
     applyTheme(this._state$.value.theme);
   }
@@ -121,12 +120,28 @@ export class StoreService {
       this.select('chartList'),
     ]).pipe(
       map(([paymentList, chartList]) => {
-        console.log('getChartData');
         const config = chartList.find((c) => c.chartId === chartId);
         if (!config) return null;
         return createChartConfig(paymentList, config);
       }),
     );
+  }
+
+  createChart(config: Pick<ChartConfig, 'type' | 'field' | 'op'>): void {
+    this.patchState({
+      chartList: [
+        ...this._state$.value.chartList,
+        { ...config, chartId: uuid.v4() },
+      ],
+    });
+  }
+
+  removeChart(chartId: string): void {
+    this.patchState({
+      chartList: this._state$.value.chartList.filter(
+        (chart) => chart.chartId !== chartId,
+      ),
+    });
   }
 
   setTheme(theme: 'dark' | 'light'): void {

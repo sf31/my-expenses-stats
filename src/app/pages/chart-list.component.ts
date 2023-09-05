@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChartConfig } from '../app.types';
 import { StoreService } from '../store.service';
-import { Observable } from 'rxjs';
+import { Observable, take } from 'rxjs';
 
 @Component({
   selector: 'app-chart-list',
@@ -18,13 +18,31 @@ import { Observable } from 'rxjs';
         <app-filter-list field="subcategory" />
       </app-filter-dropdown>
     </div>
-    <app-chart *ngFor="let c of chartList$ | async" [chartId]="c.chartId" />
+
+    <div class="debug" (click)="defaultCharts()">SET DEFAULT CHARTS</div>
+
+    <div class="chart-list" *ngIf="chartList$ | async as chartList">
+      <app-chart *ngFor="let c of chartList" [chartConfig]="c" />
+    </div>
   `,
   styles: [
     `
+      .chart-list {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        grid-gap: var(--spacing-3);
+        padding: var(--spacing-3) 0;
+      }
+
       .filters {
         display: flex;
         flex-wrap: wrap;
+      }
+
+      @media screen and (max-width: 600px) {
+        .chart-list {
+          grid-template-columns: 1fr;
+        }
       }
     `,
   ],
@@ -35,5 +53,19 @@ export class ChartListComponent {
 
   constructor(private store: StoreService) {
     this.chartList$ = this.store.select('chartList');
+  }
+
+  defaultCharts(): void {
+    this.chartList$.pipe(take(1)).subscribe((list) => {
+      list.map((c) => this.store.removeChart(c.chartId));
+      const charts = [
+        { type: 'pie', field: 'category', op: 'expense' },
+        { type: 'pie', field: 'subcategory', op: 'expense' },
+        { type: 'bar', field: 'category', op: 'expense' },
+        { type: 'bar', field: 'category', op: 'count' },
+      ];
+
+      charts.map((c: any) => this.store.createChart(c));
+    });
   }
 }
