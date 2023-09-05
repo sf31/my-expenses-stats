@@ -8,7 +8,7 @@ import { faFilter } from '@fortawesome/free-solid-svg-icons';
     `
       fa-icon {
         cursor: pointer;
-        color: var(--disabled-color);
+        color: var(--disabled-alt-color);
       }
 
       .enabled {

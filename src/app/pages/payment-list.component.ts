@@ -66,7 +66,7 @@ import { Payment } from '../app.types';
         font-weight: bold;
         position: sticky;
         top: 0;
-        border-bottom: 1px solid var(--border-color);
+        background-color: var(--disabled-color) !important;
       }
 
       .list-header > div,

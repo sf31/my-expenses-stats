@@ -13,9 +13,9 @@ body {
 
 @mixin light() {
   --primary-color: #2962FF;
-  --secondary-color: #868e96;
   --accent-color: #FF7043;
   --disabled-color: #d2d6da;
+  --disabled-alt-color: #a2a2a2;
   --bg-color: #ffffff;
   --border-color: #f1f3f5;
   --hover-color: #f1f3f5;
@@ -24,9 +24,9 @@ body {
 
 @mixin dark() {
   --primary-color: #2962FF;
-  --secondary-color: #5a6268;
   --accent-color: #FF7043;
   --disabled-color: #6c757d;
+  --disabled-alt-color: #a2a2a2;
   --bg-color: #333333;
   --border-color: #424242;
   --hover-color: #424242;
@@ -90,4 +90,8 @@ body.dark input {
 .show-on-hover {
   //opacity: 0;
   display: none;
+}
+
+.shadow {
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
 }

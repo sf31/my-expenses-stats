@@ -22,7 +22,7 @@ type Stats = {
     <ng-container *ngIf="view$ | async as view">
       <div class="stats">
         <div class="stat">
-          <div class="label">Count</div>
+          <div class="label">Payments count</div>
           <div class="value">
             {{ view.filtered.count }} (of {{ view.total.count }})
           </div>
@@ -60,11 +60,24 @@ type Stats = {
   styles: [
     `
       .stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
+        grid-gap: var(--spacing-2);
+        justify-items: center;
+        padding: var(--spacing-2);
+      }
+
+      .stat {
         display: flex;
-        flex-wrap: wrap;
-        justify-content: space-between;
+        flex-direction: column;
+        align-items: center;
+        width: 250px;
         padding: var(--spacing-1);
-        border-bottom: 1px solid var(--border-color);
+      }
+
+      .stat .label {
+        font-weight: bold;
+        margin-bottom: var(--spacing-1);
       }
     `,
   ],
