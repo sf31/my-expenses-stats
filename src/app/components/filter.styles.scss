@@ -1,0 +1,75 @@
+@mixin filter-multi() {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+@mixin reset-btn() {
+  border: 1px solid var(--border-color);
+  border-radius: var(--radius-1);
+  cursor: pointer;
+  user-select: none;
+  &:hover {
+    background-color: var(--disabled-color);
+  }
+}
+
+.filter-wrapper {
+  display: grid;
+  width: 300px;
+  grid-template-columns: 1fr 60px;
+  grid-template-rows: 1fr 1fr;
+  gap: var(--spacing-1);
+  background-color: var(--border-color);
+  padding: var(--spacing-1);
+  border-radius: var(--radius-1);
+}
+
+.filter-1 .field,
+.filter-2 .field {
+  width: 50px;
+}
+
+.filter-1 {
+  @include filter-multi();
+  grid-column: 1 / 2;
+  grid-row: 1 / 2;
+}
+
+.filter-2 {
+  @include filter-multi();
+  grid-column: 1 / 2;
+  grid-row: 2 / 3;
+}
+
+.filter-multi-reset {
+  @include filter-multi();
+  @include reset-btn();
+  grid-column: 2 / 3;
+  grid-row: 1 / 3;
+}
+
+// single line (eg. FilterString)
+
+.filter-wrapper .field {
+  text-transform: capitalize;
+  grid-column: 1/2;
+  grid-row: 1/2;
+  align-self: center;
+  font-weight: bold;
+}
+
+.filter-wrapper .filter-reset {
+  @include reset-btn();
+  grid-column: 2/3;
+  grid-row: 1/2;
+  align-self: stretch;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.filter-wrapper .filter {
+  grid-column: 1/ 3;
+  grid-row: 2/3;
+}

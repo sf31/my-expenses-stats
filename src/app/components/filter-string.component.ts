@@ -11,13 +11,19 @@ import { StoreService } from '../store.service';
 @Component({
   selector: 'app-filter-string',
   template: `
-    <input
-      [placeholder]="'Filter ' + field"
-      [value]="(filter$ | async)?.value"
-      type="text"
-      (input)="onInput($event)"
-    />
+    <div class="filter-wrapper">
+      <div class="field">{{ field }}</div>
+      <div class="filter-reset" (click)="reset()">Reset</div>
+      <input
+        class="filter"
+        [placeholder]="'Filter ' + field"
+        [value]="(filter$ | async)?.value"
+        type="text"
+        (input)="onInput($event)"
+      />
+    </div>
   `,
+  styleUrls: ['./filter.styles.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterStringComponent implements OnInit {
@@ -39,5 +45,10 @@ export class FilterStringComponent implements OnInit {
       return this.store.setFilter(this.field, null);
     const filter: FilterString = { value };
     this.store.setFilter(this.field, filter);
+  }
+
+  reset(): void {
+    if (!this.field) return;
+    this.store.setFilter(this.field, null);
   }
 }

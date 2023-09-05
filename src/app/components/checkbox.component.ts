@@ -23,6 +23,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
         color: var(--bg-color);
         &.checked {
           background-color: var(--primary-color);
+          border: 1px solid var(--primary-color);
         }
       }
     `,

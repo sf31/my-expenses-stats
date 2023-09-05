@@ -18,12 +18,20 @@ import { map, Observable } from 'rxjs';
         [cdkMenuTriggerFor]="menu"
       />
     </ng-container>
-    <div class="select" [cdkMenuTriggerFor]="menu" *ngIf="mode === 'select'">
-      <span class="text-ellipsis">
-        {{ (filterEnabled$ | async)?.filterValues || 'Select ' + field }}
-      </span>
-      <fa-icon [icon]="iconCaret" />
-    </div>
+
+    <ng-container *ngIf="mode === 'select'">
+      <div class="filter-wrapper">
+        <div class="field">{{ field }}</div>
+        <div class="filter-reset" (click)="reset()">Reset</div>
+        <div class="filter select" [cdkMenuTriggerFor]="menu">
+          <span class="text-ellipsis">
+            {{ (filterEnabled$ | async)?.filterValues || 'Select ' + field }}
+          </span>
+          <fa-icon [icon]="iconCaret" />
+        </div>
+      </div>
+    </ng-container>
+
     <ng-template #menu>
       <div class="dropdown-menu-outer">
         <div class="dropdown-menu" cdkMenu>
@@ -32,15 +40,16 @@ import { map, Observable } from 'rxjs';
       </div>
     </ng-template>
   `,
+  styleUrls: ['./filter.styles.scss'],
   styles: [
     `
       .select {
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--bg-color);
+        background-color: var(--bg-color);
         border-radius: var(--radius-1);
         padding: var(--spacing-1) 0;
         cursor: pointer;
         user-select: none;
-        width: 250px;
         display: flex;
         align-items: center;
         justify-content: space-between;
@@ -56,7 +65,7 @@ import { map, Observable } from 'rxjs';
 
       .dropdown-menu-outer {
         max-height: 350px;
-        width: 250px;
+        width: 300px;
         overflow: auto;
       }
 
@@ -88,5 +97,10 @@ export class FilterDropdown implements OnInit {
         return { filterValues, enabled: !!filter };
       }),
     );
+  }
+
+  reset(): void {
+    if (!this.field) return;
+    this.store.setFilter(this.field, null);
   }
 }

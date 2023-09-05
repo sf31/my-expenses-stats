@@ -8,6 +8,8 @@ import { Observable, take } from 'rxjs';
   template: `
     <div class="filters">
       <app-filter-date />
+      <app-filter-number field="expense" />
+      <app-filter-number field="income" />
       <app-filter-string field="payee" />
       <app-filter-string field="notes" />
       <app-filter-string field="paymentMethod" />
@@ -35,8 +37,10 @@ import { Observable, take } from 'rxjs';
       }
 
       .filters {
-        display: flex;
-        flex-wrap: wrap;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: var(--spacing-2);
+        justify-items: center;
       }
 
       @media screen and (max-width: 600px) {

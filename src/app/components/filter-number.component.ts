@@ -11,28 +11,49 @@ import { StoreService } from '../store.service';
 @Component({
   selector: 'app-filter-number',
   template: `
-    <div class="filter">
-      <div class="field">Min</div>
-      <input
-        #min
-        type="number"
-        [value]="(filter$ | async)?.min"
-        (input)="onValueChange(min, max)"
-      />
+    <div class="filter-wrapper">
+      <div class="field">{{ field }}</div>
+      <div class="filter-reset" (click)="reset()">Reset</div>
+      <div class="filter">
+        <div class="label">Min</div>
+        <input
+          #min
+          type="number"
+          [value]="(filter$ | async)?.min"
+          (input)="onValueChange(min, max)"
+        />
+        <div class="fill"></div>
+        <div class="label">Max</div>
+        <input
+          #max
+          type="number"
+          [value]="(filter$ | async)?.max"
+          (input)="onValueChange(min, max)"
+        />
+      </div>
     </div>
-
-    <div class="filter">
-      <div class="field">Max</div>
-      <input
-        #max
-        type="number"
-        [value]="(filter$ | async)?.max"
-        (input)="onValueChange(min, max)"
-      />
-    </div>
-
-    <app-btn (click)="reset()"> Reset</app-btn>
   `,
+  styleUrls: ['./filter.styles.scss'],
+  styles: [
+    `
+      .filter {
+        display: flex;
+        align-items: center;
+      }
+
+      .label {
+        width: 35px;
+      }
+
+      input {
+        width: 100px;
+      }
+
+      .fill {
+        flex: 1 1 auto;
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterNumberComponent implements OnInit {

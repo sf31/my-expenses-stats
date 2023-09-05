@@ -6,8 +6,8 @@ import { StoreService } from '../store.service';
 @Component({
   selector: 'app-filter-date',
   template: `
-    <ng-container *ngIf="filter$ | async as filter">
-      <div class="filter">
+    <div class="filter-wrapper" *ngIf="filter$ | async as filter">
+      <div class="filter-1">
         <div class="field">From</div>
         <input
           #dateFrom
@@ -17,7 +17,7 @@ import { StoreService } from '../store.service';
         />
       </div>
 
-      <div class="filter">
+      <div class="filter-2">
         <div class="field">To</div>
         <input
           #dateTo
@@ -26,23 +26,28 @@ import { StoreService } from '../store.service';
           (input)="onDateChange(dateFrom, dateTo)"
         />
       </div>
-
-      <app-btn (click)="reset()"> Reset </app-btn>
-    </ng-container>
+      <div class="filter-multi-reset" (click)="reset()">Reset</div>
+    </div>
   `,
+  styleUrls: ['./filter.styles.scss'],
   styles: [
     `
-      .filter {
+      .right {
         display: flex;
         align-items: center;
-      }
+        justify-content: center;
+        padding: var(--spacing-1);
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-1);
+        cursor: pointer;
 
-      .field {
-        min-width: 50px;
+        &:hover {
+          background-color: var(--hover-color);
+        }
       }
 
       input {
-        padding: var(--spacing-1);
+        height: 35px;
       }
     `,
   ],
