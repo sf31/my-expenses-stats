@@ -1,3 +1,6 @@
+import { State } from '../app.types';
+import { INITIAL_APP_STATE } from '../app.const';
+
 export function notNullOrUndefined<T>(val: T | null | undefined): val is T {
   return val !== null && val !== undefined;
 }
@@ -96,4 +99,10 @@ export function moveElement<T>(array: T[], from: number, to: number): T[] {
  */
 export function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
+}
+
+// todo add validation from localStorage
+export function getLocalStorageState(key: string): State {
+  const local = localStorage.getItem(key);
+  return local ? JSON.parse(local) : INITIAL_APP_STATE;
 }

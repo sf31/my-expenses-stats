@@ -13,6 +13,7 @@ export type State = {
   };
   chartList: ChartConfig[];
   theme: 'light' | 'dark';
+  restoreError: string | null;
 };
 
 export type Payment = {

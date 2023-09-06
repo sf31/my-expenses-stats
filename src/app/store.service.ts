@@ -18,39 +18,25 @@ import {
   State,
 } from './app.types';
 import * as uuid from 'uuid';
-import { createChartConfig, historicalChart } from './utils/chart.utils';
-import { parseDateToUnix } from './pages/upload-csv.component';
+import { createChartConfig } from './utils/chart.utils';
+import { getLocalStorageState } from './utils/utils';
+import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './app.const';
 
 @Injectable({
   providedIn: 'root',
 })
 export class StoreService {
-  private readonly LSK_STATE = 'my-expenses-stats-state';
-  private readonly INITIAL_STATE: State = {
-    paymentList: [],
-    filterList: {},
-    chartList: [],
-    theme: 'dark',
-  };
+  private _state$: BehaviorSubject<State>;
 
   constructor() {
-    const state = localStorage.getItem(this.LSK_STATE);
-    if (!state) return;
-    this._state$.next({
-      ...this.INITIAL_STATE,
-      ...JSON.parse(state),
-      // chartList: [],
-    });
-    parseDateToUnix('10/10/2020');
-    historicalChart(this._state$.value.paymentList);
+    this._state$ = new BehaviorSubject<State>(INITIAL_APP_STATE);
+    this._state$.next(getLocalStorageState(LOCAL_STORAGE_KEY));
     applyTheme(this._state$.value.theme);
   }
 
-  private _state$ = new BehaviorSubject<State>(this.INITIAL_STATE);
-
   private patchState(patch: Partial<State>) {
     this._state$.next({ ...this._state$.value, ...patch });
-    localStorage.setItem(this.LSK_STATE, JSON.stringify(this._state$.value));
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this._state$.value));
   }
 
   select<T extends keyof State>(
