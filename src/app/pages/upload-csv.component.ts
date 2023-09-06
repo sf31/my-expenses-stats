@@ -79,7 +79,9 @@ export function parseDateToUnix(
 ): number {
   if (typeof dateStr !== 'string')
     throw new Error(`Expected string, got ${typeof dateStr}`);
-  return DateTime.fromFormat(dateStr, format, { zone: 'UTC' }).toUnixInteger();
+  return DateTime.fromFormat(dateStr, format, { zone: 'UTC' })
+    .startOf('day')
+    .toUnixInteger();
 }
 
 function parseNumber(numStr: unknown): number {

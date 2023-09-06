@@ -1,4 +1,5 @@
 import { ChartConfig, ChartData, Payment } from '../app.types';
+import { DateTime } from 'luxon';
 
 export function createChartConfig(
   paymentList: Payment[],
@@ -28,9 +29,46 @@ export function historicalChart(paymentList: Payment[]): any {
   const sorted = [...paymentList].sort((p1, p2) =>
     p1.date >= p2.date ? 1 : -1,
   );
-  const first = sorted[0].date;
-  const last = sorted[sorted.length - 1].date;
-  // const daily: { day: DateTime, list: Payment[]} = {}
+
+  const result: {
+    daily: { [day: number]: Payment[] };
+    weekly: { [week: number]: Payment[] };
+    monthly: { [month: number]: Payment[] };
+    yearly: { [year: number]: Payment[] };
+  } = {
+    daily: {},
+    weekly: {},
+    monthly: {},
+    yearly: {},
+  };
+
+  for (let i = 0; i < sorted.length; i++) {
+    const payment = sorted[i];
+    const dt = DateTime.fromSeconds(payment.date, { zone: 'utc' });
+    const day = payment.date;
+    const week = dt.startOf('week').toUnixInteger();
+    const month = dt.startOf('month').toUnixInteger();
+    const year = dt.startOf('year').toUnixInteger();
+    result['daily'][day] = [...(result['daily'][day] ?? []), payment];
+    result['weekly'][week] = [...(result['weekly'][week] ?? []), payment];
+    result['monthly'][month] = [...(result['monthly'][month] ?? []), payment];
+    result['yearly'][year] = [...(result['yearly'][year] ?? []), payment];
+  }
+
+  console.log(result);
+}
+
+function getHistoricalDay(sortedList: Payment[]): { [day: number]: Payment[] } {
+  if (sortedList.length === 0) return {};
+  const daily: { [day: number]: Payment[] } = {};
+  let currentDay = sortedList[0].date;
+  for (let i = 0; i < sortedList.length; i++) {
+    const payment = sortedList[i];
+    const existingPayments = daily[payment.date] ?? [];
+    daily[payment.date] = [...existingPayments, payment];
+    if (payment.date > currentDay) currentDay = payment.date;
+  }
+  return daily;
 }
 
 function valueToString(value: string | Date | number): string {
