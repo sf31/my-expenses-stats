@@ -5,10 +5,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   template: `
     <div class="container">
       <app-header />
-      <div class="content-outer">
-        <div class="content">
-          <router-outlet />
-        </div>
+      <div class="content">
+        <router-outlet />
       </div>
     </div>
   `,
@@ -20,24 +18,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         grid-template-rows: 50px 1fr;
       }
 
-      .content-outer {
-        display: grid;
-        grid-template-columns: auto 70vw auto;
-        overflow: auto;
-        padding: var(--spacing-2);
-      }
-
       .content {
-        grid-column: 2 / 3;
-      }
-
-      @media screen and (max-width: 1600px) {
-        .content-outer {
-          grid-template-columns: 1fr;
-        }
-        .content {
-          grid-column: 1 / 2;
-        }
+        overflow: auto;
       }
     `,
   ],

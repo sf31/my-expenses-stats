@@ -6,18 +6,7 @@ import { Observable, take } from 'rxjs';
 @Component({
   selector: 'app-chart-list',
   template: `
-    <div class="filters">
-      <app-filter-date />
-      <app-filter-number field="expense" />
-      <app-filter-string field="payee" />
-      <app-filter-dropdown mode="select" field="category">
-        <app-filter-list field="category" />
-      </app-filter-dropdown>
-      <app-filter-dropdown mode="select" field="subcategory">
-        <app-filter-list field="subcategory" />
-      </app-filter-dropdown>
-    </div>
-
+    <div class="filters"></div>
     <div class="debug" (click)="defaultCharts()">SET DEFAULT CHARTS</div>
 
     <div class="chart-list" *ngIf="chartList$ | async as chartList">

@@ -23,11 +23,19 @@ import { CheckboxComponent } from './components/checkbox.component';
 import { ChartComponent } from './components/chart.component';
 import { FilterDropdown } from './components/filter-dropdown';
 import { ThemeToggleComponent } from './components/theme-toggle.component';
+import { FilterPanelComponent } from './components/filter-panel.component';
+import { HomeComponent } from './pages/home.component';
 
 const routes: Routes = [
-  { path: '', component: PaymentListComponent },
+  {
+    path: '',
+    component: HomeComponent,
+    children: [
+      { path: '', component: PaymentListComponent },
+      { path: 'charts', component: ChartListComponent },
+    ],
+  },
   { path: 'upload', component: UploadCsvComponent },
-  { path: 'charts', component: ChartListComponent },
   { path: '**', redirectTo: '' },
 ];
 
@@ -51,6 +59,8 @@ const routes: Routes = [
     ChartComponent,
     FilterDropdown,
     ThemeToggleComponent,
+    FilterPanelComponent,
+    HomeComponent,
   ],
   imports: [
     BrowserModule,
