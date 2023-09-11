@@ -7,8 +7,9 @@ import {
   Observable,
 } from 'rxjs';
 import {
-  ChartConfig,
   ChartData,
+  ChartHistoryConfig,
+  ChartStandardConfig,
   Filter,
   FilterDate,
   FilterList,
@@ -17,10 +18,13 @@ import {
   Payment,
   State,
 } from './app.types';
-import * as uuid from 'uuid';
-import { createChartConfig } from './utils/chart.utils';
+import {
+  createChartHistoryData,
+  createChartStandardData,
+} from './utils/chart.utils';
 import { getLocalStorageState } from './utils/utils';
 import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './app.const';
+import * as uuid from 'uuid';
 
 @Injectable({
   providedIn: 'root',
@@ -37,6 +41,10 @@ export class StoreService {
   private patchState(patch: Partial<State>) {
     this._state$.next({ ...this._state$.value, ...patch });
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this._state$.value));
+  }
+
+  resetChartState(): void {
+    this.patchState({ chartList: INITIAL_APP_STATE.chartList });
   }
 
   select<T extends keyof State>(
@@ -109,27 +117,59 @@ export class StoreService {
       this.select('chartList'),
     ]).pipe(
       map(([paymentList, chartList]) => {
-        const config = chartList.find((c) => c.chartId === chartId);
-        if (!config) return null;
-        return createChartConfig(paymentList, config);
+        const findFn = (c: ChartStandardConfig | ChartHistoryConfig) =>
+          c.chartId === chartId;
+        const stdConfig = chartList.standard.find(findFn);
+        const historyConfig = chartList.history.find(findFn);
+        if (stdConfig) return createChartStandardData(paymentList, stdConfig);
+        if (historyConfig)
+          return createChartHistoryData(paymentList, historyConfig);
+        return null;
       }),
     );
   }
 
-  createChart(config: Pick<ChartConfig, 'type' | 'field' | 'op'>): void {
+  createStandardChart(
+    config: Pick<ChartStandardConfig, 'type' | 'field' | 'op'>,
+  ): void {
+    const stdChartList = this._state$.value.chartList.standard;
+    const historyChartList = this._state$.value.chartList.history;
+
     this.patchState({
-      chartList: [
-        ...this._state$.value.chartList,
-        { ...config, chartId: uuid.v4() },
-      ],
+      chartList: {
+        standard: [
+          ...stdChartList,
+          { ...config, chartId: uuid.v4(), configType: 'standard' },
+        ],
+        history: historyChartList,
+      },
+    });
+  }
+
+  createHistoryChart(
+    config: Pick<ChartHistoryConfig, 'period' | 'op' | 'dateFormat'>,
+  ): void {
+    const stdChartList = this._state$.value.chartList.standard;
+    const historyChartList = this._state$.value.chartList.history;
+
+    this.patchState({
+      chartList: {
+        standard: stdChartList,
+        history: [
+          ...historyChartList,
+          { ...config, chartId: uuid.v4(), configType: 'history' },
+        ],
+      },
     });
   }
 
   removeChart(chartId: string): void {
+    const filterFn = (c: ChartStandardConfig | ChartHistoryConfig) =>
+      c.chartId !== chartId;
+    const history = this._state$.value.chartList.history.filter(filterFn);
+    const standard = this._state$.value.chartList.standard.filter(filterFn);
     this.patchState({
-      chartList: this._state$.value.chartList.filter(
-        (chart) => chart.chartId !== chartId,
-      ),
+      chartList: { history, standard },
     });
   }
 
@@ -213,7 +253,6 @@ export class StoreService {
 }
 
 function filterDate(value: number, filter: FilterDate): boolean {
-  console.log(value, filter);
   return value >= filter.from && value <= filter.to;
 }
 

@@ -11,7 +11,10 @@ export type State = {
     notes?: FilterString;
     paymentMethod?: FilterString;
   };
-  chartList: ChartConfig[];
+  chartList: {
+    standard: ChartStandardConfig[];
+    history: ChartHistoryConfig[];
+  };
   theme: 'light' | 'dark';
   restoreError: string | null;
 };
@@ -34,14 +37,30 @@ export type FilterString = { value: string };
 export type FilterNumber = { min: number; max: number };
 export type FilterList = { values: string[] };
 
-export type ChartConfig = {
+export type ChartStandardConfig = {
   chartId: string;
+  configType: 'standard';
   type: 'pie' | 'bar' | 'line';
   field: keyof Payment;
   op: 'expense' | 'income' | 'count';
 };
 
-export type ChartData = ChartConfig & {
-  labels: string[];
+export type ChartHistoryConfig = {
+  chartId: string;
+  configType: 'history';
+  period: 'daily' | 'weekly' | 'monthly' | 'yearly';
+  op: 'expense' | 'income' | 'count';
+  dateFormat: string;
+};
+
+export type ChartData = {
+  labels: (string | number)[];
   data: number[];
+};
+
+export type HistoryChartData = {
+  daily: { [day: number]: Payment[] };
+  weekly: { [week: number]: Payment[] };
+  monthly: { [month: number]: Payment[] };
+  yearly: { [year: number]: Payment[] };
 };

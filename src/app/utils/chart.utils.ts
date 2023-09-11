@@ -1,9 +1,16 @@
-import { ChartConfig, ChartData, Payment } from '../app.types';
+import {
+  ChartData,
+  ChartHistoryConfig,
+  ChartStandardConfig,
+  HistoryChartData,
+  Payment,
+} from '../app.types';
 import { DateTime } from 'luxon';
+import { unixToFormat } from './utils';
 
-export function createChartConfig(
+export function createChartStandardData(
   paymentList: Payment[],
-  config: ChartConfig,
+  config: ChartStandardConfig,
 ): ChartData {
   const labels: string[] = [];
   const data: number[] = [];
@@ -22,28 +29,38 @@ export function createChartConfig(
     data.push(sum);
   });
 
-  return { labels, data, ...config };
+  return { labels, data };
 }
 
-export function historicalChart(paymentList: Payment[]): any {
-  const sorted = [...paymentList].sort((p1, p2) =>
-    p1.date >= p2.date ? 1 : -1,
-  );
+export function createChartHistoryData(
+  paymentList: Payment[],
+  config: ChartHistoryConfig,
+): ChartData {
+  const labels: (number | string)[] = [];
+  const data: number[] = [];
+  const paymentsByPeriod = splitByPeriod(paymentList);
 
-  const result: {
-    daily: { [day: number]: Payment[] };
-    weekly: { [week: number]: Payment[] };
-    monthly: { [month: number]: Payment[] };
-    yearly: { [year: number]: Payment[] };
-  } = {
+  Object.keys(paymentsByPeriod[config.period]).forEach((unix) => {
+    const payments = paymentsByPeriod[config.period][parseInt(unix)];
+    const sum = payments.reduce((acc, p) => acc + p.expense, 0);
+    // labels.push(parseInt(unix) * 1000); //unixToFormat(parseInt(unix), 'dd MMM yyyy'));
+    labels.push(unixToFormat(parseInt(unix), config.dateFormat));
+    data.push(sum);
+  });
+
+  return { labels, data };
+}
+
+function splitByPeriod(paymentList: Payment[]): HistoryChartData {
+  const result: HistoryChartData = {
     daily: {},
     weekly: {},
     monthly: {},
     yearly: {},
   };
 
-  for (let i = 0; i < sorted.length; i++) {
-    const payment = sorted[i];
+  for (let i = 0; i < paymentList.length; i++) {
+    const payment = paymentList[i];
     const dt = DateTime.fromSeconds(payment.date, { zone: 'utc' });
     const day = payment.date;
     const week = dt.startOf('week').toUnixInteger();
@@ -55,20 +72,7 @@ export function historicalChart(paymentList: Payment[]): any {
     result['yearly'][year] = [...(result['yearly'][year] ?? []), payment];
   }
 
-  console.log(result);
-}
-
-function getHistoricalDay(sortedList: Payment[]): { [day: number]: Payment[] } {
-  if (sortedList.length === 0) return {};
-  const daily: { [day: number]: Payment[] } = {};
-  let currentDay = sortedList[0].date;
-  for (let i = 0; i < sortedList.length; i++) {
-    const payment = sortedList[i];
-    const existingPayments = daily[payment.date] ?? [];
-    daily[payment.date] = [...existingPayments, payment];
-    if (payment.date > currentDay) currentDay = payment.date;
-  }
-  return daily;
+  return result;
 }
 
 function valueToString(value: string | Date | number): string {
@@ -77,18 +81,10 @@ function valueToString(value: string | Date | number): string {
   return `${value}`;
 }
 
-function getValue(payment: Payment, config: ChartConfig): number {
+function getValue(payment: Payment, config: ChartStandardConfig): number {
   if (config.op === 'expense') return payment.expense;
   if (config.op === 'income') return payment.income;
   return 1;
-}
-
-function stringToHexColorCopilot(value: string): string {
-  const hash = value
-    .split('')
-    .reduce((acc, char) => char.charCodeAt(0) + acc, 0);
-  const hue = hash % 360;
-  return `hsl(${hue}, 50%, 50%)`;
 }
 
 export function stringToHexColor(str: string): string {

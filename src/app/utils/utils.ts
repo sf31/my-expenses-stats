@@ -1,5 +1,6 @@
 import { State } from '../app.types';
 import { INITIAL_APP_STATE } from '../app.const';
+import { DateTime } from 'luxon';
 
 export function notNullOrUndefined<T>(val: T | null | undefined): val is T {
   return val !== null && val !== undefined;
@@ -105,4 +106,8 @@ export function randomIntFromInterval(min: number, max: number) {
 export function getLocalStorageState(key: string): State {
   const local = localStorage.getItem(key);
   return local ? JSON.parse(local) : INITIAL_APP_STATE;
+}
+
+export function unixToFormat(unix: number, format: string): string {
+  return DateTime.fromSeconds(unix).toFormat(format);
 }

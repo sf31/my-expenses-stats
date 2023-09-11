@@ -3,7 +3,10 @@ import { State } from './app.types';
 export const INITIAL_APP_STATE: State = {
   paymentList: [],
   filterList: {},
-  chartList: [],
+  chartList: {
+    standard: [],
+    history: [],
+  },
   theme: 'dark',
   restoreError: null,
 };

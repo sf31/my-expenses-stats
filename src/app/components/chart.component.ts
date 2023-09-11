@@ -10,26 +10,17 @@ import {
 import { Chart } from 'chart.js';
 import { map, Subscription } from 'rxjs';
 import { StoreService } from '../store.service';
-import { ChartConfig } from '../app.types';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
-import { stringToHexColor } from '../utils/chart.utils';
+import {
+  ChartData,
+  ChartHistoryConfig,
+  ChartStandardConfig,
+} from '../app.types';
 
 @Component({
   selector: 'app-chart',
   template: `
-    <div class="chart-wrapper" *ngIf="chartConfig">
-      <div class="header">
-        <div class="label">
-          Field: <span class="field">{{ chartConfig.field }}</span>
-
-          <span *ngIf="chartConfig.op === 'count'"> (# of entries) </span>
-          <span *ngIf="chartConfig.op !== 'count'">
-            (sum of <span class="op">{{ chartConfig.op }}</span
-            >)
-          </span>
-        </div>
-        <fa-icon [icon]="iconRemove" (click)="removeChart(chartConfig)" />
-      </div>
+    <div class="chart-wrapper">
+      <app-chart-header [config]="chartConfig" />
       <div class="canvas-wrapper">
         <canvas [height]="400" #chartCanvas></canvas>
       </div>
@@ -42,31 +33,13 @@ import { stringToHexColor } from '../utils/chart.utils';
         border-radius: var(--radius-1);
         background-color: var(--hover-color);
       }
-
-      .header {
-        padding: var(--spacing-2);
-        border-bottom: 1px solid var(--bg-color);
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-
-      .label .field,
-      .label .op {
-        font-weight: bold;
-      }
-
-      fa-icon {
-        cursor: pointer;
-      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartComponent implements AfterViewInit, OnDestroy {
-  @Input() chartConfig?: ChartConfig;
+  @Input() chartConfig?: ChartStandardConfig | ChartHistoryConfig;
   @ViewChild('chartCanvas') chartCanvas?: ElementRef<HTMLCanvasElement>;
-  iconRemove = faTimes;
 
   private sub?: Subscription;
   private chart?: Chart;
@@ -75,36 +48,22 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
 
   ngAfterViewInit() {
     const ctx = this.chartCanvas?.nativeElement.getContext('2d');
+    const chartConfig = this.chartConfig;
     if (!ctx) throw new Error('Could not get canvas context');
-    if (!this.chartConfig) throw new Error('ChartConfig is required');
+    if (!chartConfig) throw new Error('ChartStandardConfig is required');
 
     this.sub = this.store
-      .getChartData(this.chartConfig.chartId)
+      .getChartData(chartConfig.chartId)
       .pipe(
         map((chartData) => {
           if (!chartData) return;
           if (!this.chart) {
-            this.chart = new Chart(ctx, {
-              type: chartData.type,
-              data: {
-                labels: chartData.labels,
-                datasets: [
-                  {
-                    data: chartData.data,
-                    backgroundColor: chartData.labels.map(stringToHexColor),
-                  },
-                ],
-              },
-              options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                  legend: {
-                    display: chartData.type === 'pie',
-                  },
-                },
-              },
-            }) as Chart;
+            if (chartConfig.configType === 'standard')
+              this.chart = createStandardChart(ctx, chartConfig, chartData);
+            else if (chartConfig.configType === 'history')
+              this.chart = createHistoryChart(ctx, chartData);
+            else
+              throw new Error('Invalid chartConfig.configType: ' + chartConfig);
           } else {
             this.chart.data.labels = chartData.labels;
             this.chart.data.datasets[0].data = chartData.data;
@@ -119,8 +78,59 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     this.sub?.unsubscribe();
     this.chart?.destroy();
   }
+}
 
-  removeChart(config: ChartConfig): void {
-    this.store.removeChart(config.chartId);
-  }
+function createStandardChart(
+  ctx: CanvasRenderingContext2D,
+  config: ChartStandardConfig,
+  chartData: ChartData,
+): Chart {
+  return new Chart(ctx, {
+    type: config.type,
+    data: {
+      labels: chartData.labels,
+      datasets: [
+        {
+          data: chartData.data,
+          // todo - add colors
+          // backgroundColor: chartData.labels.map(stringToHexColor),
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: config.type === 'pie',
+        },
+      },
+    },
+  }) as Chart;
+}
+
+function createHistoryChart(
+  ctx: CanvasRenderingContext2D,
+  chartData: ChartData,
+): Chart {
+  return new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: chartData.labels,
+      datasets: [
+        {
+          data: chartData.data,
+        },
+      ],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          display: false,
+        },
+      },
+    },
+  }) as Chart;
 }

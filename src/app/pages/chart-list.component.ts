@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartConfig } from '../app.types';
+import { State } from '../app.types';
 import { StoreService } from '../store.service';
 import { Observable, take } from 'rxjs';
 
@@ -8,9 +8,16 @@ import { Observable, take } from 'rxjs';
   template: `
     <div class="filters"></div>
     <div class="debug" (click)="defaultCharts()">SET DEFAULT CHARTS</div>
+    <div class="debug" (click)="reset()">RESET</div>
 
     <div class="chart-list" *ngIf="chartList$ | async as chartList">
-      <app-chart *ngFor="let c of chartList" [chartConfig]="c" />
+      <div class="standard">
+        <app-chart *ngFor="let c of chartList.standard" [chartConfig]="c" />
+      </div>
+
+      <div class="history">
+        <app-chart *ngFor="let c of chartList.history" [chartConfig]="c" />
+      </div>
     </div>
   `,
   styles: [
@@ -39,7 +46,7 @@ import { Observable, take } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartListComponent {
-  chartList$: Observable<ChartConfig[]>;
+  chartList$: Observable<State['chartList']>;
 
   constructor(private store: StoreService) {
     this.chartList$ = this.store.select('chartList');
@@ -47,7 +54,8 @@ export class ChartListComponent {
 
   defaultCharts(): void {
     this.chartList$.pipe(take(1)).subscribe((list) => {
-      list.map((c) => this.store.removeChart(c.chartId));
+      const merged = [...list.standard, ...list.history];
+      merged.map((c) => this.store.removeChart(c.chartId));
       const charts = [
         { type: 'pie', field: 'category', op: 'expense' },
         { type: 'pie', field: 'subcategory', op: 'expense' },
@@ -55,7 +63,18 @@ export class ChartListComponent {
         { type: 'bar', field: 'category', op: 'count' },
       ];
 
-      charts.map((c: any) => this.store.createChart(c));
+      charts.map((c: any) => this.store.createStandardChart(c));
+
+      const historyCharts = [
+        { period: 'daily', op: 'expense', dateFormat: 'dd MMM yy' },
+        { period: 'monthly', op: 'expense', dateFormat: 'MMM yy' },
+      ];
+
+      historyCharts.map((c: any) => this.store.createHistoryChart(c));
     });
+  }
+
+  reset(): void {
+    this.store.resetChartState();
   }
 }
