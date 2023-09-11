@@ -26,6 +26,7 @@ import { ThemeToggleComponent } from './components/theme-toggle.component';
 import { FilterPanelComponent } from './components/filter-panel.component';
 import { HomeComponent } from './pages/home.component';
 import { ChartHeaderComponent } from './components/chart-header.component';
+import { FloatingBtnComponent } from './components/floating-btn.component';
 
 const routes: Routes = [
   {
@@ -63,6 +64,7 @@ const routes: Routes = [
     FilterPanelComponent,
     HomeComponent,
     ChartHeaderComponent,
+    FloatingBtnComponent,
   ],
   imports: [
     BrowserModule,

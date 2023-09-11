@@ -14,7 +14,16 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
       <app-filter-list field="subcategory" />
     </app-filter-dropdown>
   `,
-  styles: [],
+  styles: [
+    `
+      :host {
+        display: grid;
+        grid-template-columns: 1fr;
+        grid-gap: var(--spacing-3);
+        padding: 0 0 0 var(--spacing-3);
+      }
+    `,
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterPanelComponent {}

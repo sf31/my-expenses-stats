@@ -16,6 +16,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         display: grid;
         grid-template-columns: auto 1fr;
         height: calc(100vh - 50px);
+        overflow: hidden;
       }
 
       .filter-panel-wrapper,
@@ -23,8 +24,13 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         overflow: auto;
       }
 
+      .filter-panel-wrapper {
+        padding: var(--spacing-3) 0;
+      }
+
       .content {
-        padding: 0 var(--spacing-2);
+        padding: var(--spacing-3);
+        padding-top: 0;
       }
     `,
   ],

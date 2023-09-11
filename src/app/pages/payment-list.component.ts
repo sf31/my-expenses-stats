@@ -89,4 +89,6 @@ export class PaymentListComponent {
   reset() {
     this.store.resetFilters();
   }
+
+  protected readonly window = window;
 }
