@@ -7,7 +7,6 @@ import { Observable, take } from 'rxjs';
   selector: 'app-chart-list',
   template: `
     <!--    <div class="debug" (click)="defaultCharts()">SET DEFAULT CHARTS</div>-->
-    <!--    <div class="debug" (click)="reset()">RESET</div>-->
 
     <ng-container *ngIf="chartList$ | async as chartList">
       <div class="title">Standard charts</div>
@@ -85,9 +84,5 @@ export class ChartListComponent {
 
       historyCharts.map((c: any) => this.store.createHistoryChart(c));
     });
-  }
-
-  reset(): void {
-    this.store.resetChartState();
   }
 }

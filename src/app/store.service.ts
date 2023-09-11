@@ -43,8 +43,12 @@ export class StoreService {
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this._state$.value));
   }
 
-  resetChartState(): void {
-    this.patchState({ chartList: INITIAL_APP_STATE.chartList });
+  reset(target: keyof State): void {
+    this.patchState({ [target]: INITIAL_APP_STATE[target] });
+  }
+
+  resetState(): void {
+    this.patchState(INITIAL_APP_STATE);
   }
 
   select<T extends keyof State>(
