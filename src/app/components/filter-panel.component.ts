@@ -46,11 +46,11 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 export class FilterPanelComponent {
   iconClose = faTimes;
   constructor(
-    public dialogRef: DialogRef<FilterPanelComponent>,
+    @Optional() public dialogRef?: DialogRef<FilterPanelComponent>,
     @Optional() @Inject(DIALOG_DATA) public data?: { isMobile: boolean },
   ) {}
 
   close(): void {
-    this.dialogRef.close();
+    this.dialogRef?.close();
   }
 }
