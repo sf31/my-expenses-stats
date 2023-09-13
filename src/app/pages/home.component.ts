@@ -36,13 +36,8 @@ import { FilterPanelComponent } from '../components/filter-panel.component';
         overflow: auto;
       }
 
-      .filter-panel-wrapper {
-        padding: var(--spacing-3) 0;
-      }
-
       .content {
-        padding: var(--spacing-3);
-        padding-top: 0;
+        padding: 0 var(--spacing-3) var(--spacing-5) 0;
       }
     `,
   ],

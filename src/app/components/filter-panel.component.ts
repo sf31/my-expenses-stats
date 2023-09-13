@@ -4,7 +4,7 @@ import {
   Inject,
   Optional,
 } from '@angular/core';
-import { DIALOG_DATA } from '@angular/cdk/dialog';
+import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
@@ -12,7 +12,7 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
   template: `
     <div class="title">
       Filters
-      <fa-icon [icon]="iconClose" *ngIf="data?.isMobile" />
+      <fa-icon [icon]="iconClose" *ngIf="data?.isMobile" (click)="close()" />
     </div>
     <app-filter-date />
     <app-filter-number field="expense" />
@@ -46,6 +46,11 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 export class FilterPanelComponent {
   iconClose = faTimes;
   constructor(
+    public dialogRef: DialogRef<FilterPanelComponent>,
     @Optional() @Inject(DIALOG_DATA) public data?: { isMobile: boolean },
   ) {}
+
+  close(): void {
+    this.dialogRef.close();
+  }
 }
