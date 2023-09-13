@@ -1,4 +1,4 @@
-# MyExpensesStats
+# my-expenses-stats
 
 A simple web app for visualizing and analyzing your expenses/incomes using data in CSV format.
 
@@ -18,5 +18,5 @@ This header is based on output from the [MyExpenses](https://github.com/mtotschn
 
 ## Demo 
 
-A demo is available at [https://myexpensesstats.herokuapp.com/](https://myexpensesstats.herokuapp.com/)
+A demo is available at [https://stupendous-tartufo-e3815f.netlify.app/](https://stupendous-tartufo-e3815f.netlify.app/)
 
