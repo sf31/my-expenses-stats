@@ -8,30 +8,32 @@ import { Payment } from '../app.types';
   template: `
     <app-stats />
 
-    <div class="list-header">
-      <div class="payee">Payee</div>
-      <div class="amount">Amount</div>
-      <div class="date">Date</div>
-      <div class="category">Category</div>
-      <div class="subcategory">Subcategory</div>
-    </div>
+    <div class="table">
+      <div class="list-header">
+        <div class="payee">Payee</div>
+        <div class="amount">Amount</div>
+        <div class="date">Date</div>
+        <div class="category">Category</div>
+        <div class="subcategory">Subcategory</div>
+      </div>
 
-    <ng-container *ngIf="paymentListFiltered$ | async as paymentListFiltered">
-      <div class="payment-card" *ngFor="let p of paymentListFiltered">
-        <div class="payee">{{ p.payee }}</div>
-        <div class="amount">{{ p.expense | currency: 'EUR' }}</div>
-        <div class="date">
-          {{ p.date * 1000 | date: 'dd/MM/yyyy' : 'UTC' }}
+      <ng-container *ngIf="paymentListFiltered$ | async as paymentListFiltered">
+        <div class="payment-card" *ngFor="let p of paymentListFiltered">
+          <div class="payee">{{ p.payee }}</div>
+          <div class="amount">{{ p.expense | currency: 'EUR' }}</div>
+          <div class="date">
+            {{ p.date * 1000 | date: 'dd/MM/yyyy' : 'UTC' }}
+          </div>
+          <div class="category">{{ p.category }}</div>
+          <div class="subcategory">{{ p.subcategory }}</div>
         </div>
-        <div class="category">{{ p.category }}</div>
-        <div class="subcategory">{{ p.subcategory }}</div>
-      </div>
 
-      <div class="no-data" *ngIf="paymentListFiltered.length === 0">
-        Mmmh... Seems like there is no data to show.
-        <app-btn routerLink="/upload"> Upload your data! </app-btn>
-      </div>
-    </ng-container>
+        <div class="no-data" *ngIf="paymentListFiltered.length === 0">
+          Mmmh... Seems like there is no data to show.
+          <app-btn routerLink="/upload"> Upload your data! </app-btn>
+        </div>
+      </ng-container>
+    </div>
   `,
   styles: [
     `
@@ -45,6 +47,8 @@ import { Payment } from '../app.types';
         display: flex;
         align-items: center;
         padding: var(--spacing-1);
+        border-left: 1px solid var(--border-color);
+        border-right: 1px solid var(--border-color);
         &:nth-child(odd) {
           background-color: var(--border-color);
         }
