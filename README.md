@@ -1,4 +1,5 @@
 # my-expenses-stats
+[![Netlify Status](https://api.netlify.com/api/v1/badges/ee76df48-8e90-47b5-bbd9-9d2f4ece3f2d/deploy-status)](https://app.netlify.com/sites/stupendous-tartufo-e3815f/deploys)
 
 A simple web app for visualizing and analyzing your expenses/incomes using data in CSV format.
 
