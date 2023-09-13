@@ -17,6 +17,7 @@ export type State = {
   };
   theme: 'light' | 'dark';
   restoreError: string | null;
+  isMobile: boolean;
 };
 
 export type Payment = {

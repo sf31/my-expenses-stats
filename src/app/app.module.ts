@@ -29,6 +29,7 @@ import { ChartHeaderComponent } from './components/chart-header.component';
 import { FloatingBtnComponent } from './components/floating-btn.component';
 import { DndComponent } from './components/dnd.component';
 import { UploadInfoComponent } from './components/upload-info.component';
+import { DialogModule } from '@angular/cdk/dialog';
 
 const routes: Routes = [
   {
@@ -79,6 +80,7 @@ const routes: Routes = [
     CdkMenu,
     CdkMenuItem,
     ReactiveFormsModule,
+    DialogModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

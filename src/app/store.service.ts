@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import {
   BehaviorSubject,
   combineLatest,
+  debounceTime,
   distinctUntilChanged,
+  fromEvent,
   map,
   Observable,
 } from 'rxjs';
@@ -22,7 +24,7 @@ import {
   createChartHistoryData,
   createChartStandardData,
 } from './utils/chart.utils';
-import { getLocalStorageState } from './utils/utils';
+import { getLocalStorageState, isMobile } from './utils/utils';
 import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './app.const';
 import * as uuid from 'uuid';
 
@@ -36,6 +38,13 @@ export class StoreService {
     this._state$ = new BehaviorSubject<State>(INITIAL_APP_STATE);
     this._state$.next(getLocalStorageState(LOCAL_STORAGE_KEY));
     applyTheme(this._state$.value.theme);
+
+    fromEvent(window, 'resize')
+      .pipe(debounceTime(10))
+      .subscribe(() => {
+        if (this._state$.getValue().isMobile !== isMobile())
+          this.patchState({ isMobile: isMobile() });
+      });
   }
 
   private patchState(patch: Partial<State>) {

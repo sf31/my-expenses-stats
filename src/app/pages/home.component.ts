@@ -1,14 +1,26 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { Observable } from 'rxjs';
+import { StoreService } from '../store.service';
+import { faFilter } from '@fortawesome/free-solid-svg-icons';
+import { Dialog } from '@angular/cdk/dialog';
+import { FilterPanelComponent } from '../components/filter-panel.component';
 
 @Component({
   selector: 'app-home',
   template: `
     <div class="filter-panel-wrapper">
-      <app-filter-panel />
+      <app-filter-panel *ngIf="(isMobile$ | async) === false" />
     </div>
     <div class="content">
       <router-outlet />
     </div>
+
+    <app-floating-btn
+      *ngIf="isMobile$ | async"
+      [icon]="iconFilter"
+      position="left"
+      (click)="openFilter()"
+    />
   `,
   styles: [
     `
@@ -36,4 +48,18 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class HomeComponent {}
+export class HomeComponent {
+  isMobile$: Observable<boolean>;
+  iconFilter = faFilter;
+
+  constructor(
+    private store: StoreService,
+    private dialog: Dialog,
+  ) {
+    this.isMobile$ = this.store.select('isMobile');
+  }
+
+  openFilter(): void {
+    this.dialog.open(FilterPanelComponent, { data: { isMobile: true } });
+  }
+}

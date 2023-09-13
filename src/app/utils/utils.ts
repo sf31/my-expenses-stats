@@ -105,9 +105,14 @@ export function randomIntFromInterval(min: number, max: number) {
 // todo add validation from localStorage
 export function getLocalStorageState(key: string): State {
   const local = localStorage.getItem(key);
-  return local ? JSON.parse(local) : INITIAL_APP_STATE;
+  if (!local) return INITIAL_APP_STATE;
+  return { ...JSON.parse(local), isMobile: isMobile() };
 }
 
 export function unixToFormat(unix: number, format: string): string {
   return DateTime.fromSeconds(unix).toFormat(format);
+}
+
+export function isMobile(): boolean {
+  return window.innerWidth <= 768;
 }
