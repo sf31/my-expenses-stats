@@ -71,8 +71,10 @@ export class StoreService {
     );
   }
 
-  setPaymentList(paymentList: Payment[]): void {
-    this.patchState({ paymentList: paymentList });
+  addPaymentList(pList: Payment[], mode: 'append' | 'replace'): void {
+    const paymentList =
+      mode === 'append' ? [...this._state$.value.paymentList, ...pList] : pList;
+    this.patchState({ paymentList });
   }
 
   setFilter(field: keyof Payment, filter: Filter | null): void {

@@ -13,6 +13,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         display: flex;
         align-items: center;
         justify-content: center;
+        text-align: center;
         padding: var(--spacing-1) var(--spacing-2);
         border-radius: var(--radius-1);
         border: 1px solid var(--border-color);

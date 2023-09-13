@@ -16,15 +16,22 @@ import { Payment } from '../app.types';
       <div class="subcategory">Subcategory</div>
     </div>
 
-    <div class="payment-card" *ngFor="let p of paymentListFiltered$ | async">
-      <div class="payee">{{ p.payee }}</div>
-      <div class="amount">{{ p.expense | currency: 'EUR' }}</div>
-      <div class="date">
-        {{ p.date * 1000 | date: 'dd/MM/yyyy' : 'UTC' }}
+    <ng-container *ngIf="paymentListFiltered$ | async as paymentListFiltered">
+      <div class="payment-card" *ngFor="let p of paymentListFiltered">
+        <div class="payee">{{ p.payee }}</div>
+        <div class="amount">{{ p.expense | currency: 'EUR' }}</div>
+        <div class="date">
+          {{ p.date * 1000 | date: 'dd/MM/yyyy' : 'UTC' }}
+        </div>
+        <div class="category">{{ p.category }}</div>
+        <div class="subcategory">{{ p.subcategory }}</div>
       </div>
-      <div class="category">{{ p.category }}</div>
-      <div class="subcategory">{{ p.subcategory }}</div>
-    </div>
+
+      <div class="no-data" *ngIf="paymentListFiltered.length === 0">
+        Mmmh... Seems like there is no data to show.
+        <app-btn routerLink="/upload"> Upload your data! </app-btn>
+      </div>
+    </ng-container>
   `,
   styles: [
     `
@@ -74,6 +81,15 @@ import { Payment } from '../app.types';
       .category,
       .subcategory {
         min-width: 120px;
+      }
+
+      .no-data {
+        margin-top: var(--spacing-5);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: var(--spacing-2);
+        color: var(--accent-color);
       }
     `,
   ],
