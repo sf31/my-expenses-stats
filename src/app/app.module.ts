@@ -20,7 +20,7 @@ import { SelectMultipleComponent } from './components/select-multiple.component'
 import { CheckboxComponent } from './components/checkbox.component';
 import { ChartComponent } from './components/chart.component';
 import { FilterDropdown } from './components/filter-dropdown';
-import { ThemeToggleComponent } from './components/theme-toggle.component';
+import { HelpMenuComponent } from './components/help-menu.component';
 import { FilterPanelComponent } from './components/filter-panel.component';
 import { HomeComponent } from './pages/home.component';
 import { ChartHeaderComponent } from './components/chart-header.component';
@@ -59,7 +59,7 @@ const routes: Routes = [
     CheckboxComponent,
     ChartComponent,
     FilterDropdown,
-    ThemeToggleComponent,
+    HelpMenuComponent,
     FilterPanelComponent,
     HomeComponent,
     ChartHeaderComponent,
