@@ -8,14 +8,12 @@ import { PaymentListComponent } from './pages/payment-list.component';
 import { ChartListComponent } from './pages/chart-list.component';
 import { HeaderComponent } from './components/header.component';
 import { BtnComponent } from './components/btn.component';
-import { InputSelectComponent } from './components/input-select.component';
 import { FilterStringComponent } from './components/filter-string.component';
 import { FilterListComponent } from './components/filter-list.component';
 import { FilterNumberComponent } from './components/filter-number.component';
 import { FilterDateComponent } from './components/filter-date.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
-import { FilterIconComponent } from './components/filter-icon.component';
 import { StatsComponent } from './components/stats.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SelectMultipleComponent } from './components/select-multiple.component';
@@ -52,12 +50,10 @@ const routes: Routes = [
     ChartListComponent,
     HeaderComponent,
     BtnComponent,
-    InputSelectComponent,
     FilterStringComponent,
     FilterListComponent,
     FilterNumberComponent,
     FilterDateComponent,
-    FilterIconComponent,
     StatsComponent,
     SelectMultipleComponent,
     CheckboxComponent,

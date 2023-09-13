@@ -12,25 +12,16 @@ import { map, Observable } from 'rxjs';
 @Component({
   selector: 'app-filter-dropdown',
   template: `
-    <ng-container *ngIf="mode === 'icon'">
-      <app-filter-icon
-        [enabled]="(filterEnabled$ | async)?.enabled ?? false"
-        [cdkMenuTriggerFor]="menu"
-      />
-    </ng-container>
-
-    <ng-container *ngIf="mode === 'select'">
-      <div class="filter-wrapper">
-        <div class="field">{{ field }}</div>
-        <div class="filter-reset" (click)="reset()">Reset</div>
-        <div class="filter select" [cdkMenuTriggerFor]="menu">
-          <span class="text-ellipsis">
-            {{ (filterEnabled$ | async)?.filterValues || 'Select ' + field }}
-          </span>
-          <fa-icon [icon]="iconCaret" />
-        </div>
+    <div class="filter-wrapper">
+      <div class="field">{{ field }}</div>
+      <div class="filter-reset" (click)="reset()">Reset</div>
+      <div class="filter select" [cdkMenuTriggerFor]="menu">
+        <span class="text-ellipsis">
+          {{ (filterEnabled$ | async)?.filterValues || 'Select ' + field }}
+        </span>
+        <fa-icon [icon]="iconCaret" />
       </div>
-    </ng-container>
+    </div>
 
     <ng-template #menu>
       <div class="dropdown-menu-outer">
@@ -77,7 +68,6 @@ import { map, Observable } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FilterDropdown implements OnInit {
-  @Input() mode: 'icon' | 'select' = 'icon';
   @Input() field?: keyof State['filterList'];
   iconCaret = faCaretDown;
   filterEnabled$?: Observable<{

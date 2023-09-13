@@ -31,7 +31,7 @@ import {
       .chart-wrapper {
         border: 1px solid var(--border-color);
         border-radius: var(--radius-1);
-        background-color: var(--hover-color);
+        background-color: var(--border-color);
       }
     `,
   ],

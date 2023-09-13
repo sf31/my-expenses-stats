@@ -21,7 +21,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         background-color: var(--bg-color);
         user-select: none;
         &:hover {
-          background-color: var(--hover-color);
+          background-color: var(--border-color);
         }
       }
     `,

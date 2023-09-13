@@ -14,7 +14,7 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
         width: 20px;
         height: 20px;
         cursor: pointer;
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--disabled-color);
         border-radius: var(--radius-1);
         display: flex;
         align-items: center;

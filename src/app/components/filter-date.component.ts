@@ -42,7 +42,7 @@ import { StoreService } from '../store.service';
         cursor: pointer;
 
         &:hover {
-          background-color: var(--hover-color);
+          background-color: var(--border-color);
         }
       }
 
