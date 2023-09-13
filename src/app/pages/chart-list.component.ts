@@ -7,14 +7,19 @@ import { Observable, take } from 'rxjs';
   selector: 'app-chart-list',
   template: `
     <!--    <div class="debug" (click)="defaultCharts()">SET DEFAULT CHARTS</div>-->
+    <app-add-chart />
 
     <ng-container *ngIf="chartList$ | async as chartList">
-      <div class="title">Standard charts</div>
+      <div class="title" *ngIf="chartList.standard.length > 0">
+        Standard charts
+      </div>
       <div class="chart-list">
         <app-chart *ngFor="let c of chartList.standard" [chartConfig]="c" />
       </div>
 
-      <div class="title history">History charts</div>
+      <div class="title history" *ngIf="chartList.history.length > 0">
+        History charts
+      </div>
       <div class="chart-list history">
         <app-chart *ngFor="let c of chartList.history" [chartConfig]="c" />
       </div>
@@ -41,6 +46,7 @@ import { Observable, take } from 'rxjs';
 
       .title {
         margin: var(--spacing-3) 0;
+        text-align: center;
       }
 
       .title.history {

@@ -28,6 +28,8 @@ import { FloatingBtnComponent } from './components/floating-btn.component';
 import { DndComponent } from './components/dnd.component';
 import { UploadInfoComponent } from './components/upload-info.component';
 import { DialogModule } from '@angular/cdk/dialog';
+import { AddChartComponent } from './components/add-chart.component';
+import { SelectComponent } from './components/select.component';
 
 const routes: Routes = [
   {
@@ -66,6 +68,8 @@ const routes: Routes = [
     FloatingBtnComponent,
     DndComponent,
     UploadInfoComponent,
+    AddChartComponent,
+    SelectComponent,
   ],
   imports: [
     BrowserModule,
