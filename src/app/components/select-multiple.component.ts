@@ -22,16 +22,21 @@ import {
       .select-multiple-wrapper {
         background-color: var(--bg-color);
         overflow: auto;
+        border-radius: var(--radius-1);
       }
 
       .item {
         display: flex;
         align-items: center;
         justify-content: space-between;
+        border-radius: var(--radius-1);
+        padding: var(--spacing-1);
         cursor: pointer;
-        margin-bottom: var(--spacing-1);
         &:last-child {
           margin-bottom: 0;
+        }
+        &:hover {
+          background-color: var(--border-color);
         }
       }
     `,

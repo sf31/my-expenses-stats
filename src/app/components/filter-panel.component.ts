@@ -17,10 +17,10 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
     <app-filter-date />
     <app-filter-number field="expense" />
     <app-filter-string field="payee" />
-    <app-filter-dropdown mode="select" field="category">
+    <app-filter-dropdown field="category">
       <app-filter-list field="category" />
     </app-filter-dropdown>
-    <app-filter-dropdown mode="select" field="subcategory">
+    <app-filter-dropdown field="subcategory">
       <app-filter-list field="subcategory" />
     </app-filter-dropdown>
   `,

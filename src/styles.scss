@@ -79,6 +79,10 @@ body.dark input {
   padding: var(--spacing-1);
 }
 
+.shadow {
+  box-shadow: var(--shadow);
+}
+
 .show-on-hover-toggle:hover .show-on-hover {
   //opacity: 1;
   display: inline;

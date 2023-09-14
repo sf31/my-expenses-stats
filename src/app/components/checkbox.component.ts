@@ -11,19 +11,20 @@ import { faCheck } from '@fortawesome/free-solid-svg-icons';
   styles: [
     `
       .checkbox-wrapper {
-        width: 20px;
-        height: 20px;
+        width: 18px;
+        height: 18px;
         cursor: pointer;
-        border: 1px solid var(--disabled-color);
+        border: 1px solid var(--border-color);
         border-radius: var(--radius-1);
         display: flex;
         align-items: center;
         justify-content: center;
-        font-size: 0.9rem;
+        font-size: 0.8rem;
         color: var(--bg-color);
         &.checked {
           background-color: var(--primary-color);
           border: 1px solid var(--primary-color);
+          color: var(--text-color);
         }
       }
     `,
