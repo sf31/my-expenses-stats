@@ -20,6 +20,7 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
         cursor: pointer;
         background-color: var(--bg-color);
         user-select: none;
+
         &:hover {
           background-color: var(--border-color);
         }

@@ -17,7 +17,8 @@ body {
   --disabled-color: #d2d6da;
   --bg-color: #ffffff;
   --border-color: #f1f3f5;
-  --text-color: #333333
+  --text-color: #333333;
+  --shadow: 0 0 5px 0 rgba(180, 180, 180, 0.5);
 }
 
 @mixin dark() {
@@ -25,8 +26,9 @@ body {
   --accent-color: #FF7043;
   --disabled-color: #6c757d;
   --bg-color: #333333;
-  --border-color: #424242;
+  --border-color: #565656;
   --text-color: #ffffff;
+  --shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
 }
 
 body.dark {
@@ -71,7 +73,7 @@ body.dark input {
 
 .dropdown-menu {
   background-color: var(--bg-color);
-  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow);
   overflow: hidden;
   border-radius: var(--radius-1);
   padding: var(--spacing-1);
