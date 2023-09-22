@@ -8,6 +8,7 @@ export const INITIAL_APP_STATE: State = {
     standard: [],
     history: [],
   },
+  chartList2: {},
   theme: 'dark',
   restoreError: null,
   isMobile: isMobile(),

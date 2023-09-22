@@ -1,5 +1,4 @@
 import {
-  ChartData,
   ChartHistoryConfig,
   ChartStandardConfig,
   HistoryChartData,
@@ -7,11 +6,13 @@ import {
 } from '../app.types';
 import { DateTime } from 'luxon';
 import { unixToFormat } from './utils';
+import { ChartConfiguration } from 'chart.js';
 
 export function createChartStandardData(
   paymentList: Payment[],
   config: ChartStandardConfig,
-): ChartData {
+  theme: 'dark' | 'light',
+): ChartConfiguration {
   const labels: string[] = [];
   const data: number[] = [];
   const partial: { [k: string]: number } = {};
@@ -29,13 +30,18 @@ export function createChartStandardData(
     data.push(sum);
   });
 
-  return { labels, data };
+  return {
+    type: config.type,
+    data: { labels, datasets: [{ data }] },
+    options: getChartOptions(theme, config.type),
+  };
 }
 
 export function createChartHistoryData(
   paymentList: Payment[],
   config: ChartHistoryConfig,
-): ChartData {
+  theme: 'dark' | 'light',
+): ChartConfiguration {
   const labels: (number | string)[] = [];
   const data: number[] = [];
   const paymentsByPeriod = splitByPeriod(paymentList);
@@ -48,7 +54,39 @@ export function createChartHistoryData(
     data.push(sum);
   });
 
-  return { labels, data };
+  return {
+    type: 'line',
+    data: { labels, datasets: [{ data }] },
+    options: getChartOptions(theme),
+  };
+}
+
+function getChartOptions(
+  theme: 'dark' | 'light',
+  type?: ChartConfiguration['type'],
+): ChartConfiguration['options'] {
+  const fontColor = theme === 'dark' ? '#ffffff' : '#333333';
+  const color = theme === 'dark' ? '#ffffff' : '#2962FF';
+  return {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: { legend: { display: false } },
+    scales:
+      type === 'pie' || type === 'doughnut'
+        ? undefined
+        : {
+            x: { ticks: { color: fontColor, maxRotation: 25 } },
+            y: { ticks: { color: fontColor, maxRotation: 0 } },
+          },
+    elements: {
+      line: { tension: 0.2, borderColor: color },
+      bar: { backgroundColor: color },
+      point: { radius: 0 },
+    },
+    datasets: {
+      // pie: {  },
+    },
+  };
 }
 
 function splitByPeriod(paymentList: Payment[]): HistoryChartData {
@@ -99,3 +137,19 @@ export function stringToHexColor(str: string): string {
   }
   return colour;
 }
+
+const a: ChartConfiguration = {
+  type: 'bar',
+  data: {
+    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    datasets: [
+      {
+        label: '# of Votes',
+        data: [12, 19, 3, 5, 2, 3],
+        backgroundColor: ['rgba(255, 99, 132, 0.2)'],
+        borderColor: ['rgba(255, 99, 132, 1)'],
+        borderWidth: 1,
+      },
+    ],
+  },
+};

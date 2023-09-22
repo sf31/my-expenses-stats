@@ -1,3 +1,5 @@
+import { ChartConfiguration } from 'chart.js';
+
 export type State = {
   paymentList: Payment[];
   filterList: {
@@ -15,6 +17,7 @@ export type State = {
     standard: ChartStandardConfig[];
     history: ChartHistoryConfig[];
   };
+  chartList2: { [id: string]: ChartConfiguration };
   theme: 'light' | 'dark';
   restoreError: string | null;
   isMobile: boolean;
@@ -52,11 +55,6 @@ export type ChartHistoryConfig = {
   period: 'daily' | 'weekly' | 'monthly' | 'yearly';
   op: 'expense' | 'income' | 'count';
   dateFormat: string;
-};
-
-export type ChartData = {
-  labels: (string | number)[];
-  data: number[];
 };
 
 export type HistoryChartData = {

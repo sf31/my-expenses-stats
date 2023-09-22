@@ -4,12 +4,12 @@ import {
   combineLatest,
   debounceTime,
   distinctUntilChanged,
+  filter,
   fromEvent,
   map,
   Observable,
 } from 'rxjs';
 import {
-  ChartData,
   ChartHistoryConfig,
   ChartStandardConfig,
   Filter,
@@ -24,9 +24,14 @@ import {
   createChartHistoryData,
   createChartStandardData,
 } from './utils/chart.utils';
-import { getLocalStorageState, isMobile } from './utils/utils';
+import {
+  getLocalStorageState,
+  isMobile,
+  notNullOrUndefined,
+} from './utils/utils';
 import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './app.const';
 import * as uuid from 'uuid';
+import { ChartConfiguration } from 'chart.js';
 
 @Injectable({
   providedIn: 'root',
@@ -126,21 +131,24 @@ export class StoreService {
     );
   }
 
-  getChartData(chartId: string): Observable<ChartData | null> {
+  getChartData(chartId: string): Observable<ChartConfiguration> {
     return combineLatest([
       this.getFilteredPaymentList(),
       this.select('chartList'),
+      this.select('theme'),
     ]).pipe(
-      map(([paymentList, chartList]) => {
+      map(([paymentList, chartList, theme]) => {
         const findFn = (c: ChartStandardConfig | ChartHistoryConfig) =>
           c.chartId === chartId;
         const stdConfig = chartList.standard.find(findFn);
         const historyConfig = chartList.history.find(findFn);
-        if (stdConfig) return createChartStandardData(paymentList, stdConfig);
+        if (stdConfig)
+          return createChartStandardData(paymentList, stdConfig, theme);
         if (historyConfig)
-          return createChartHistoryData(paymentList, historyConfig);
+          return createChartHistoryData(paymentList, historyConfig, theme);
         return null;
       }),
+      filter(notNullOrUndefined),
     );
   }
 
