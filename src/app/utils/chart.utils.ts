@@ -69,6 +69,7 @@ function getChartOptions(
   const color = theme === 'dark' ? '#ffffff' : '#2962FF';
   return {
     responsive: true,
+    animation: false,
     maintainAspectRatio: false,
     plugins: { legend: { display: false } },
     scales:
