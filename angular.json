@@ -11,7 +11,8 @@
           "inlineStyle": true,
           "inlineTemplate": true,
           "flat": true,
-          "changeDetection": "OnPush"
+          "changeDetection": "OnPush",
+          "standalone": true
         }
       },
       "root": "",

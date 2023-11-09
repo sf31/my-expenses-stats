@@ -16,6 +16,7 @@ import { StoreService } from '../store.service';
           Standard
         </app-btn>
         <app-btn
+          type="success"
           [class.selected]="selectedChartConfig === 'history'"
           (click)="selectedChartConfig = 'history'"
         >

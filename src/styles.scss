@@ -7,7 +7,6 @@ body {
   padding: 0;
   margin: 0;
   color: var(--text-color);
-  background-color: var(--bg-color);
   font-family: 'Anonymous Pro', monospace;
 }
 
@@ -25,7 +24,7 @@ body {
   --primary-color: #2962FF;
   --accent-color: #FF7043;
   --disabled-color: #6c757d;
-  --bg-color: #333333;
+  --bg-color: #424242;
   --border-color: #565656;
   --text-color: #ffffff;
   --shadow: 0 0 5px 0 rgba(0, 0, 0, 0.5);
@@ -33,9 +32,11 @@ body {
 
 body.dark {
   @include dark();
+  background-color: #333333;
 }
 body.light {
   @include light();
+  background-color: var(--bg-color);
 }
 
 :root {
@@ -43,6 +44,7 @@ body.light {
   --warning-color: #ffc107;
   --danger-color: #dc3545;
 
+  --radius: 7px;
   --radius-1: 5px;
   --radius-2: 10px;
 

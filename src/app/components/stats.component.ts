@@ -21,6 +21,13 @@ type Stats = {
   template: `
     <ng-container *ngIf="view$ | async as view">
       <div class="stats">
+        <app-card>
+          <div class="labell">Payments count</div>
+          <div class="valuel">
+            {{ view.filtered.count }} (of {{ view.total.count }})
+          </div>
+        </app-card>
+
         <div class="stat">
           <div class="label">Payments count</div>
           <div class="value">

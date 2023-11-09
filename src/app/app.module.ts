@@ -7,7 +7,7 @@ import { UploadCsvComponent } from './pages/upload-csv.component';
 import { PaymentListComponent } from './pages/payment-list.component';
 import { ChartListComponent } from './pages/chart-list.component';
 import { HeaderComponent } from './components/header.component';
-import { BtnComponent } from './components/btn.component';
+import { BtnComponent } from './shared/btn.component';
 import { FilterStringComponent } from './components/filter-string.component';
 import { FilterListComponent } from './components/filter-list.component';
 import { FilterNumberComponent } from './components/filter-number.component';
@@ -30,6 +30,7 @@ import { UploadInfoComponent } from './components/upload-info.component';
 import { DialogModule } from '@angular/cdk/dialog';
 import { AddChartComponent } from './components/add-chart.component';
 import { SelectComponent } from './components/select.component';
+import { CardComponent } from './shared/card.component';
 
 const routes: Routes = [
   {
@@ -51,7 +52,6 @@ const routes: Routes = [
     PaymentListComponent,
     ChartListComponent,
     HeaderComponent,
-    BtnComponent,
     FilterStringComponent,
     FilterListComponent,
     FilterNumberComponent,
@@ -81,6 +81,8 @@ const routes: Routes = [
     CdkMenuItem,
     ReactiveFormsModule,
     DialogModule,
+    CardComponent,
+    BtnComponent,
   ],
   providers: [],
   bootstrap: [AppComponent],
