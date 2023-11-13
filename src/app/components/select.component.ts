@@ -6,9 +6,20 @@ import {
   Output,
 } from '@angular/core';
 import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 
 @Component({
   selector: 'app-select',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FontAwesomeModule,
+    CdkMenuTrigger,
+    CdkMenu,
+    CdkMenuItem,
+  ],
   template: `
     <div class="item-selected" [cdkMenuTriggerFor]="menuSelect">
       <div class="label">{{ itemSelected || placeholder || 'Select one' }}</div>

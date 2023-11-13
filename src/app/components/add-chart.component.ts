@@ -1,9 +1,14 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ChartHistoryConfig, ChartStandardConfig } from '../app.types';
 import { StoreService } from '../store.service';
+import { CommonModule } from '@angular/common';
+import { BtnComponent } from '../shared/btn.component';
+import { SelectComponent } from './select.component';
 
 @Component({
   selector: 'app-add-chart',
+  standalone: true,
+  imports: [CommonModule, BtnComponent, SelectComponent],
   template: `
     <div class="title">Add Chart</div>
 

@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { faCheck } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-checkbox',
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule],
   template: `
     <div class="checkbox-wrapper" [class.checked]="checked">
       <fa-icon [icon]="icon" *ngIf="checked" />

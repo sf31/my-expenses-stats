@@ -7,9 +7,13 @@ import {
 import { Observable } from 'rxjs';
 import { StoreService } from '../store.service';
 import { FilterList } from '../app.types';
+import { CommonModule } from '@angular/common';
+import { SelectMultipleComponent } from './select-multiple.component';
 
 @Component({
   selector: 'app-filter-list',
+  standalone: true,
+  imports: [CommonModule, SelectMultipleComponent],
   template: `
     <app-select-multiple
       *ngIf="field === 'category'"

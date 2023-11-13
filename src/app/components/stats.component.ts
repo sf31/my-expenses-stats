@@ -2,6 +2,8 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { StoreService } from '../store.service';
 import { map, Observable, withLatestFrom } from 'rxjs';
 import { Payment } from '../app.types';
+import { CommonModule } from '@angular/common';
+import { CardComponent } from '../shared/card.component';
 
 type View = {
   total: Stats;
@@ -18,6 +20,8 @@ type Stats = {
 
 @Component({
   selector: 'app-stats',
+  standalone: true,
+  imports: [CommonModule, CardComponent],
   template: `
     <ng-container *ngIf="view$ | async as view">
       <div class="stats">

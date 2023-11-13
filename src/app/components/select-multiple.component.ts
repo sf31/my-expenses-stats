@@ -6,9 +6,13 @@ import {
   OnChanges,
   Output,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { CheckboxComponent } from './checkbox.component';
 
 @Component({
   selector: 'app-select-multiple',
+  standalone: true,
+  imports: [CommonModule, CheckboxComponent],
   template: `
     <div class="select-multiple-wrapper">
       <div class="item" *ngFor="let item of view" (click)="onItemClick(item)">

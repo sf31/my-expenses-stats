@@ -1,8 +1,12 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-floating-btn',
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule],
   template: `
     <div class="floating-btn" [className]="position">
       <fa-icon *ngIf="icon" [icon]="icon" />

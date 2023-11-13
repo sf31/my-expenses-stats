@@ -2,9 +2,14 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { State } from '../app.types';
 import { StoreService } from '../store.service';
 import { Observable, take } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { AddChartComponent } from '../components/add-chart.component';
+import { ChartComponent } from '../components/chart.component';
 
 @Component({
   selector: 'app-chart-list',
+  standalone: true,
+  imports: [CommonModule, AddChartComponent, ChartComponent],
   template: `
     <!--    <div class="debug" (click)="defaultCharts()">SET DEFAULT CHARTS</div>-->
     <app-add-chart />

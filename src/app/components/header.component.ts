@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { filter, map, Observable } from 'rxjs';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, Router, RouterLink } from '@angular/router';
 import { notNullOrUndefined, randomIntFromInterval } from '../utils/utils';
 import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
@@ -12,9 +12,14 @@ import {
   faSackDollar,
   faWallet,
 } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { HelpMenuComponent } from './help-menu.component';
 
 @Component({
   selector: 'app-header',
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule, RouterLink, HelpMenuComponent],
   template: `
     <ng-container *ngIf="routeStr$ | async as routerStr">
       <fa-icon [icon]="logo" class="logo" />

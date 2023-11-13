@@ -5,9 +5,13 @@ import {
   HostListener,
   Output,
 } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { BtnComponent } from '../shared/btn.component';
 
 @Component({
   selector: 'app-dnd',
+  standalone: true,
+  imports: [CommonModule, BtnComponent],
   template: `
     <div class="dnd-area" [class.file-over]="isFileOver">
       <div class="label">Drag here your files</div>

@@ -2,9 +2,13 @@ import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
 import { ChartHistoryConfig, ChartStandardConfig } from '../app.types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { StoreService } from '../store.service';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-chart-header',
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule],
   template: `
     <div class="header" *ngIf="config">
       <div class="label">

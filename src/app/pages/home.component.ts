@@ -4,9 +4,19 @@ import { StoreService } from '../store.service';
 import { faFilter } from '@fortawesome/free-solid-svg-icons';
 import { Dialog } from '@angular/cdk/dialog';
 import { FilterPanelComponent } from '../components/filter-panel.component';
+import { CommonModule } from '@angular/common';
+import { RouterOutlet } from '@angular/router';
+import { FloatingBtnComponent } from '../components/floating-btn.component';
 
 @Component({
   selector: 'app-home',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FilterPanelComponent,
+    RouterOutlet,
+    FloatingBtnComponent,
+  ],
   template: `
     <div class="filter-panel-wrapper">
       <app-filter-panel *ngIf="(isMobile$ | async) === false" />

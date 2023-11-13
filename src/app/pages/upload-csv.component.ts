@@ -11,6 +11,12 @@ import {
   faCheckCircle,
   faExclamationCircle,
 } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { UploadInfoComponent } from '../components/upload-info.component';
+import { DndComponent } from '../components/dnd.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { BtnComponent } from '../shared/btn.component';
+import { RouterLink } from '@angular/router';
 
 type UploadCsvView = {
   parsedFiles: ParsedFile[];
@@ -25,6 +31,15 @@ type ParsedFile = {
 
 @Component({
   selector: 'app-upload-csv',
+  standalone: true,
+  imports: [
+    CommonModule,
+    UploadInfoComponent,
+    DndComponent,
+    FontAwesomeModule,
+    BtnComponent,
+    RouterLink,
+  ],
   template: `
     <div class="upload-csv-wrapper">
       <div class="upload-csv-wrapper-inner">

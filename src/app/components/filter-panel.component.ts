@@ -6,9 +6,26 @@ import {
 } from '@angular/core';
 import { DIALOG_DATA, DialogRef } from '@angular/cdk/dialog';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { FilterDateComponent } from './filter-date.component';
+import { FilterDropdown } from './filter-dropdown';
+import { FilterNumberComponent } from './filter-number.component';
+import { FilterStringComponent } from './filter-string.component';
+import { FilterListComponent } from './filter-list.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 @Component({
   selector: 'app-filter-panel',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FilterDateComponent,
+    FilterDropdown,
+    FilterNumberComponent,
+    FilterStringComponent,
+    FilterListComponent,
+    FontAwesomeModule,
+  ],
   template: `
     <div class="title">
       Filters

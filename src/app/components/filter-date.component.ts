@@ -2,9 +2,12 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { map, Observable } from 'rxjs';
 import { DateTime } from 'luxon';
 import { StoreService } from '../store.service';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-filter-date',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div class="filter-wrapper" *ngIf="filter$ | async as filter">
       <div class="filter-1">

@@ -6,9 +6,14 @@ import {
   faCircleQuestion,
   faExclamationTriangle,
 } from '@fortawesome/free-solid-svg-icons';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CdkMenuTrigger } from '@angular/cdk/menu';
 
 @Component({
   selector: 'app-theme-toggle',
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule, CdkMenuTrigger],
   template: `
     <fa-icon [icon]="iconSettings" [cdkMenuTriggerFor]="settingsMenu" />
     <ng-template #settingsMenu>

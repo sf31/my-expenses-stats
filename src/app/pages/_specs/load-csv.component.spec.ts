@@ -8,8 +8,8 @@ describe('LoadCsvComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [UploadCsvComponent],
-    });
+    declarations: [UploadCsvComponent],
+});
     fixture = TestBed.createComponent(UploadCsvComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

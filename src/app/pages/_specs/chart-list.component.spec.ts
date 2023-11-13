@@ -8,8 +8,8 @@ describe('ChartListComponent', () => {
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [ChartListComponent],
-    });
+    declarations: [ChartListComponent],
+});
     fixture = TestBed.createComponent(ChartListComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

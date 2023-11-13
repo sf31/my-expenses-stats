@@ -8,9 +8,14 @@ import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
 import { State } from '../app.types';
 import { StoreService } from '../store.service';
 import { map, Observable } from 'rxjs';
+import { CommonModule } from '@angular/common';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { CdkMenuTrigger } from '@angular/cdk/menu';
 
 @Component({
   selector: 'app-filter-dropdown',
+  standalone: true,
+  imports: [CommonModule, FontAwesomeModule, CdkMenuTrigger],
   template: `
     <div class="filter-wrapper">
       <div class="field">{{ field }}</div>

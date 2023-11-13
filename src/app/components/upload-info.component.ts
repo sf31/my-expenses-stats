@@ -1,7 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-upload-info',
+  standalone: true,
+  imports: [CommonModule],
   template: `
     <div class="info">
       Currently only CSV files with the following header are supported:
