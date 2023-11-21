@@ -55,15 +55,6 @@ body.light {
   --spacing-5: 3rem;
 }
 
-input {
-    border-radius: var(--radius-1);
-    border: 1px solid var(--border-color);
-    padding: var(--spacing-1);
-    font-size: 1rem;
-    width: 100%;
-    box-sizing: border-box;
-}
-
 textarea:focus, input:focus{
   outline: var(--primary-color) solid 1px;
 }
