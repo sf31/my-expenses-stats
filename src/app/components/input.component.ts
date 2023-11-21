@@ -14,27 +14,23 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   standalone: true,
   imports: [CommonModule, FontAwesomeModule],
   template: `
-    <div class="app-input-wrapper">
+    <div class="app-input-wrapper" [class.error]="hasError">
       <input
         #input
-        [type]="type"
         [placeholder]="placeholder ?? ''"
-        [class.error]="hasError"
         [value]="value"
         (input)="valueChange.emit(input.value)"
       />
       <fa-icon
         *ngIf="input.value.length > 0"
         [icon]="iconEmpty"
-        (click)="empty()"
+        (click)="valueChange.emit('')"
       />
     </div>
   `,
   styles: [
     `
       .app-input-wrapper {
-        position: relative;
-        border: 1px solid green;
         border-radius: var(--radius-1);
         display: flex;
         align-items: center;
@@ -55,21 +51,22 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         cursor: pointer;
         padding: 0.25rem;
       }
+
+      .error {
+        border: 1px solid var(--danger-color);
+      }
+
+      .error input {
+        color: var(--danger-color);
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InputComponent {
-  @Input() value?: string | number | null = null;
+  @Input() value?: string | null = '';
   @Input() placeholder?: string;
-  @Input() type: 'text' | 'date' = 'text';
   @Input() hasError?: boolean;
-  @Output() valueChange = new EventEmitter<string | null>();
-
+  @Output() valueChange = new EventEmitter<string>();
   iconEmpty = faTimes;
-
-  empty(): void {
-    this.value = '';
-    this.valueChange.emit(this.value);
-  }
 }
