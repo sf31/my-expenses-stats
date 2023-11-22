@@ -5,7 +5,7 @@ import {
   Input,
   Output,
 } from '@angular/core';
-import { faCaretDown } from '@fortawesome/free-solid-svg-icons';
+import { faCaretDown, faTimes } from '@fortawesome/free-solid-svg-icons';
 import { CommonModule } from '@angular/common';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
@@ -21,16 +21,26 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
     CdkMenuItem,
   ],
   template: `
-    <div class="item-selected" [cdkMenuTriggerFor]="menuSelect">
-      <div class="label">{{ itemSelected || placeholder || 'Select one' }}</div>
+    <div #select class="item-selected" [cdkMenuTriggerFor]="menuSelect">
+      <div class="label">
+        {{ itemSelected || placeholder || 'Select one' }}
+      </div>
+      <div class="fill-remaining-space"></div>
+      <fa-icon
+        *ngIf="itemSelected"
+        [icon]="iconEmpty"
+        (click)="
+          $event.stopImmediatePropagation(); itemSelectedChange.emit(null)
+        "
+      />
       <fa-icon [icon]="iconCaret" />
     </div>
 
     <ng-template #menuSelect>
-      <div class="dropdown-menu" cdkMenu>
+      <div class="dropdown-menu" cdkMenu [style.width.px]="select.clientWidth">
         <div
           cdkMenuItem
-          class="menu-item"
+          class="menu-item text-ellipsis"
           *ngFor="let i of itemList"
           (click)="itemSelectedChange.emit(i)"
         >
@@ -42,32 +52,39 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
   styles: [
     `
       .item-selected {
+        cursor: pointer;
+        border-radius: var(--radius-1);
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        padding: var(--spacing-1);
-        border: 1px solid var(--border-color);
-        cursor: pointer;
-        text-transform: capitalize;
+        background-color: var(--bg-color);
+        padding: 0 0.25rem 0 0.5rem;
       }
 
-      .select {
-        background-color: var(--border-color);
-        overflow: auto;
-        padding: var(--spacing-2);
+      fa-icon {
+        color: var(--text-color);
+        cursor: pointer;
+        padding: 0.5rem 0.25rem;
+      }
+
+      .fill-remaining-space {
+        flex: 1 1 auto;
+      }
+
+      .dropdown-menu {
+        background-color: var(--bg-color);
         border-radius: var(--radius-1);
-        border: 1px solid var(--border-color);
+        overflow: auto;
+        max-height: 40dvh;
+        user-select: none;
       }
 
       .menu-item {
-        width: 120px;
         display: flex;
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
         text-transform: capitalize;
-        padding: var(--spacing-1);
-        border-radius: var(--radius-1);
+        padding: 0.5rem;
         &:last-child {
           margin-bottom: 0;
         }
@@ -86,6 +103,8 @@ export class SelectComponent<T> {
   @Input() itemList: T[] = [];
   @Input() itemSelected?: T;
   @Input() placeholder?: string;
-  @Output() itemSelectedChange = new EventEmitter<T>();
+  @Output() itemSelectedChange = new EventEmitter<T | null>();
+
   iconCaret = faCaretDown;
+  iconEmpty = faTimes;
 }

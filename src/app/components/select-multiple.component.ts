@@ -16,8 +16,8 @@ import { CheckboxComponent } from './checkbox.component';
   template: `
     <div class="select-multiple-wrapper">
       <div class="item" *ngFor="let item of view" (click)="onItemClick(item)">
-        <div class="label text-ellipsis">{{ item.label }}</div>
         <app-checkbox [checked]="item.selected" />
+        <div class="label text-ellipsis">{{ item.label }}</div>
       </div>
     </div>
   `,
@@ -27,15 +27,24 @@ import { CheckboxComponent } from './checkbox.component';
         background-color: var(--bg-color);
         overflow: auto;
         border-radius: var(--radius-1);
+        user-select: none;
+      }
+
+      app-checkbox {
+        padding: 0.5rem 0.5rem 0.5rem 0;
+      }
+
+      .label {
+        flex: 1 1 auto;
+        overflow: hidden;
       }
 
       .item {
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        border-radius: var(--radius-1);
-        padding: var(--spacing-1);
+        overflow: hidden;
         cursor: pointer;
+        padding: 0 0.5rem;
         &:last-child {
           margin-bottom: 0;
         }

@@ -30,51 +30,51 @@ import { SelectComponent } from './select.component';
       </div>
 
       <ng-container *ngIf="selectedChartConfig === 'standard'">
-        <app-select
-          [placeholder]="'Chart type'"
-          [itemList]="chartTypes"
-          [itemSelected]="standard.type"
-          (itemSelectedChange)="setStandardProp({ type: $event })"
-        />
+        <!--        <app-select-->
+        <!--          [placeholder]="'Chart type'"-->
+        <!--          [itemList]="chartTypes"-->
+        <!--          [itemSelected]="standard.type"-->
+        <!--          (itemSelectedChange)="setStandardProp({ type: $event })"-->
+        <!--        />-->
 
-        <app-select
-          [placeholder]="'Field'"
-          [itemList]="fieldList"
-          [itemSelected]="standard.field"
-          (itemSelectedChange)="setStandardProp({ field: $event })"
-        />
+        <!--        <app-select-->
+        <!--          [placeholder]="'Field'"-->
+        <!--          [itemList]="fieldList"-->
+        <!--          [itemSelected]="standard.field"-->
+        <!--          (itemSelectedChange)="setStandardProp({ field: $event })"-->
+        <!--        />-->
 
-        <app-select
-          [placeholder]="'Operation'"
-          [itemList]="chartOps"
-          [itemSelected]="standard.op"
-          (itemSelectedChange)="setStandardProp({ op: $event })"
-        />
+        <!--        <app-select-->
+        <!--          [placeholder]="'Operation'"-->
+        <!--          [itemList]="chartOps"-->
+        <!--          [itemSelected]="standard.op"-->
+        <!--          (itemSelectedChange)="setStandardProp({ op: $event })"-->
+        <!--        />-->
 
         <app-btn (click)="addChart('standard')"> Add chart </app-btn>
       </ng-container>
 
       <ng-container *ngIf="selectedChartConfig === 'history'">
-        <app-select
-          [placeholder]="'Period'"
-          [itemList]="periodList"
-          [itemSelected]="history.period"
-          (itemSelectedChange)="setHistoryProp({ period: $event })"
-        />
+        <!--        <app-select-->
+        <!--          [placeholder]="'Period'"-->
+        <!--          [itemList]="periodList"-->
+        <!--          [itemSelected]="history.period"-->
+        <!--          (itemSelectedChange)="setHistoryProp({ period: $event })"-->
+        <!--        />-->
 
-        <app-select
-          [placeholder]="'Operation'"
-          [itemList]="chartOps"
-          [itemSelected]="history.op"
-          (itemSelectedChange)="setHistoryProp({ op: $event })"
-        />
+        <!--        <app-select-->
+        <!--          [placeholder]="'Operation'"-->
+        <!--          [itemList]="chartOps"-->
+        <!--          [itemSelected]="history.op"-->
+        <!--          (itemSelectedChange)="setHistoryProp({ op: $event })"-->
+        <!--        />-->
 
-        <app-select
-          [placeholder]="'Date format'"
-          [itemList]="dateFormatList"
-          [itemSelected]="history.dateFormat"
-          (itemSelectedChange)="setHistoryProp({ dateFormat: $event })"
-        />
+        <!--        <app-select-->
+        <!--          [placeholder]="'Date format'"-->
+        <!--          [itemList]="dateFormatList"-->
+        <!--          [itemSelected]="history.dateFormat"-->
+        <!--          (itemSelectedChange)="setHistoryProp({ dateFormat: $event })"-->
+        <!--        />-->
 
         <app-btn (click)="addChart('history')"> Add chart </app-btn>
       </ng-container>
@@ -150,11 +150,15 @@ export class AddChartComponent {
 
   constructor(private store: StoreService) {}
 
-  setStandardProp(p: Partial<ChartStandardConfig>): void {
+  // setStandardProp(p: Partial<ChartStandardConfig> | null): void {
+  //   this.standard = { ...this.standard, ...p };
+  // }
+
+  setStandardProp(p: Partial<ChartStandardConfig> | null): void {
     this.standard = { ...this.standard, ...p };
   }
 
-  setHistoryProp(p: Partial<ChartHistoryConfig>): void {
+  setHistoryProp(p: Partial<ChartHistoryConfig> | null): void {
     this.history = { ...this.history, ...p };
   }
 
