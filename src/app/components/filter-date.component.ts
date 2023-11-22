@@ -65,8 +65,8 @@ export class FilterDateComponent {
         if (!filterList) return { fromStr: '', toStr: '', enabled: false };
         const fmt = 'yyyy-MM-dd';
         const { from, to } = filterList;
-        const fromStr = DateTime.fromSeconds(from).toFormat(fmt);
-        const toStr = DateTime.fromSeconds(to).toFormat(fmt);
+        const fromStr = ''; // DateTime.fromSeconds(from).toFormat(fmt);
+        const toStr = ''; //DateTime.fromSeconds(to).toFormat(fmt);
         return { fromStr, toStr, enabled: true };
       }),
     );

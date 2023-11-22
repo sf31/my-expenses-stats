@@ -16,11 +16,11 @@
 
 .filter-wrapper {
   display: grid;
-  width: 300px;
+  //width: 300px;
   grid-template-columns: 1fr 60px;
   grid-template-rows: 1fr 1fr;
   gap: var(--spacing-1);
-  background-color: var(--border-color);
+  //background-color: var(--border-color);
   padding: var(--spacing-1);
   border-radius: var(--radius-1);
 }

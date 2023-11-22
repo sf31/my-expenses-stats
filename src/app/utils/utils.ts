@@ -1,5 +1,5 @@
 import { State } from '../app.types';
-import { INITIAL_APP_STATE } from '../app.const';
+import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from '../app.const';
 import { DateTime } from 'luxon';
 
 export function notNullOrUndefined<T>(val: T | null | undefined): val is T {
@@ -103,8 +103,8 @@ export function randomIntFromInterval(min: number, max: number) {
 }
 
 // todo add validation from localStorage
-export function getLocalStorageState(key: string): State {
-  const local = localStorage.getItem(key);
+export function getInitialState(): State {
+  const local = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (!local) return INITIAL_APP_STATE;
   return { ...JSON.parse(local), isMobile: isMobile() };
 }
@@ -115,4 +115,9 @@ export function unixToFormat(unix: number, format: string): string {
 
 export function isMobile(): boolean {
   return window.innerWidth <= 768;
+}
+
+function isNumber(str: any): boolean {
+  const regex = /^-?\d+(\.\d+)?$/;
+  return regex.test(str);
 }

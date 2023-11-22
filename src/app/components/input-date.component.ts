@@ -4,21 +4,38 @@ import {
   EventEmitter,
   Input,
   Output,
+  Pipe,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { InputComponent } from './input.component';
+import { DateTime } from 'luxon';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+
+@Pipe({
+  name: 'inputDate',
+  pure: true,
+  standalone: true,
+})
+class InputDatePipe {
+  transform(value?: number | null): string {
+    if (!value) return '';
+    const fmt = 'yyyy-MM-dd';
+    return DateTime.fromSeconds(value).toFormat(fmt);
+  }
+}
 
 @Component({
-  selector: 'app-input',
+  selector: 'app-input-date',
   standalone: true,
-  imports: [CommonModule, FontAwesomeModule],
+  imports: [CommonModule, FontAwesomeModule, InputComponent, InputDatePipe],
   template: `
-    <div class="app-input-wrapper" [class.error]="hasError">
+    <div class="app-input-date-wrapper" [class.error]="hasError">
       <input
         #input
+        type="date"
         [placeholder]="placeholder ?? ''"
-        [value]="value"
+        [value]="value | inputDate"
         (input)="emit(input.value)"
       />
       <fa-icon
@@ -30,7 +47,7 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   `,
   styles: [
     `
-      .app-input-wrapper {
+      .app-input-date-wrapper {
         border-radius: var(--radius-1);
         display: flex;
         align-items: center;
@@ -44,13 +61,13 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
         box-sizing: border-box;
         border: none;
         outline: none;
-        padding: 0.5rem 0;
+        padding: 0.4rem 0;
       }
 
       fa-icon {
         color: var(--text-color);
         cursor: pointer;
-        padding: 0.25rem;
+        padding: 0.25rem 0.25rem 0.25rem 0.5rem;
       }
 
       .error {
@@ -64,16 +81,20 @@ import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InputComponent {
-  @Input() value?: string | null = '';
+export class InputDateComponent {
+  @Input() value?: number | null = null;
   @Input() placeholder?: string;
   @Input() hasError?: boolean;
-  @Output() valueChange = new EventEmitter<string | null>();
+  @Output() valueChange = new EventEmitter<number | null>();
   iconEmpty = faTimes;
 
   emit(value: string): void {
-    const val = value.trim().length > 0 ? value.trim() : null;
-    this.valueChange.emit(val);
+    console.log('emit', value);
+    // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/date
+    this.hasError = false;
+    const date = DateTime.fromFormat(value, 'yyyy-MM-dd', { zone: 'UTC' });
+    if (date.isValid) this.valueChange.emit(date.toUnixInteger());
+    else this.hasError = true;
   }
 
   emptyInput(): void {

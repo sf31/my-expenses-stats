@@ -36,9 +36,9 @@ export type Payment = {
 };
 
 export type Filter = FilterDate | FilterString | FilterNumber | FilterList;
-export type FilterDate = { from: number; to: number };
+export type FilterDate = { from: number | null; to: number | null };
 export type FilterString = { value: string };
-export type FilterNumber = { min: number; max: number };
+export type FilterNumber = { min: number | null; max: number | null };
 export type FilterList = { values: string[] };
 
 export type ChartStandardConfig = {

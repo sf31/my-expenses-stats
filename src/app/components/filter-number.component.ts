@@ -8,11 +8,12 @@ import { Observable } from 'rxjs';
 import { FilterNumber } from '../app.types';
 import { StoreService } from '../store.service';
 import { CommonModule } from '@angular/common';
+import { InputComponent } from './input.component';
 
 @Component({
   selector: 'app-filter-number',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, InputComponent],
   template: `
     <div class="filter-wrapper">
       <div class="field">{{ field }}</div>
