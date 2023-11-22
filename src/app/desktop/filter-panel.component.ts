@@ -63,6 +63,22 @@ import { InputDateComponent } from '../components/input-date.component';
         />
       </div>
 
+      <div class="label">Categories</div>
+      <app-select-multiple
+        [itemList]="view.categories"
+        [itemListSelected]="view.filters.category?.values"
+        (itemListSelectedChange)="onCategoryChange($event)"
+        mode="dropdown"
+      />
+
+      <div class="label">Sub-categories</div>
+      <app-select-multiple
+        [itemList]="view.subcategories"
+        [itemListSelected]="view.filters.subcategory?.values"
+        (itemListSelectedChange)="onSubcategoryChange($event)"
+        mode="dropdown"
+      />
+
       <div class="label">Date</div>
       <div class="date">
         <app-input-date
@@ -72,22 +88,6 @@ import { InputDateComponent } from '../components/input-date.component';
         <app-input-date
           [value]="view.filters.date?.to"
           (valueChange)="onDateChange($event, 'to', view.filters.date)"
-        />
-      </div>
-
-      <div class="label">Categories</div>
-      <app-select-multiple
-        [itemList]="view.categories"
-        [itemListSelected]="view.filters.category?.values"
-        (itemListSelectedChange)="onCategoryChange($event)"
-      />
-
-      <div class="label">Sub-categories</div>
-      <div class="wrap">
-        <app-select-multiple
-          [itemList]="view.subcategories"
-          [itemListSelected]="view.filters.subcategory?.values"
-          (itemListSelectedChange)="onSubcategoryChange($event)"
         />
       </div>
     </ng-container>
