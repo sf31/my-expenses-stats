@@ -1,9 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { StoreService } from '../store.service';
 import { map, Observable, withLatestFrom } from 'rxjs';
-import { Payment } from '../app.types';
+import { Payment } from '../utils/app.types';
 import { CommonModule } from '@angular/common';
-import { CardComponent } from '../shared/card.component';
 
 type View = {
   total: Stats;
@@ -21,16 +20,16 @@ type Stats = {
 @Component({
   selector: 'app-stats',
   standalone: true,
-  imports: [CommonModule, CardComponent],
+  imports: [CommonModule],
   template: `
     <ng-container *ngIf="view$ | async as view">
       <div class="stats">
-        <app-card>
+        <div>
           <div class="labell">Payments count</div>
           <div class="valuel">
             {{ view.filtered.count }} (of {{ view.total.count }})
           </div>
-        </app-card>
+        </div>
 
         <div class="stat">
           <div class="label">Payments count</div>

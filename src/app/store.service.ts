@@ -19,17 +19,13 @@ import {
   FilterString,
   Payment,
   State,
-} from './app.types';
+} from './utils/app.types';
 import {
   createChartHistoryData,
   createChartStandardData,
 } from './utils/chart.utils';
-import {
-  getLocalStorageState,
-  isMobile,
-  notNullOrUndefined,
-} from './utils/utils';
-import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './app.const';
+import { getInitialState, isMobile, notNullOrUndefined } from './utils/utils';
+import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './utils/app.const';
 import * as uuid from 'uuid';
 import { ChartConfiguration } from 'chart.js';
 
@@ -40,20 +36,21 @@ export class StoreService {
   private _state$: BehaviorSubject<State>;
 
   constructor() {
-    this._state$ = new BehaviorSubject<State>(INITIAL_APP_STATE);
-    this._state$.next(getLocalStorageState(LOCAL_STORAGE_KEY));
+    this._state$ = new BehaviorSubject<State>(getInitialState());
     applyTheme(this._state$.value.theme);
-
     fromEvent(window, 'resize')
       .pipe(debounceTime(10))
       .subscribe(() => {
         if (this._state$.getValue().isMobile !== isMobile())
           this.patchState({ isMobile: isMobile() });
       });
+
+    console.log('initial state', this._state$.value);
   }
 
   private patchState(patch: Partial<State>) {
     this._state$.next({ ...this._state$.value, ...patch });
+    console.log(this._state$.value);
     localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this._state$.value));
   }
 
@@ -276,6 +273,7 @@ export class StoreService {
 }
 
 function filterDate(value: number, filter: FilterDate): boolean {
+  if (filter.from === null || filter.to === null) return true;
   return value >= filter.from && value <= filter.to;
 }
 
@@ -288,6 +286,7 @@ function filterString(value: string, filter: FilterString): boolean {
 }
 
 function filterNumber(value: number, filter: FilterNumber): boolean {
+  if (filter.min === null || filter.max === null) return true;
   return value >= filter.min && value <= filter.max;
 }
 

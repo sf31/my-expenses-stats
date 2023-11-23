@@ -1,11 +1,6 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FilterDateComponent } from '../components/filter-date.component';
-import { FilterDropdown } from '../components/filter-dropdown';
-import { FilterNumberComponent } from '../components/filter-number.component';
-import { FilterStringComponent } from '../components/filter-string.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { FilterListComponent } from '../components/filter-list.component';
 import { InputComponent } from '../components/input.component';
 import { combineLatest, map, Observable } from 'rxjs';
 import { SelectComponent } from '../components/select.component';
@@ -17,7 +12,7 @@ import {
   FilterList,
   FilterNumber,
   FilterString,
-} from '../app.types';
+} from '../utils/app.types';
 import { InputDateComponent } from '../components/input-date.component';
 
 @Component({
@@ -25,13 +20,7 @@ import { InputDateComponent } from '../components/input-date.component';
   standalone: true,
   imports: [
     CommonModule,
-    FilterDateComponent,
-    FilterDropdown,
-    FilterNumberComponent,
-    FilterStringComponent,
-    FilterListComponent,
     FontAwesomeModule,
-    FilterListComponent,
     InputComponent,
     SelectComponent,
     SelectMultipleComponent,

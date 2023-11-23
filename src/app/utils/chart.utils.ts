@@ -3,7 +3,7 @@ import {
   ChartStandardConfig,
   HistoryChartData,
   Payment,
-} from '../app.types';
+} from './app.types';
 import { DateTime } from 'luxon';
 import { unixToFormat } from './utils';
 import { ChartConfiguration } from 'chart.js';

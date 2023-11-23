@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
-import { ChartHistoryConfig, ChartStandardConfig } from '../app.types';
+import { ChartHistoryConfig, ChartStandardConfig } from '../utils/app.types';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { StoreService } from '../store.service';
 import { CommonModule } from '@angular/common';

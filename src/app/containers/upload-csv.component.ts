@@ -5,7 +5,7 @@ import * as uuid from 'uuid';
 import { DateTime } from 'luxon';
 import { notNullOrUndefined } from '../utils/utils';
 import { StoreService } from '../store.service';
-import { Payment } from '../app.types';
+import { Payment } from '../utils/app.types';
 import { BehaviorSubject } from 'rxjs';
 import {
   faCheckCircle,
@@ -15,7 +15,7 @@ import { CommonModule } from '@angular/common';
 import { UploadInfoComponent } from '../components/upload-info.component';
 import { DndComponent } from '../components/dnd.component';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
-import { BtnComponent } from '../shared/btn.component';
+import { BtnComponent } from '../components/btn.component';
 import { RouterLink } from '@angular/router';
 
 type UploadCsvView = {

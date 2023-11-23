@@ -1,5 +1,5 @@
-import { State } from '../app.types';
-import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from '../app.const';
+import { State } from './app.types';
+import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './app.const';
 import { DateTime } from 'luxon';
 
 export function notNullOrUndefined<T>(val: T | null | undefined): val is T {

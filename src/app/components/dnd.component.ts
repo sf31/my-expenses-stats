@@ -6,7 +6,7 @@ import {
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { BtnComponent } from '../shared/btn.component';
+import { BtnComponent } from './btn.component';
 
 @Component({
   selector: 'app-dnd',

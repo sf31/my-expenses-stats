@@ -1,5 +1,5 @@
 import { State } from './app.types';
-import { isMobile } from './utils/utils';
+import { isMobile } from './utils';
 
 export const INITIAL_APP_STATE: State = {
   paymentList: [],

@@ -10,7 +10,7 @@ import {
 import { Chart } from 'chart.js';
 import { Subscription } from 'rxjs';
 import { StoreService } from '../store.service';
-import { ChartHistoryConfig, ChartStandardConfig } from '../app.types';
+import { ChartHistoryConfig, ChartStandardConfig } from '../utils/app.types';
 import { CommonModule } from '@angular/common';
 import { ChartHeaderComponent } from './chart-header.component';
 

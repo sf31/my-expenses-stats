@@ -1,8 +1,8 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { ChartHistoryConfig, ChartStandardConfig } from '../app.types';
+import { ChartHistoryConfig, ChartStandardConfig } from '../utils/app.types';
 import { StoreService } from '../store.service';
 import { CommonModule } from '@angular/common';
-import { BtnComponent } from '../shared/btn.component';
+import { BtnComponent } from './btn.component';
 import { SelectComponent } from './select.component';
 
 @Component({

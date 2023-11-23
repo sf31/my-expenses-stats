@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { State } from '../app.types';
+import { State } from '../utils/app.types';
 import { StoreService } from '../store.service';
 import { Observable, take } from 'rxjs';
 import { CommonModule } from '@angular/common';

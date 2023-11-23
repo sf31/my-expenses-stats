@@ -1,10 +1,10 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { StoreService } from '../store.service';
 import { Observable } from 'rxjs';
-import { Payment } from '../app.types';
+import { Payment } from '../utils/app.types';
 import { CommonModule } from '@angular/common';
 import { StatsComponent } from '../components/stats.component';
-import { BtnComponent } from '../shared/btn.component';
+import { BtnComponent } from '../components/btn.component';
 import { RouterLink } from '@angular/router';
 
 @Component({
