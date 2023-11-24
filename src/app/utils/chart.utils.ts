@@ -96,7 +96,7 @@ function getChartOptions(
   };
 }
 
-function splitByPeriod(paymentList: Payment[]): HistoryChartData {
+export function splitByPeriod(paymentList: Payment[]): HistoryChartData {
   const result: HistoryChartData = {
     daily: {},
     weekly: {},

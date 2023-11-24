@@ -125,6 +125,7 @@ export class DesktopComponent {
         return [
           { label: 'Payments List', link: '', active: route === '' },
           { label: 'Charts', link: 'charts', active: route === 'charts' },
+          { label: 'Stats', link: 'stats', active: route === 'stats' },
         ];
       }),
     );

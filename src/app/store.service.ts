@@ -72,18 +72,10 @@ export class StoreService {
     );
   }
 
-  selectFilter<T extends keyof State['filterList']>(
-    field: T,
-  ): Observable<State['filterList'][typeof field]> {
-    return this.select('filterList').pipe(
-      map((filterList) => filterList[field]),
-      distinctUntilChanged(),
-    );
-  }
-
   addPaymentList(pList: Payment[], mode: 'append' | 'replace'): void {
     const paymentList =
       mode === 'append' ? [...this._state$.value.paymentList, ...pList] : pList;
+    paymentList.sort((a, b) => b.date - a.date);
     this.patchState({ paymentList });
   }
 
@@ -95,10 +87,6 @@ export class StoreService {
     } else {
       this.patchState({ filterList: { ...filterList, [field]: filter } });
     }
-  }
-
-  resetFilters(): void {
-    this.patchState({ filterList: {} });
   }
 
   getFilteredPaymentList(): Observable<Payment[]> {

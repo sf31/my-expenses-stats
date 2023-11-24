@@ -6,7 +6,7 @@ import { CommonModule } from '@angular/common';
 import { BtnComponent } from '../components/btn.component';
 import { RouterLink } from '@angular/router';
 import { NoDataComponent } from '../components/no-data.component';
-import { StatsComponent } from '../components/stats.component';
+import { StatsComponent } from './stats.component';
 
 @Component({
   selector: 'app-payment-list',

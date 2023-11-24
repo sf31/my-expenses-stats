@@ -5,6 +5,7 @@ import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
 import {
   faArrowUpFromBracket,
   faChartBar,
+  faChartPie,
   faCog,
   faFilter,
   faList,
@@ -14,6 +15,7 @@ import { map, Observable } from 'rxjs';
 import { AppService } from '../app.service';
 import { SettingsComponent } from '../components/settings.component';
 import { CdkMenu, CdkMenuTrigger } from '@angular/cdk/menu';
+import { StoreService } from '../store.service';
 
 type BottomAction = {
   label: string;
@@ -48,6 +50,10 @@ type BottomAction = {
       <ng-container *ngFor="let a of actionList$ | async">
         <div class="action" [routerLink]="a.link" [class.active]="a.active">
           <fa-icon [icon]="a.icon" />
+          <div
+            class="dot"
+            *ngIf="(activeFilter$ | async) && a.link === 'filters'"
+          ></div>
           <div class="label">{{ a.label }}</div>
         </div>
       </ng-container>
@@ -81,26 +87,37 @@ type BottomAction = {
 
       .bottom-bar {
         display: flex;
-        justify-content: space-evenly;
+        justify-content: space-around;
         align-items: center;
         background-color: var(--bg-color);
       }
 
       .bottom-bar fa-icon {
-        font-size: 1.3rem;
+        font-size: 1.2rem;
       }
 
       .action {
+        position: relative;
         display: flex;
         flex-direction: column;
         align-items: center;
         justify-content: center;
         gap: 0.5rem;
-        padding: 0.7rem 0;
+      }
+
+      .dot {
+        position: absolute;
+        top: 0;
+        left: 70%;
+        transform: translate(-50%, -50%);
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
+        background-color: var(--success-color);
       }
 
       .active {
-        color: var(--primary-color);
+        color: var(--accent-color);
         font-weight: bold;
       }
     `,
@@ -108,6 +125,7 @@ type BottomAction = {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MobileComponent {
+  activeFilter$: Observable<boolean>;
   actionList$: Observable<BottomAction[]>;
   actionList: {
     label: string;
@@ -116,12 +134,18 @@ export class MobileComponent {
     icon: IconDefinition;
   }[] = [
     { label: 'Payments', long: 'Payment List', link: '', icon: faList },
-    { label: 'Charts', long: 'Charts', link: 'charts', icon: faChartBar },
+    { label: 'Charts', long: 'Charts', link: 'charts', icon: faChartPie },
     {
       label: 'Filters',
       long: 'Apply filters',
       link: 'filters',
       icon: faFilter,
+    },
+    {
+      label: 'Stats',
+      long: 'Stats',
+      link: 'stats',
+      icon: faChartBar,
     },
     {
       label: 'Import',
@@ -133,7 +157,14 @@ export class MobileComponent {
   sectionName = '';
   iconSettings = faCog;
 
-  constructor(private app: AppService) {
+  constructor(
+    private app: AppService,
+    private store: StoreService,
+  ) {
+    this.activeFilter$ = this.store
+      .select('filterList')
+      .pipe(map((fList) => Object.keys(fList).length > 0));
+
     this.actionList$ = this.app.currentRoute$.pipe(
       map((route) => {
         return this.actionList.map((a) => {
