@@ -1,5 +1,3 @@
-import { ChartConfiguration } from 'chart.js';
-
 export type State = {
   paymentList: Payment[];
   filterList: {
@@ -13,14 +11,16 @@ export type State = {
     notes?: FilterString;
     paymentMethod?: FilterString;
   };
-  chartList: {
-    standard: ChartStandardConfig[];
-    history: ChartHistoryConfig[];
-  };
-  chartList2: { [id: string]: ChartConfiguration };
+  // chartList: {
+  //   standard: ChartStandardConfig[];
+  //   history: ChartHistoryConfig[];
+  // };
+  stdChartList: { [id: string]: ChartStandardConfig };
+  historyChartList: { [id: string]: ChartHistoryConfig };
   theme: 'light' | 'dark';
   restoreError: string | null;
   isMobile: boolean;
+  desktopView: 'tabs' | 'split';
 };
 
 export type Payment = {
@@ -43,18 +43,18 @@ export type FilterList = { values: string[] };
 
 export type ChartStandardConfig = {
   chartId: string;
+  op: 'expense' | 'income' | 'count' | null;
   configType: 'standard';
-  type: 'pie' | 'bar' | 'line';
-  field: keyof Payment;
-  op: 'expense' | 'income' | 'count';
+  type: 'pie' | 'bar' | 'line' | null;
+  field: keyof Payment | null;
 };
 
 export type ChartHistoryConfig = {
   chartId: string;
+  op: 'expense' | 'income' | 'count' | null;
   configType: 'history';
-  period: 'daily' | 'weekly' | 'monthly' | 'yearly';
-  op: 'expense' | 'income' | 'count';
-  dateFormat: string;
+  period: 'daily' | 'weekly' | 'monthly' | 'yearly' | null;
+  dateFormat: string | null;
 };
 
 export type HistoryChartData = {

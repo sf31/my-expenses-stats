@@ -29,62 +29,76 @@ import { InputDateComponent } from '../components/input-date.component';
   ],
   template: `
     <ng-container *ngIf="view$ | async as view">
-      <div class="title">Filters</div>
-
-      <div class="label">Payee</div>
-      <app-input
-        [value]="view.filters.payee?.value"
-        (valueChange)="onPayeeChange($event)"
-        placeholder="Search text"
-      />
-
-      <div class="label">Expense</div>
-      <div class="min-max">
-        <app-input-number
-          [value]="view.filters.expense?.min"
-          (valueChange)="onExpenseChange($event, 'min', view.filters.expense)"
-          placeholder="Min"
-        />
-        <app-input-number
-          [value]="view.filters.expense?.max"
-          (valueChange)="onExpenseChange($event, 'max', view.filters.expense)"
-          placeholder="Max"
+      <div class="item">
+        <div class="label">Payee</div>
+        <app-input
+          [value]="view.filters.payee?.value"
+          (valueChange)="onPayeeChange($event)"
+          placeholder="Search text"
         />
       </div>
 
-      <div class="label">Categories</div>
-      <app-select-multiple
-        [itemList]="view.categories"
-        [itemListSelected]="view.filters.category?.values"
-        (itemListSelectedChange)="onCategoryChange($event)"
-        mode="dropdown"
-      />
+      <div class="item">
+        <div class="label">Expense</div>
+        <div class="min-max">
+          <app-input-number
+            [value]="view.filters.expense?.min"
+            (valueChange)="onExpenseChange($event, 'min', view.filters.expense)"
+            placeholder="Min"
+          />
+          <app-input-number
+            [value]="view.filters.expense?.max"
+            (valueChange)="onExpenseChange($event, 'max', view.filters.expense)"
+            placeholder="Max"
+          />
+        </div>
+      </div>
 
-      <div class="label">Sub-categories</div>
-      <app-select-multiple
-        [itemList]="view.subcategories"
-        [itemListSelected]="view.filters.subcategory?.values"
-        (itemListSelectedChange)="onSubcategoryChange($event)"
-        mode="dropdown"
-      />
+      <div class="item">
+        <div class="label">Categories</div>
+        <app-select-multiple
+          [itemList]="view.categories"
+          [itemListSelected]="view.filters.category?.values"
+          (itemListSelectedChange)="onCategoryChange($event)"
+          mode="dropdown"
+        />
+      </div>
 
-      <div class="label">Date</div>
-      <div class="date">
-        <app-input-date
-          [value]="view.filters.date?.from"
-          (valueChange)="onDateChange($event, 'from', view.filters.date)"
+      <div class="item">
+        <div class="label">Sub-categories</div>
+        <app-select-multiple
+          [itemList]="view.subcategories"
+          [itemListSelected]="view.filters.subcategory?.values"
+          (itemListSelectedChange)="onSubcategoryChange($event)"
+          mode="dropdown"
         />
-        <app-input-date
-          [value]="view.filters.date?.to"
-          (valueChange)="onDateChange($event, 'to', view.filters.date)"
-        />
+      </div>
+
+      <div class="item">
+        <div class="label">Date</div>
+        <div class="min-max">
+          <app-input-date
+            [value]="view.filters.date?.from"
+            (valueChange)="onDateChange($event, 'from', view.filters.date)"
+          />
+          <app-input-date
+            [value]="view.filters.date?.to"
+            (valueChange)="onDateChange($event, 'to', view.filters.date)"
+          />
+        </div>
       </div>
     </ng-container>
   `,
   styles: [
     `
       :host {
-        padding: 1rem;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1rem;
+      }
+
+      .item {
+        max-width: 350px;
       }
 
       .title {
@@ -96,22 +110,15 @@ import { InputDateComponent } from '../components/input-date.component';
       .label {
         margin-top: 1rem;
         margin-bottom: 0.5rem;
+        &:first-child {
+          margin-top: 0;
+        }
       }
 
       .min-max {
         display: grid;
         grid-template-columns: 1fr 1fr;
         gap: 1rem;
-      }
-
-      .date {
-        display: flex;
-        gap: 1rem;
-        flex-wrap: wrap;
-      }
-
-      .date > * {
-        flex: 1 1 auto;
       }
 
       app-select-multiple {

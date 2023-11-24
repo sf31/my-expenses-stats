@@ -3,11 +3,14 @@ import { StoreService } from '../store.service';
 import { map, Observable, withLatestFrom } from 'rxjs';
 import { Payment } from '../utils/app.types';
 import { CommonModule } from '@angular/common';
-
-type View = {
-  total: Stats;
-  filtered: Stats;
-};
+import { IconDefinition } from '@fortawesome/free-regular-svg-icons';
+import {
+  faBarsStaggered,
+  faEuroSign,
+  faTags,
+  faUserFriends,
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
 
 type Stats = {
   count: number;
@@ -17,51 +20,31 @@ type Stats = {
   uniqueCategories: number;
 };
 
+type Stat = {
+  label: string;
+  value: number;
+  filteredValue: number;
+  icon: IconDefinition;
+};
+
 @Component({
   selector: 'app-stats',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, FontAwesomeModule],
   template: `
-    <ng-container *ngIf="view$ | async as view">
-      <div class="stats">
-        <div>
-          <div class="labell">Payments count</div>
-          <div class="valuel">
-            {{ view.filtered.count }} (of {{ view.total.count }})
-          </div>
+    <ng-container *ngFor="let s of statList$ | async">
+      <div class="stat">
+        <div class="left">
+          <fa-icon [icon]="s.icon" />
         </div>
-
-        <div class="stat">
-          <div class="label">Payments count</div>
-          <div class="value">
-            {{ view.filtered.count }} (of {{ view.total.count }})
-          </div>
-        </div>
-        <div class="stat">
-          <div class="label">Expense</div>
-          <div class="value">
-            {{ view.filtered.expense | currency: 'EUR' }} (of
-            {{ view.total.expense | currency: 'EUR' }})
-          </div>
-        </div>
-        <div class="stat">
-          <div class="label">Income</div>
-          <div class="value">
-            {{ view.filtered.income | currency: 'EUR' }} (of
-            {{ view.total.income | currency: 'EUR' }})
-          </div>
-        </div>
-        <div class="stat">
-          <div class="label">Unique payees</div>
-          <div class="value">
-            {{ view.filtered.uniquePayees }} (of {{ view.total.uniquePayees }})
-          </div>
-        </div>
-        <div class="stat">
-          <div class="label">Unique categories</div>
-          <div class="value">
-            {{ view.filtered.uniqueCategories }} (of
-            {{ view.total.uniqueCategories }})
+        <div class="right">
+          <div class="label">{{ s.label }}</div>
+          <div class="value-filtered">
+            {{
+              s.label === 'Expense'
+                ? (s.filteredValue | number: '1.2-2')
+                : s.filteredValue
+            }}
           </div>
         </div>
       </div>
@@ -69,40 +52,79 @@ type Stats = {
   `,
   styles: [
     `
-      .stats {
+      :host {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(270px, 1fr));
-        grid-gap: var(--spacing-2);
-        justify-items: center;
-        padding: var(--spacing-2);
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 2rem;
       }
 
       .stat {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        width: 250px;
-        padding: var(--spacing-1);
+        display: grid;
+        grid-template-columns: 60px 1fr;
+        gap: 1rem;
       }
 
-      .stat .label {
-        font-weight: bold;
-        margin-bottom: var(--spacing-1);
+      .left {
+        text-align: center;
+      }
+
+      fa-icon {
+        font-size: 2.5rem;
+      }
+
+      .right {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        gap: 0.5rem;
+      }
+
+      .label {
+        font-size: 0.8rem;
+      }
+
+      .value-filtered {
+        font-size: 1.2rem;
       }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class StatsComponent {
-  view$: Observable<View>;
+  statList$: Observable<Stat[]>;
 
   constructor(private store: StoreService) {
-    this.view$ = this.store.getFilteredPaymentList().pipe(
+    this.statList$ = this.store.getFilteredPaymentList().pipe(
       withLatestFrom(this.store.select('paymentList')),
       map(([filteredPaymentList, paymentList]) => {
         const total = getStats(paymentList);
         const filtered = getStats(filteredPaymentList);
-        return { total, filtered };
+        return [
+          {
+            label: 'Payments',
+            value: total.count,
+            filteredValue: filtered.count,
+            icon: faBarsStaggered,
+          },
+          {
+            label: 'Expense',
+            value: total.expense,
+            filteredValue: filtered.expense,
+            icon: faEuroSign,
+          },
+          {
+            label: 'Payees',
+            value: total.uniquePayees,
+            filteredValue: filtered.uniquePayees,
+            icon: faUserFriends,
+          },
+          {
+            label: 'Categories',
+            value: total.uniqueCategories,
+            filteredValue: filtered.uniqueCategories,
+            icon: faTags,
+          },
+        ];
       }),
     );
   }

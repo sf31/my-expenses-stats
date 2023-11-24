@@ -8,9 +8,12 @@ import { SettingsComponent } from '../components/settings.component';
 import { CdkMenu, CdkMenuTrigger } from '@angular/cdk/menu';
 import { map, Observable } from 'rxjs';
 import { AppService } from '../app.service';
+import { PaymentListComponent } from '../containers/payment-list.component';
+import { ChartListComponent } from '../containers/chart-list.component';
+import { SplitViewComponent } from '../components/split-view.component';
 
 @Component({
-  selector: 'app-desktop',
+  selector: 'app-desktop2',
   standalone: true,
   imports: [
     CommonModule,
@@ -21,6 +24,9 @@ import { AppService } from '../app.service';
     SettingsComponent,
     CdkMenuTrigger,
     CdkMenu,
+    PaymentListComponent,
+    ChartListComponent,
+    SplitViewComponent,
   ],
   template: `
     <div class="desktop-container">
@@ -41,13 +47,13 @@ import { AppService } from '../app.service';
       </div>
 
       <div class="content">
-        <div class="left">
-          <div class="title">Filters</div>
+        <div class="top">
           <app-filter-panel />
         </div>
-        <div class="router-content">
-          <router-outlet />
-        </div>
+        <app-split-view>
+          <app-chart-list right />'
+          <app-payment-list left />
+        </app-split-view>
       </div>
     </div>
 
@@ -76,8 +82,8 @@ import { AppService } from '../app.service';
 
       .content {
         display: grid;
-        grid-template-columns: 300px 1fr;
-        grid-template-rows: 1fr;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
         overflow: auto;
       }
 
@@ -94,26 +100,23 @@ import { AppService } from '../app.service';
         }
       }
 
-      .left {
-        grid-column: 1 / 2;
+      .top {
+        grid-column: 1 / 3;
+        grid-row: 1 / 2;
         overflow: auto;
-        padding: 1rem 0 1rem 1rem;
-      }
-
-      .left > div {
-        margin-bottom: 2rem;
-      }
-
-      .router-content {
-        overflow: auto;
-        grid-column: 2 / 3;
         padding: 1rem;
+      }
+
+      app-split-view {
+        grid-column: 1 / 3;
+        grid-row: 2 / 3;
+        overflow: auto;
       }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DesktopComponent {
+export class DesktopComponent2 {
   iconSettings = faCog;
   headerItemList$: Observable<
     { label: string; link: string; active: boolean }[]

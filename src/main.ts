@@ -11,14 +11,12 @@ import { PaymentListComponent } from './app/containers/payment-list.component';
 import { provideRouter, Routes } from '@angular/router';
 import { bootstrapApplication, BrowserModule } from '@angular/platform-browser';
 import { FilterPanelComponent } from './app/containers/filter-panel.component';
-import { HelpMenuComponent } from './app/components/help-menu.component';
 
 const routes: Routes = [
   { path: '', component: PaymentListComponent },
   { path: 'charts', component: ChartListComponent },
   { path: 'upload', component: UploadCsvComponent },
   { path: 'filters', component: FilterPanelComponent },
-  { path: 'settings', component: HelpMenuComponent },
   { path: '**', redirectTo: '' },
 ];
 

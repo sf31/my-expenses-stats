@@ -9,12 +9,8 @@ import { CommonModule } from '@angular/common';
     <div class="info">
       Currently only CSV files with the following header are supported:
     </div>
-    <!--    <div class="csv-header" *ngFor="let h of headerFields; let i = index">-->
-    <!--      <div class="field">{{ h }}</div>-->
-    <!--      <div class="index">{{ i }}</div>-->
-    <!--    </div>-->
 
-    <div class="csv-header2">
+    <div class="csv-header">
       Split transaction, Date, Payee/Payer, Income, Expense, Category,
       Subcategory, Notes, Payment method
     </div>
@@ -31,12 +27,6 @@ import { CommonModule } from '@angular/common';
   styles: [
     `
       .csv-header {
-        display: grid;
-        grid-template-columns: 160px auto;
-        margin: var(--spacing-1) 0;
-      }
-
-      .csv-header2 {
         background-color: var(--disabled-color);
         padding: var(--spacing-1);
         border-radius: var(--radius-1);
@@ -46,6 +36,9 @@ import { CommonModule } from '@angular/common';
 
       .info {
         margin: var(--spacing-4) 0;
+        &:first-child {
+          margin-top: 0;
+        }
       }
     `,
   ],

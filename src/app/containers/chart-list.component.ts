@@ -1,32 +1,64 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
-import { State } from '../utils/app.types';
+import {
+  ChartHistoryConfig,
+  ChartStandardConfig,
+  State,
+} from '../utils/app.types';
 import { StoreService } from '../store.service';
-import { Observable, take } from 'rxjs';
+import { map, Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { AddChartComponent } from '../components/add-chart.component';
 import { ChartComponent } from '../components/chart.component';
+import { NoDataComponent } from '../components/no-data.component';
+import { BtnComponent } from '../components/btn.component';
+import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { faChartLine, faChartPie } from '@fortawesome/free-solid-svg-icons';
 
 @Component({
   selector: 'app-chart-list',
   standalone: true,
-  imports: [CommonModule, AddChartComponent, ChartComponent],
+  imports: [
+    CommonModule,
+    ChartComponent,
+    NoDataComponent,
+    BtnComponent,
+    FontAwesomeModule,
+  ],
   template: `
-    <!--    <div class="debug" (click)="defaultCharts()">SET DEFAULT CHARTS</div>-->
-    <app-add-chart />
+    <app-no-data
+      class="no-data"
+      *ngIf="!(paymentListExists$ | async); else addChartView"
+    />
 
-    <ng-container *ngIf="chartList$ | async as chartList">
-      <div class="title" *ngIf="chartList.standard.length > 0">
-        Standard charts
+    <ng-template #addChartView>
+      <div class="buttons">
+        <div class="title">Add Chart</div>
+        <div class="add-btn hover" (click)="addChart('standard')">
+          <fa-icon [icon]="iconStd" />
+          Standard
+        </div>
+
+        <div class="add-btn hover" (click)="addChart('history')">
+          <fa-icon [icon]="iconHistory" />
+          History
+        </div>
       </div>
+    </ng-template>
+
+    <ng-container *ngIf="stdChartList$ | async as stdChartList">
       <div class="chart-list">
-        <app-chart *ngFor="let c of chartList.standard" [chartConfig]="c" />
+        <app-chart
+          *ngFor="let c of stdChartList | keyvalue; trackBy: trackByFn"
+          [chartConfig]="c.value"
+        />
       </div>
+    </ng-container>
 
-      <div class="title history" *ngIf="chartList.history.length > 0">
-        History charts
-      </div>
+    <ng-container *ngIf="historyChartList$ | async as historyChartList">
       <div class="chart-list history">
-        <app-chart *ngFor="let c of chartList.history" [chartConfig]="c" />
+        <app-chart
+          *ngFor="let c of historyChartList | keyvalue; trackBy: trackByFn"
+          [chartConfig]="c.value"
+        />
       </div>
     </ng-container>
   `,
@@ -34,28 +66,33 @@ import { ChartComponent } from '../components/chart.component';
     `
       .chart-list {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        //grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        grid-template-columns: 1fr 1fr;
         grid-gap: var(--spacing-3);
+        margin-bottom: var(--spacing-3);
       }
 
       .chart-list.history {
         grid-template-columns: 1fr 1fr;
+        margin-bottom: var(--spacing-3);
       }
 
-      .filters {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      .buttons {
+        display: flex;
+        align-items: center;
+        padding-bottom: var(--spacing-2);
         gap: var(--spacing-2);
-        justify-items: center;
       }
 
-      .title {
-        margin: var(--spacing-3) 0;
-        text-align: center;
-      }
-
-      .title.history {
-        margin-top: var(--spacing-5);
+      .add-btn {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--spacing-2);
+        background-color: var(--bg-color);
+        padding: var(--spacing-1);
+        border-radius: var(--radius-1);
+        font-size: 1.2rem;
       }
 
       @media screen and (max-width: 600px) {
@@ -68,32 +105,54 @@ import { ChartComponent } from '../components/chart.component';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ChartListComponent {
-  chartList$: Observable<State['chartList']>;
+  stdChartList$: Observable<State['stdChartList']>;
+  historyChartList$: Observable<State['historyChartList']>;
+  paymentListExists$: Observable<boolean>;
+  iconStd = faChartPie;
+  iconHistory = faChartLine;
 
   constructor(private store: StoreService) {
-    this.chartList$ = this.store.select('chartList');
+    this.stdChartList$ = this.store.select('stdChartList');
+    this.historyChartList$ = this.store.select('historyChartList');
+    this.paymentListExists$ = this.store
+      .select('paymentList')
+      .pipe(map((paymentList) => paymentList.length > 0));
   }
 
-  defaultCharts(): void {
-    this.chartList$.pipe(take(1)).subscribe((list) => {
-      const merged = [...list.standard, ...list.history];
-      merged.map((c) => this.store.removeChart(c.chartId));
-      const charts = [
-        { type: 'pie', field: 'category', op: 'expense' },
-        { type: 'pie', field: 'subcategory', op: 'expense' },
-        { type: 'bar', field: 'category', op: 'expense' },
-        { type: 'bar', field: 'category', op: 'count' },
-      ];
-
-      charts.map((c: any) => this.store.createStandardChart(c));
-
-      const historyCharts = [
-        { period: 'daily', op: 'expense', dateFormat: 'dd MMM yy' },
-        { period: 'weekly', op: 'expense', dateFormat: 'MMM yy' },
-        { period: 'monthly', op: 'expense', dateFormat: 'MMM yy' },
-      ];
-
-      historyCharts.map((c: any) => this.store.createHistoryChart(c));
-    });
+  addChart(type: 'standard' | 'history'): void {
+    this.store.createChartConfig(type);
   }
+
+  trackByFn(
+    index: number,
+    item: {
+      key: string;
+      value: ChartStandardConfig | ChartHistoryConfig;
+    },
+  ): string {
+    return item.key;
+  }
+
+  // defaultCharts(): void {
+  //   this.chartList$.pipe(take(1)).subscribe((list) => {
+  //     const merged = [...list.standard, ...list.history];
+  //     merged.map((c) => this.store.removeChart(c.chartId));
+  //     const charts = [
+  //       { type: 'pie', field: 'category', op: 'expense' },
+  //       { type: 'pie', field: 'subcategory', op: 'expense' },
+  //       { type: 'bar', field: 'category', op: 'expense' },
+  //       { type: 'bar', field: 'category', op: 'count' },
+  //     ];
+  //
+  //     charts.map((c: any) => this.store.createStandardChart(c));
+  //
+  //     const historyCharts = [
+  //       { period: 'daily', op: 'expense', dateFormat: 'dd MMM yy' },
+  //       { period: 'weekly', op: 'expense', dateFormat: 'MMM yy' },
+  //       { period: 'monthly', op: 'expense', dateFormat: 'MMM yy' },
+  //     ];
+  //
+  //     historyCharts.map((c: any) => this.store.createHistoryChart(c));
+  //   });
+  // }
 }

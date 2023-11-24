@@ -58,6 +58,7 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
         align-items: center;
         background-color: var(--bg-color);
         padding: 0 0.25rem 0 0.5rem;
+        //border: 1px solid var(--disabled-color); // prevent flickering when error border is added
       }
 
       fa-icon {
@@ -83,7 +84,6 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
         align-items: center;
         justify-content: space-between;
         cursor: pointer;
-        text-transform: capitalize;
         padding: 0.5rem;
         &:last-child {
           margin-bottom: 0;
@@ -100,8 +100,8 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectComponent<T> {
-  @Input() itemList: T[] = [];
-  @Input() itemSelected?: T;
+  @Input() itemList: (T | null)[] = [];
+  @Input() itemSelected?: T | null;
   @Input() placeholder?: string;
   @Output() itemSelectedChange = new EventEmitter<T | null>();
 

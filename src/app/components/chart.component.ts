@@ -29,9 +29,14 @@ import { ChartHeaderComponent } from './chart-header.component';
   styles: [
     `
       .chart-wrapper {
-        border: 1px solid var(--border-color);
+        border: 1px solid var(--bg-color);
         border-radius: var(--radius-1);
-        background-color: var(--border-color);
+        //background-color: var(--bg-color);
+        padding: var(--spacing-1);
+      }
+
+      .canvas-wrapper {
+        margin-top: var(--spacing-1);
       }
     `,
   ],
@@ -40,21 +45,29 @@ import { ChartHeaderComponent } from './chart-header.component';
 export class ChartComponent implements AfterViewInit, OnDestroy {
   @Input() chartConfig?: ChartStandardConfig | ChartHistoryConfig;
   @ViewChild('chartCanvas') chartCanvas?: ElementRef<HTMLCanvasElement>;
-
+  private chart?: Chart | null;
   private sub?: Subscription;
-  private chart?: Chart;
 
   constructor(private store: StoreService) {}
 
-  ngAfterViewInit() {
+  private getCtx(): CanvasRenderingContext2D {
     const ctx = this.chartCanvas?.nativeElement.getContext('2d');
     if (!ctx) throw new Error('Could not get canvas context');
+    return ctx;
+  }
+
+  ngAfterViewInit() {
+    console.log('ChartComponent.ngAfterViewInit');
     if (!this.chartConfig) throw new Error('ChartStandardConfig is required');
 
     this.sub = this.store
       .getChartData(this.chartConfig.chartId)
       .subscribe((config) => {
-        if (!this.chart) this.chart = new Chart(ctx, config);
+        if (!config) {
+          this.chart?.destroy();
+          return;
+        }
+        if (!this.chart) this.chart = new Chart(this.getCtx(), config);
         else {
           this.chart.data.labels = config.data.labels;
           this.chart.data.datasets = config.data.datasets;

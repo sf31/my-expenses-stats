@@ -3,28 +3,35 @@ import {
   Component,
   EventEmitter,
   HostListener,
+  Input,
   Output,
 } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { BtnComponent } from './btn.component';
+import { HttpClientModule } from '@angular/common/http';
 
 @Component({
   selector: 'app-dnd',
   standalone: true,
-  imports: [CommonModule, BtnComponent],
+  imports: [CommonModule, BtnComponent, HttpClientModule],
   template: `
-    <div class="dnd-area" [class.file-over]="isFileOver">
+    <div *ngIf="!isMobile" class="dnd-area" [class.file-over]="isFileOver">
       <div class="label">Drag here your files</div>
       <div>or</div>
       <app-btn (click)="fileInput.click()"> Browse files </app-btn>
-      <input
-        style="display: none"
-        multiple
-        #fileInput
-        type="file"
-        (change)="onFileBrowsed($event)"
-      />
     </div>
+
+    <div class="mobile-file" *ngIf="isMobile" (click)="fileInput.click()">
+      Tap here to select files
+    </div>
+
+    <input
+      style="display: none"
+      multiple
+      #fileInput
+      type="file"
+      (change)="onFileBrowsed($event)"
+    />
   `,
   styles: [
     `
@@ -43,11 +50,20 @@ import { BtnComponent } from './btn.component';
       .file-over {
         background-color: var(--accent-color);
       }
+
+      .mobile-file {
+        padding: var(--spacing-4);
+        font-size: 1.3rem;
+        border: 1px solid var(--border-color);
+        border-radius: var(--radius-1);
+        background-color: var(--border-color);
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DndComponent {
+  @Input() isMobile?: boolean;
   @Output() filesDrop = new EventEmitter<File[]>();
   isFileOver?: boolean;
 

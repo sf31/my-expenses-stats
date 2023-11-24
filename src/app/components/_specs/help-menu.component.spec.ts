@@ -1,16 +1,16 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { HelpMenuComponent } from '../help-menu.component';
+import { SettingsComponent } from '../settings.component';
 
 describe('ThemeComponent', () => {
-  let component: HelpMenuComponent;
-  let fixture: ComponentFixture<HelpMenuComponent>;
+  let component: SettingsComponent;
+  let fixture: ComponentFixture<SettingsComponent>;
 
   beforeEach(() => {
     TestBed.configureTestingModule({
-      declarations: [HelpMenuComponent],
+      declarations: [SettingsComponent],
     });
-    fixture = TestBed.createComponent(HelpMenuComponent);
+    fixture = TestBed.createComponent(SettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

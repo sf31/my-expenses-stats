@@ -12,14 +12,17 @@ export function createChartStandardData(
   paymentList: Payment[],
   config: ChartStandardConfig,
   theme: 'dark' | 'light',
-): ChartConfiguration {
+): ChartConfiguration | null {
+  const { field, op, type } = config;
+  if (field === null || op === null || type === null) return null;
+
   const labels: string[] = [];
   const data: number[] = [];
   const partial: { [k: string]: number } = {};
 
   for (let i = 0; i < paymentList.length; i++) {
     const payment = paymentList[i];
-    const fieldValue = valueToString(payment[config.field]);
+    const fieldValue = valueToString(payment[field]);
     const value = getValue(payment, config);
     partial[fieldValue] = (partial[fieldValue] ?? 0) + value;
   }
@@ -31,9 +34,9 @@ export function createChartStandardData(
   });
 
   return {
-    type: config.type,
+    type,
     data: { labels, datasets: [{ data }] },
-    options: getChartOptions(theme, config.type),
+    options: getChartOptions(theme, type),
   };
 }
 
@@ -41,16 +44,19 @@ export function createChartHistoryData(
   paymentList: Payment[],
   config: ChartHistoryConfig,
   theme: 'dark' | 'light',
-): ChartConfiguration {
+): ChartConfiguration | null {
+  const { period, op, dateFormat } = config;
+  if (period === null || op === null || dateFormat === null) return null;
+
   const labels: (number | string)[] = [];
   const data: number[] = [];
   const paymentsByPeriod = splitByPeriod(paymentList);
 
-  Object.keys(paymentsByPeriod[config.period]).forEach((unix) => {
-    const payments = paymentsByPeriod[config.period][parseInt(unix)];
+  Object.keys(paymentsByPeriod[period]).forEach((unix) => {
+    const payments = paymentsByPeriod[period][parseInt(unix)];
     const sum = payments.reduce((acc, p) => acc + p.expense, 0);
     // labels.push(parseInt(unix) * 1000); //unixToFormat(parseInt(unix), 'dd MMM yyyy'));
-    labels.push(unixToFormat(parseInt(unix), config.dateFormat));
+    labels.push(unixToFormat(parseInt(unix), dateFormat));
     data.push(sum);
   });
 

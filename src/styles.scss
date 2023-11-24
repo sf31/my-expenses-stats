@@ -96,3 +96,15 @@ body.dark input {
   font-size: 1.5rem;
   font-weight: bold;
 }
+
+.fill-remaining-space {
+  flex: 1 1 auto;
+}
+
+.hover {
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  &:hover {
+    background-color: var(--border-color);
+  }
+}

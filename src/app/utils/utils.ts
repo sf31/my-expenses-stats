@@ -1,6 +1,7 @@
-import { State } from './app.types';
+import { Payment, State } from './app.types';
 import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './app.const';
 import { DateTime } from 'luxon';
+import * as uuid from 'uuid';
 
 export function notNullOrUndefined<T>(val: T | null | undefined): val is T {
   return val !== null && val !== undefined;
@@ -106,7 +107,7 @@ export function randomIntFromInterval(min: number, max: number) {
 export function getInitialState(): State {
   const local = localStorage.getItem(LOCAL_STORAGE_KEY);
   if (!local) return INITIAL_APP_STATE;
-  return { ...JSON.parse(local), isMobile: isMobile() };
+  return { ...INITIAL_APP_STATE, ...JSON.parse(local), isMobile: isMobile() };
 }
 
 export function unixToFormat(unix: number, format: string): string {
@@ -120,4 +121,40 @@ export function isMobile(): boolean {
 function isNumber(str: any): boolean {
   const regex = /^-?\d+(\.\d+)?$/;
   return regex.test(str);
+}
+
+export function generateMockPayments(count: number): Payment[] {
+  const payeeList = generateRandomList('Payee', count, 100);
+  const categoryList = generateRandomList('Category', count, 10);
+  const subcategoryList = generateRandomList('Subcategory', count, 25);
+  const paymentList: Payment[] = [];
+
+  for (let i = 0; i < count; i++) {
+    paymentList.push({
+      id: uuid.v4(),
+      date: randomIntFromInterval(1600000000, 1609999999),
+      payee: payeeList[randomIntFromInterval(0, payeeList.length - 1)],
+      expense: randomIntFromInterval(0, 1000),
+      income: 0,
+      category: categoryList[randomIntFromInterval(0, categoryList.length - 1)],
+      subcategory:
+        subcategoryList[randomIntFromInterval(0, subcategoryList.length - 1)],
+      notes: '',
+      paymentMethod: '',
+    });
+  }
+
+  paymentList.sort((a, b) => a.date - b.date);
+  return paymentList;
+}
+
+function generateRandomList(
+  prefix: string,
+  count: number,
+  uniques: number,
+): string[] {
+  return Array.from(
+    { length: count },
+    (_, i) => `${prefix}_${randomIntFromInterval(0, uniques)}`,
+  );
 }
