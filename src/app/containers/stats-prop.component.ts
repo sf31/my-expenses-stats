@@ -1,5 +1,5 @@
 import { Component, Input } from '@angular/core';
-import { StatProps } from '../utils/app.types';
+import { Stat } from '../utils/app.types';
 import { CommonModule } from '@angular/common';
 import { CardComponent } from '../components/card.component';
 
@@ -8,25 +8,29 @@ import { CardComponent } from '../components/card.component';
   standalone: true,
   imports: [CommonModule, CardComponent],
   template: `
-    <app-card *ngIf="statProps">
+    <app-card *ngIf="stat">
       <div class="row">
         <div class="label">{{ label }}</div>
-        <div class="value">{{ statProps.name }}</div>
+        <div class="value">{{ stat.topByExpenseSum.name }}</div>
       </div>
 
       <div class="row">
-        <div class="label">Payment count</div>
-        <div class="value">{{ statProps.paymentCount }}</div>
+        <div class="label">Payments</div>
+        <div class="value">{{ stat.topByExpenseSum.paymentCount }}</div>
       </div>
 
       <div class="row">
         <div class="label">Sum</div>
-        <div class="value">{{ statProps.expenseSum | currency: 'EUR' }}</div>
+        <div class="value">
+          {{ stat.topByExpenseSum.expenseSum | currency: 'EUR' }}
+        </div>
       </div>
 
       <div class="row">
         <div class="label">Average</div>
-        <div class="value">{{ statProps.expenseAvg | currency: 'EUR' }}</div>
+        <div class="value">
+          {{ stat.topByExpenseSum.expenseAvg | currency: 'EUR' }}
+        </div>
       </div>
     </app-card>
 
@@ -57,7 +61,7 @@ import { CardComponent } from '../components/card.component';
 })
 export class StatPropsComponent {
   @Input() label?: string;
-  @Input() statProps?: StatProps;
+  @Input() stat?: Stat | (Stat & { unique: number });
   @Input() value?: string | number;
   @Input() currency?: boolean;
 }

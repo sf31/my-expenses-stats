@@ -87,6 +87,10 @@ import { InputDateComponent } from '../components/input-date.component';
           />
         </div>
       </div>
+
+      <div class="clear-filters" *ngIf="view.hasFilters" (click)="reset()">
+        Remove all filters
+      </div>
     </ng-container>
   `,
   styles: [
@@ -125,6 +129,12 @@ import { InputDateComponent } from '../components/input-date.component';
         height: 200px;
         overflow: auto;
       }
+
+      .clear-filters {
+        margin-top: 1rem;
+        cursor: pointer;
+        text-align: center;
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -140,6 +150,7 @@ export class FilterPanelComponent {
     };
     categories: string[];
     subcategories: string[];
+    hasFilters: boolean;
   }>;
 
   constructor(private store: StoreService) {
@@ -149,6 +160,8 @@ export class FilterPanelComponent {
       this.store.getSubcategoryList(),
     ]).pipe(
       map(([filterList, categories, subcategories]) => {
+        categories.sort();
+        subcategories.sort();
         return {
           filters: {
             payee: filterList.payee,
@@ -159,9 +172,14 @@ export class FilterPanelComponent {
           },
           categories,
           subcategories,
+          hasFilters: Object.keys(filterList).length > 0,
         };
       }),
     );
+  }
+
+  reset(): void {
+    this.store.resetFilters();
   }
 
   onPayeeChange(value: string | null) {

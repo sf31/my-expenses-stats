@@ -5,6 +5,7 @@ import {
   HistoryChartData,
   Payment,
   PaymentStats,
+  Stat,
   StatProps,
 } from '../utils/app.types';
 import { CommonModule } from '@angular/common';
@@ -20,50 +21,56 @@ import { CardComponent } from '../components/card.component';
   imports: [CommonModule, FontAwesomeModule, StatPropsComponent, CardComponent],
   template: `
     <!--    <div class="title">Stats</div>-->
-    <div class="stats-list" *ngIf="paymentStat$ | async as s">
-      <app-card>
-        <app-stats-prop
-          label="Total expense"
-          [value]="s.totalExpense"
-          [currency]="true"
-        />
-        <app-stats-prop label="Total payments" [value]="s.totalPayment" />
-        <app-stats-prop label="Payees" [value]="s.payee.unique" />
-        <app-stats-prop label="Categories" [value]="s.category.unique" />
-      </app-card>
+    <ng-container *ngIf="paymentStat$ | async as s">
+      <div class="stats-list" *ngIf="s.totalPayment > 0; else noStats">
+        <app-card>
+          <app-stats-prop
+            label="Total expense"
+            [value]="s.totalExpense"
+            [currency]="true"
+          />
+          <app-stats-prop label="Total payments" [value]="s.totalPayment" />
+          <app-stats-prop label="Payees" [value]="s.payee.unique" />
+          <app-stats-prop label="Categories" [value]="s.category.unique" />
+        </app-card>
 
-      <app-card>
-        <app-stats-prop
-          label="Day Average"
-          [value]="s.avg.day"
-          [currency]="true"
-        />
-        <app-stats-prop
-          label="Week Average"
-          [value]="s.avg.week"
-          [currency]="true"
-        />
-        <app-stats-prop
-          label="Month Average"
-          [value]="s.avg.month"
-          [currency]="true"
-        />
-        <app-stats-prop
-          label="Year Average"
-          [value]="s.avg.year"
-          [currency]="true"
-        />
-      </app-card>
+        <app-card>
+          <app-stats-prop
+            label="Day Average"
+            [value]="s.avg.day"
+            [currency]="true"
+          />
+          <app-stats-prop
+            label="Week Average"
+            [value]="s.avg.week"
+            [currency]="true"
+          />
+          <app-stats-prop
+            label="Month Average"
+            [value]="s.avg.month"
+            [currency]="true"
+          />
+          <app-stats-prop
+            label="Year Average"
+            [value]="s.avg.year"
+            [currency]="true"
+          />
+        </app-card>
 
-      <app-stats-prop label="Top payee" [statProps]="s.payee.top" />
-      <app-stats-prop label="Top Category" [statProps]="s.category.top" />
-      <app-stats-prop label="Top Subcat." [statProps]="s.subcategory.top" />
+        <app-stats-prop label="Top payee" [stat]="s.payee" />
+        <app-stats-prop label="Top Category" [stat]="s.category" />
+        <app-stats-prop label="Top Subcat." [stat]="s.subcategory" />
 
-      <app-stats-prop label="Top day" [statProps]="s.day" />
-      <app-stats-prop label="Top week" [statProps]="s.week" />
-      <app-stats-prop label="Top month" [statProps]="s.month" />
-      <app-stats-prop label="Top year" [statProps]="s.year" />
-    </div>
+        <app-stats-prop label="Top day" [stat]="s.day" />
+        <app-stats-prop label="Top week" [stat]="s.week" />
+        <app-stats-prop label="Top month" [stat]="s.month" />
+        <app-stats-prop label="Top year" [stat]="s.year" />
+      </div>
+    </ng-container>
+
+    <ng-template #noStats>
+      <div class="no-stats">Not enough data to show stats.</div></ng-template
+    >
   `,
   styles: [
     `
@@ -71,6 +78,11 @@ import { CardComponent } from '../components/card.component';
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
         grid-gap: var(--spacing-3);
+      }
+
+      .no-stats {
+        text-align: center;
+        margin-top: var(--spacing-3);
       }
     `,
   ],
@@ -113,33 +125,66 @@ function getStats2(paymentList: Payment[]): PaymentStats {
   const monthCount = dayEnd.diff(dayStart, 'months').months;
   const yearCount = dayEnd.diff(dayStart, 'years').years;
 
-  const dayStatProps = getStatProps(byDate.daily);
-  const weekStatProps = getStatProps(byDate.weekly);
-  const monthStatProps = getStatProps(byDate.monthly);
-  const yearStatProps = getStatProps(byDate.yearly);
+  const dayStatProps = getStat(byDate.daily);
+  const weekStatProps = getStat(byDate.weekly);
+  const monthStatProps = getStat(byDate.monthly);
+  const yearStatProps = getStat(byDate.yearly);
 
   return {
     totalExpense: expenseSum,
     totalPayment: paymentList.length,
     payee: {
       unique: Object.keys(payee).length,
-      top: getStatProps(payee),
+      ...getStat(payee),
     },
     category: {
       unique: Object.keys(category).length,
-      top: getStatProps(category),
+      ...getStat(category),
     },
     subcategory: {
       unique: Object.keys(subcategory).length,
-      top: getStatProps(subcategory),
+      ...getStat(subcategory),
     },
-    day: { ...dayStatProps, name: formatDate(+dayStatProps.name, 'day') },
-    week: { ...weekStatProps, name: formatDate(+weekStatProps.name, 'week') },
+    day: {
+      topByPayments: {
+        ...dayStatProps.topByPayments,
+        name: formatDate(+dayStatProps.topByPayments.name, 'day'),
+      },
+      topByExpenseSum: {
+        ...dayStatProps.topByExpenseSum,
+        name: formatDate(+dayStatProps.topByExpenseSum.name, 'day'),
+      },
+    },
+    week: {
+      topByPayments: {
+        ...weekStatProps.topByPayments,
+        name: formatDate(+weekStatProps.topByPayments.name, 'week'),
+      },
+      topByExpenseSum: {
+        ...weekStatProps.topByExpenseSum,
+        name: formatDate(+weekStatProps.topByExpenseSum.name, 'week'),
+      },
+    },
     month: {
-      ...monthStatProps,
-      name: formatDate(+monthStatProps.name, 'month'),
+      topByPayments: {
+        ...monthStatProps.topByPayments,
+        name: formatDate(+monthStatProps.topByPayments.name, 'month'),
+      },
+      topByExpenseSum: {
+        ...monthStatProps.topByExpenseSum,
+        name: formatDate(+monthStatProps.topByExpenseSum.name, 'month'),
+      },
     },
-    year: { ...yearStatProps, name: formatDate(+yearStatProps.name, 'year') },
+    year: {
+      topByPayments: {
+        ...yearStatProps.topByPayments,
+        name: formatDate(+yearStatProps.topByPayments.name, 'year'),
+      },
+      topByExpenseSum: {
+        ...yearStatProps.topByExpenseSum,
+        name: formatDate(+yearStatProps.topByExpenseSum.name, 'year'),
+      },
+    },
     avg: {
       from: formatDate(minDate, 'day'),
       to: formatDate(maxDate, 'day'),
@@ -175,6 +220,40 @@ function getStatProps(map: { [k: string | number]: Payment[] }): StatProps {
     expenseSum,
     expenseAvg: expenseSum / pList.length,
   };
+}
+
+function getStat(map: { [k: string | number]: Payment[] }): Stat {
+  const topByPayments: StatProps = {
+    name: '',
+    paymentCount: -1,
+    expenseSum: 0,
+    expenseAvg: 0,
+  };
+
+  const topByExpenseSum: StatProps = {
+    name: '',
+    paymentCount: -1,
+    expenseSum: 0,
+    expenseAvg: 0,
+  };
+
+  for (const [key, paymentList] of Object.entries(map)) {
+    const expenseSum = paymentList.reduce((acc, p) => acc + p.expense, 0);
+    if (paymentList.length > topByPayments.paymentCount) {
+      topByPayments.name = key.toString();
+      topByPayments.paymentCount = paymentList.length;
+      topByPayments.expenseSum = expenseSum;
+      topByPayments.expenseAvg = expenseSum / paymentList.length;
+    }
+    if (expenseSum > topByExpenseSum.expenseSum) {
+      topByExpenseSum.name = key.toString();
+      topByExpenseSum.paymentCount = paymentList.length;
+      topByExpenseSum.expenseSum = expenseSum;
+      topByExpenseSum.expenseAvg = expenseSum / paymentList.length;
+    }
+  }
+
+  return { topByPayments, topByExpenseSum };
 }
 
 function formatDate(

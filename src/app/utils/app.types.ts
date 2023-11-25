@@ -64,6 +64,11 @@ export type HistoryChartData = {
   yearly: { [year: number]: Payment[] };
 };
 
+export type Stat = {
+  topByPayments: StatProps;
+  topByExpenseSum: StatProps;
+};
+
 export type StatProps = {
   name: string;
   paymentCount: number;
@@ -74,13 +79,13 @@ export type StatProps = {
 export type PaymentStats = {
   totalExpense: number;
   totalPayment: number;
-  payee: { unique: number; top: StatProps };
-  category: { unique: number; top: StatProps };
-  subcategory: { unique: number; top: StatProps };
-  day: StatProps;
-  week: StatProps;
-  month: StatProps;
-  year: StatProps;
+  payee: { unique: number } & Stat;
+  category: { unique: number } & Stat;
+  subcategory: { unique: number } & Stat;
+  day: Stat;
+  week: Stat;
+  month: Stat;
+  year: Stat;
   avg: {
     from: string; // date string
     to: string; // date string

@@ -66,8 +66,8 @@ import { faChartLine, faChartPie } from '@fortawesome/free-solid-svg-icons';
     `
       .chart-list {
         display: grid;
-        //grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
-        grid-template-columns: 1fr 1fr;
+        grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
+        //grid-template-columns: 1fr 1fr;
         grid-gap: var(--spacing-3);
         margin-bottom: var(--spacing-3);
       }

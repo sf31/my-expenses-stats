@@ -89,6 +89,10 @@ export class StoreService {
     }
   }
 
+  resetFilters(): void {
+    this.patchState({ filterList: INITIAL_APP_STATE.filterList });
+  }
+
   getFilteredPaymentList(): Observable<Payment[]> {
     return this._state$.pipe(
       map(({ paymentList }) =>
