@@ -285,8 +285,9 @@ export class StoreService {
 }
 
 function filterDate(value: number, filter: FilterDate): boolean {
-  if (filter.from === null || filter.to === null) return true;
-  return value >= filter.from && value <= filter.to;
+  const from = filter.from ?? -Infinity;
+  const to = filter.to ?? Infinity;
+  return value >= from && value <= to;
 }
 
 function filterListString(value: string, filter: FilterList): boolean {
@@ -298,8 +299,10 @@ function filterString(value: string, filter: FilterString): boolean {
 }
 
 function filterNumber(value: number, filter: FilterNumber): boolean {
-  if (filter.min === null || filter.max === null) return true;
-  return value >= filter.min && value <= filter.max;
+  const min = filter.min ?? -Infinity;
+  const max = filter.max ?? Infinity;
+  // if (filter.min === null || filter.max === null) return true;
+  return value >= min && value <= max;
 }
 
 function applyTheme(theme: 'dark' | 'light'): void {
