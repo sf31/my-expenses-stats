@@ -22,7 +22,7 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
   ],
   template: `
     <div #select class="item-selected" [cdkMenuTriggerFor]="menuSelect">
-      <div class="label">
+      <div class="label" [class.capitalize]="capitalizeItems">
         {{ itemSelected || placeholder || 'Select one' }}
       </div>
       <div class="fill-remaining-space"></div>
@@ -41,6 +41,7 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
         <div
           cdkMenuItem
           class="menu-item text-ellipsis"
+          [class.capitalize]="capitalizeItems"
           *ngFor="let i of itemList"
           (click)="itemSelectedChange.emit(i)"
         >
@@ -95,6 +96,10 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
           background-color: var(--border-color);
         }
       }
+
+      .capitalize {
+        text-transform: capitalize;
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -103,6 +108,7 @@ export class SelectComponent<T> {
   @Input() itemList: (T | null)[] = [];
   @Input() itemSelected?: T | null;
   @Input() placeholder?: string;
+  @Input() capitalizeItems: boolean = true;
   @Output() itemSelectedChange = new EventEmitter<T | null>();
 
   iconCaret = faCaretDown;

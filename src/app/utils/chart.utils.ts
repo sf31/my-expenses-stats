@@ -127,8 +127,8 @@ function valueToString(value: string | Date | number): string {
 }
 
 function getValue(payment: Payment, config: ChartStandardConfig): number {
-  if (config.op === 'expense') return payment.expense;
-  if (config.op === 'income') return payment.income;
+  if (config.op === 'Sum expense') return payment.expense;
+  if (config.op === 'Sum income') return payment.income;
   return 1;
 }
 

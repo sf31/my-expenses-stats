@@ -1,3 +1,5 @@
+import { ChartType } from 'chart.js';
+
 export type State = {
   paymentList: Payment[];
   filterList: {
@@ -41,17 +43,19 @@ export type FilterString = { value: string };
 export type FilterNumber = { min: number | null; max: number | null };
 export type FilterList = { values: string[] };
 
+type ChartOp = 'Sum expense' | 'Sum income' | '# entries';
+
 export type ChartStandardConfig = {
   chartId: string;
-  op: 'expense' | 'income' | 'count' | null;
+  op: ChartOp | null;
   configType: 'standard';
-  type: 'pie' | 'bar' | 'line' | null;
+  type: ChartType | null;
   field: keyof Payment | null;
 };
 
 export type ChartHistoryConfig = {
   chartId: string;
-  op: 'expense' | 'income' | 'count' | null;
+  op: ChartOp | null;
   configType: 'history';
   period: 'daily' | 'weekly' | 'monthly' | 'yearly' | null;
   dateFormat: string | null;

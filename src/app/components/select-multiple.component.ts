@@ -28,7 +28,9 @@ import { faCaretDown, faTimes } from '@fortawesome/free-solid-svg-icons';
       <ng-container *ngIf="mode === 'list'; else dropdown">
         <div class="item" *ngFor="let item of view" (click)="onItemClick(item)">
           <app-checkbox [checked]="item.selected" />
-          <div class="label text-ellipsis">{{ item.label }}</div>
+          <div class="label text-ellipsis" [class.capitalize]="capitalizeItems">
+            {{ item.label }}
+          </div>
         </div>
       </ng-container>
     </div>
@@ -37,6 +39,7 @@ import { faCaretDown, faTimes } from '@fortawesome/free-solid-svg-icons';
       <div #select class="dropdown" [cdkMenuTriggerFor]="menuSelect">
         <div
           *ngIf="itemListSelected && itemListSelected.length > 0"
+          [class.capitalize]="capitalizeItems"
           class="dropdown-label text-ellipsis"
         >
           {{ itemListSelected }}
@@ -68,6 +71,7 @@ import { faCaretDown, faTimes } from '@fortawesome/free-solid-svg-icons';
         >
           <div
             class="item"
+            [class.capitalize]="capitalizeItems"
             *ngFor="let item of view"
             (click)="onItemClick(item)"
           >
@@ -145,6 +149,10 @@ import { faCaretDown, faTimes } from '@fortawesome/free-solid-svg-icons';
           background-color: var(--border-color);
         }
       }
+
+      .capitalize {
+        text-transform: capitalize;
+      }
     `,
   ],
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -154,6 +162,7 @@ export class SelectMultipleComponent implements OnChanges {
   @Input() itemListSelected?: string[];
   @Input() placeholder?: string;
   @Input() mode: 'list' | 'dropdown' = 'list';
+  @Input() capitalizeItems: boolean = true;
   @Output() itemListSelectedChange = new EventEmitter<string[]>();
   iconCaret = faCaretDown;
   iconEmpty = faTimes;

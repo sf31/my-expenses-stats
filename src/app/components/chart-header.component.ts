@@ -113,9 +113,9 @@ export class ChartHeaderComponent {
 
   stdChartTypeList: ChartStandardConfig['type'][] = ['pie', 'line', 'bar'];
   chartOpList: (ChartHistoryConfig['op'] | ChartStandardConfig['op'])[] = [
-    'expense',
-    'income',
-    'count',
+    'Sum expense',
+    'Sum income',
+    '# entries',
   ];
   stdFieldList: ChartStandardConfig['field'][] = [
     'date',
