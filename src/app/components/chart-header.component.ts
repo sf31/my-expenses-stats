@@ -111,7 +111,12 @@ import { BtnComponent } from './btn.component';
 export class ChartHeaderComponent {
   @Input() config?: ChartHistoryConfig | ChartStandardConfig;
 
-  stdChartTypeList: ChartStandardConfig['type'][] = ['pie', 'line', 'bar'];
+  stdChartTypeList: ChartStandardConfig['type'][] = [
+    'doughnut',
+    'pie',
+    'line',
+    'bar',
+  ];
   chartOpList: (ChartHistoryConfig['op'] | ChartStandardConfig['op'])[] = [
     'Sum expense',
     'Sum income',
