@@ -179,7 +179,7 @@ export class FilterPanelComponent {
   }
 
   reset(): void {
-    this.store.resetFilters();
+    this.store.reset('filterList');
   }
 
   onPayeeChange(value: string | null) {

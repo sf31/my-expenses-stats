@@ -23,7 +23,12 @@ import {
   createChartHistoryData,
   createChartStandardData,
 } from './utils/chart.utils';
-import { getInitialState, isMobile } from './utils/utils';
+import {
+  getInitialState,
+  isMobile,
+  sortNumber,
+  sortString,
+} from './utils/utils';
 import { INITIAL_APP_STATE, LOCAL_STORAGE_KEY } from './utils/app.const';
 import * as uuid from 'uuid';
 import { ChartConfiguration } from 'chart.js';
@@ -89,14 +94,29 @@ export class StoreService {
     }
   }
 
-  resetFilters(): void {
-    this.patchState({ filterList: INITIAL_APP_STATE.filterList });
+  setSortBy(field: keyof Payment, order: 'asc' | 'desc'): void {
+    this.patchState({ sortBy: { field, order } });
   }
 
   getFilteredPaymentList(): Observable<Payment[]> {
     return this._state$.pipe(
-      map(({ paymentList }) =>
-        paymentList.filter((payment) => this.applyFilter(payment)),
+      map(({ paymentList, sortBy }) =>
+        paymentList
+          .filter((payment) => this.applyFilter(payment))
+          .sort((a, b) => {
+            const { field, order } = sortBy;
+            if (field === 'date') return sortNumber(a.date, b.date, order);
+            if (field === 'payee') return sortString(a.payee, b.payee, order);
+            if (field === 'expense')
+              return sortNumber(a.expense, b.expense, order);
+            if (field === 'income')
+              return sortNumber(a.income, b.income, order);
+            if (field === 'category')
+              return sortString(a.category, b.category, order);
+            if (field === 'subcategory')
+              return sortString(a.subcategory, b.subcategory, order);
+            return 0;
+          }),
       ),
     );
   }

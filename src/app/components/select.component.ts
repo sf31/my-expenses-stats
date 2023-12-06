@@ -27,7 +27,7 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
       </div>
       <div class="fill-remaining-space"></div>
       <fa-icon
-        *ngIf="itemSelected"
+        *ngIf="itemSelected && showClearIcon"
         [icon]="iconEmpty"
         (click)="
           $event.stopImmediatePropagation(); itemSelectedChange.emit(null)
@@ -109,6 +109,7 @@ export class SelectComponent<T> {
   @Input() itemSelected?: T | null;
   @Input() placeholder?: string;
   @Input() capitalizeItems: boolean = true;
+  @Input() showClearIcon: boolean = true;
   @Output() itemSelectedChange = new EventEmitter<T | null>();
 
   iconCaret = faCaretDown;

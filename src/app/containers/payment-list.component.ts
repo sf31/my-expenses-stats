@@ -7,6 +7,7 @@ import { BtnComponent } from '../components/btn.component';
 import { RouterLink } from '@angular/router';
 import { NoDataComponent } from '../components/no-data.component';
 import { StatsComponent } from './stats.component';
+import { SortByComponent } from '../components/sort-by.component';
 
 @Component({
   selector: 'app-payment-list',
@@ -17,6 +18,7 @@ import { StatsComponent } from './stats.component';
     BtnComponent,
     RouterLink,
     NoDataComponent,
+    SortByComponent,
   ],
   template: `
     <ng-container *ngIf="view$ | async as view">
@@ -24,7 +26,8 @@ import { StatsComponent } from './stats.component';
 
       <ng-container *ngIf="view.paymentList.length > 0">
         <div class="header">
-          <div class="title">Table</div>
+          <app-sort-by />
+
           <div class="desc">
             {{ view.paymentListFiltered.length }} Payments
             <span

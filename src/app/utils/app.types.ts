@@ -2,6 +2,7 @@ import { ChartType } from 'chart.js';
 
 export type State = {
   paymentList: Payment[];
+  sortBy: { field: keyof Payment; order: 'asc' | 'desc' };
   filterList: {
     id?: FilterString;
     date?: FilterDate;

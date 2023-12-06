@@ -3,6 +3,7 @@ import { isMobile } from './utils';
 
 export const INITIAL_APP_STATE: State = {
   paymentList: [],
+  sortBy: { field: 'date', order: 'desc' },
   filterList: {},
   stdChartList: {},
   historyChartList: {},

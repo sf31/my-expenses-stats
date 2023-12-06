@@ -158,3 +158,19 @@ function generateRandomList(
     (_, i) => `${prefix}_${randomIntFromInterval(0, uniques)}`,
   );
 }
+
+export function sortNumber(
+  a: number,
+  b: number,
+  order: 'asc' | 'desc',
+): number {
+  return order === 'asc' ? a - b : b - a;
+}
+
+export function sortString(
+  a: string,
+  b: string,
+  order: 'asc' | 'desc',
+): number {
+  return order === 'asc' ? a.localeCompare(b) : b.localeCompare(a);
+}
