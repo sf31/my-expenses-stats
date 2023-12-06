@@ -63,12 +63,15 @@ export class ChartComponent implements AfterViewInit, OnDestroy {
     this.sub = this.store
       .getChartData(this.chartConfig.chartId)
       .subscribe((config) => {
-        if (!config) {
-          this.chart?.destroy();
-          return;
-        }
+        if (!config) return this.chart?.destroy();
         if (!this.chart) this.chart = new Chart(this.getCtx(), config);
         else {
+          // if chart type has changed, destroy and create new chart
+          const currentChartType = (this.chart as any)?.config._config.type;
+          if (currentChartType !== config.type) {
+            this.chart.destroy();
+            this.chart = new Chart(this.getCtx(), config);
+          }
           this.chart.data.labels = config.data.labels;
           this.chart.data.datasets = config.data.datasets;
           this.chart.options = config.options!;
