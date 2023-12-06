@@ -18,6 +18,7 @@ import { BtnComponent } from './btn.component';
       <app-select
         [itemList]="stdChartTypeList"
         [itemSelected]="config.type"
+        [showClearIcon]="false"
         placeholder="Chart type"
         (itemSelectedChange)="updateStandard(config.chartId, { type: $event })"
       />
@@ -25,6 +26,7 @@ import { BtnComponent } from './btn.component';
       <app-select
         [itemList]="chartOpList"
         [itemSelected]="config.op"
+        [showClearIcon]="false"
         placeholder="Operation"
         (itemSelectedChange)="updateStandard(config.chartId, { op: $event })"
       />
@@ -32,6 +34,7 @@ import { BtnComponent } from './btn.component';
       <app-select
         [itemList]="stdFieldList"
         [itemSelected]="config.field"
+        [showClearIcon]="false"
         placeholder="Field"
         (itemSelectedChange)="updateStandard(config.chartId, { field: $event })"
       />
@@ -41,6 +44,7 @@ import { BtnComponent } from './btn.component';
       <app-select
         [itemList]="historyChartPeriodList"
         [itemSelected]="config.period"
+        [showClearIcon]="false"
         placeholder="Period"
         (itemSelectedChange)="updateHistory(config.chartId, { period: $event })"
       />
@@ -48,6 +52,7 @@ import { BtnComponent } from './btn.component';
       <app-select
         [itemList]="historyDateFormatList"
         [itemSelected]="config.dateFormat"
+        [showClearIcon]="false"
         placeholder="Date Format"
         (itemSelectedChange)="
           updateHistory(config.chartId, { dateFormat: $event })
@@ -57,6 +62,7 @@ import { BtnComponent } from './btn.component';
       <app-select
         [itemList]="chartOpList"
         [itemSelected]="config.op"
+        [showClearIcon]="false"
         placeholder="Operation"
         (itemSelectedChange)="updateHistory(config.chartId, { op: $event })"
       />
